@@ -1,0 +1,97 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500&family=Lora:wght@400;500&family=Roboto:wght@400;500&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Light Mode */
+:root {
+  /* background images */
+  --background-1: url('/images/background-1.jpg');
+  --background-2: url('/images/background-2.jpg');
+
+  /* colors */
+  --primary: #007bff;
+  --secondary: #ffc107;
+  --accent: #28a745;
+  --background: #f8f9fa;
+  --text-color: #212529;
+  --border-color: #e2e8f0; /* Light border color */
+}
+
+/* Dark Mode */
+.dark {
+  --primary: #1e90ff;
+  --secondary: #ffb300;
+  --accent: #22c55e;
+  --background: #121212;
+  --text-color: #eaeaea;
+  --border-color: #374151; /* Dark border color */
+}
+
+body.global {
+  background-color: var(--background);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Poppins", sans-serif;
+}
+
+p {
+  font-family: "Inter", sans-serif;
+}
+
+p.stylish {
+  font-family: "Lora", serif;
+}
+
+p.readable {
+  font-family: "Roboto", sans-serif;
+}
+
+.small-text {
+  font-family: "Inter", sans-serif;
+}
+
+.transition-class {
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 640px) {
+  .smooth-dropdown {
+    transition: max-height 0.3s ease-out, border 0.3s ease-out;
+    overflow: hidden;
+  }
+}
+
+
+
+.hero {
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: center;
+  background-image: var(--background-1);
+  background-repeat: no-repeat;
+  background-size: cover;
+  animation: change 20s infinite ease-in-out;
+}
+
+@keyframes change {
+  50% {
+    background-image: (--background-2);
+  }
+  100% {
+    background-image: var(--background-1);
+  }
+}
