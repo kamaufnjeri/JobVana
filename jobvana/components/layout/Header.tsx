@@ -32,7 +32,7 @@ const Header: React.FC = () => {
           isDropDownOpen ? "max-h-96 opacity-100 lg:opacity-100" : "max-h-0 opacity-0 lg:opacity-100"
         }`}
       >
-        <ul className="flex flex-col gap-2 lg:flex-row lg:items-center items-start lg:gap-10 lg:w-1/2">
+        <ul className="flex flex-col gap-2 lg:flex-row lg:items-center items-start lg:gap-4 lg:w-2/3">
           <li>
             <Link href="/" className={`${pathname === '/' ? 'text-primary' : 'text-text'} text-h4 hover:text-primary transition-class`}>
              Home
@@ -53,9 +53,14 @@ const Header: React.FC = () => {
              Login
             </Link>
           </li>
+          <li>
+            <Link href="/sign-up" className={`${pathname === '/login' ? 'text-primary' : 'text-text'} text-h4 hover:text-primary transition-class`}>
+             Sign Up
+            </Link>
+          </li>
           
         </ul>
-        <div className="flex gap-2 flex-row lg:items-center items-start justify-between lg:gap-4 lg:mt-0 mt-2">
+        <div className="flex gap-2 flex-row lg:items-center items-start justify-between lg:gap-4 lg:mt-0 mt-2 lg:w-1/3">
           <Link
             href="/post-a-job"
             className="bg-primary p-2 rounded-sm text-center text-h5 hover:opacity-80 opacity-100 text-white"

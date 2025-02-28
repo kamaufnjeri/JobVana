@@ -8,6 +8,7 @@ const FAQSection: React.FC = () => {
     employers: null,
     general: null,
   });
+  
   const faqRefs = useRef<{
     [key: string]: { [index: number]: HTMLDivElement | null };
   }>({});
@@ -81,7 +82,7 @@ const FAQSection: React.FC = () => {
                         }}
                         className="transition-transform duration-300"
                       >
-                        <FaChevronDown />
+                        <FaChevronDown className="opacity-90 cursor-pointer"/>
                       </div>
                     </span>
 

@@ -45,6 +45,11 @@ const Footer: React.FC = () => {
              Login
             </Link>
           </li>
+          <li className="border-text w-full border-b">
+            <Link href="/sign-up" className={`${pathname === '/login' ? 'text-primary' : 'text-text'} text-h5 hover:text-primary transition-class`}>
+             Sign Up
+            </Link>
+          </li>
          
           <li className="border-text w-full border-b">
             <Link href="/post-job" className={`${pathname === '/post-job' ? 'text-primary' : 'text-text'} text-h5 hover:text-primary transition-class`}>

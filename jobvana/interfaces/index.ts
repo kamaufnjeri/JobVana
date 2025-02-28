@@ -3,7 +3,10 @@ import { ReactNode } from "react";
 export interface LayoutProps {
     children: ReactNode;
 }
-
+export interface SelectValuesProps {
+    value: string; // Unique identifier for each category
+    label: string; // Display name for each category
+  }
 export interface ButtonProps {
     name: string;
     styles?: string;
@@ -11,6 +14,7 @@ export interface ButtonProps {
     onClick?: (...args: any[]) => void | any;
     children?: ReactNode;
 }
+
 
 export interface ManyJobsProps {
     company_name: string;
@@ -23,6 +27,20 @@ export interface ManyJobsProps {
     date_posted: string;
 }
 
+export interface JobDetailsProps {
+    responsibilities?: string[];
+    benefits?: string[];
+    requirements?: string[];
+    description: string;
+    company_name: string;
+    logo?: string;
+    categories: string[];
+    location: string;
+    type: string;
+    level: string;
+    job_name: string;
+    date_posted: string;
+}
 
 export interface TestimonialProps {
     name: string;

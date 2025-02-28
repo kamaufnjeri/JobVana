@@ -5,7 +5,7 @@ const Button: React.FC<ButtonProps> = ({ name, styles, children, type, onClick }
     <button
       onClick={onClick}
       type={type || "button"}
-      className={`flex flex-row gap-2 items-center justify-center ${styles}`}
+      className={`flex flex-row gap-2 items-center justify-center ${styles} transition-all ease-in-out duration-300 hover:opacity-80`}
     >
       {name && <h5 className="text-h5">{name}</h5>}
       {children}

@@ -1,8 +1,91 @@
-import { FAQSProps, ManyJobsProps, TeamMembersProps, TestimonialProps, TopCompaniesProps } from "@/interfaces";
+import { FAQSProps, JobDetailsProps, ManyJobsProps, SelectValuesProps, TeamMembersProps, TestimonialProps, TopCompaniesProps } from "@/interfaces";
+
+export const USER_ROLES: SelectValuesProps[] = [
+  { value: "applicant", label: "Applicant" },
+  { value: "employer", label: "Employer" },
+]
+
+export const EXPERIENCE_LEVELS: string[] = ["Internship", "Entry-Level", "Mid-Level", "Senior", 'Others'];
+
+export const JOB_TYPES: string[] = ["Hybrid", "Remote", "Full-Time", "Part-Time", "Contract"];
+
+
+
+export const JOB_CATEGORIES: SelectValuesProps[] = [
+  { value: "accounting_finance", label: "Accounting and Finance" },
+  { value: "administration_office_support", label: "Administration and Office Support" },
+  { value: "advertising_marketing_pr", label: "Advertising, Marketing, and Public Relations" },
+  { value: "art_design_media", label: "Art, Design, and Media" },
+  { value: "business_operations", label: "Business Operations" },
+  { value: "customer_service", label: "Customer Service" },
+  { value: "education", label: "Education" },
+  { value: "engineering_manufacturing", label: "Engineering and Manufacturing" },
+  { value: "healthcare_medical", label: "Healthcare and Medical" },
+  { value: "human_resources", label: "Human Resources" },
+  { value: "information_technology", label: "Information Technology (IT)" },
+  { value: "legal", label: "Legal" },
+  { value: "sales", label: "Sales" },
+  { value: "science_research", label: "Science and Research" },
+  { value: "skilled_trades", label: "Skilled Trades" },
+  { value: "supply_chain_logistics", label: "Supply Chain and Logistics" },
+  { value: "technology_emerging", label: "Technology (Emerging)" },
+  { value: "transportation_delivery", label: "Transportation and Delivery" },
+  { value: "others", label: "Others" }
+];
+
+
+export const SAMPLE_JOB:JobDetailsProps = {
+  "company_name": "Google",
+  "logo": "https://logo.clearbit.com/google.com",
+  "job_name": "Software Engineer",
+  "categories": ["engineering", "technology"],
+  "location": "San Francisco, CA",
+  "type": "full-time",
+  "level": "mid-level",
+  "date_posted": "2025-02-20",
+  description: "Google is seeking a talented and motivated Software Engineer to join our dynamic team. As part of our development team, you will work on cutting-edge technologies to build and maintain high-quality software solutions. This is an excellent opportunity to collaborate with a group of innovative engineers in a fast-paced, remote environment. If you’re passionate about solving complex problems and writing clean, scalable code, we want to hear from you!",
+  responsibilities: [
+    "Design, develop, and maintain scalable and high-performance software applications.",
+    "Collaborate with product managers and designers to define and implement new features.",
+    "Write clean, maintainable, and efficient code while following best practices.",
+    "Participate in code reviews and contribute to continuous improvement of development processes.",
+    "Debug, troubleshoot, and resolve issues related to software performance and functionality.",
+    "Stay up-to-date with the latest industry trends, technologies, and development practices.",
+    "Work in an Agile environment with weekly sprints, team meetings, and performance tracking."
+  ],
+  
+  requirements:[
+      "Bachelor's degree in Computer Science, Engineering, or a related field.",
+      "3+ years of professional software engineering experience.",
+      "Strong proficiency in at least one programming language (JavaScript, Python, Java, etc.).",
+      "Experience with web development frameworks such as React, Angular, or Vue.js.",
+      "Familiarity with backend technologies like Node.js, Express, or Django.",
+      "Knowledge of version control systems (Git).",
+      "Familiarity with databases (SQL and NoSQL databases like PostgreSQL, MongoDB).",
+      "Strong understanding of algorithms, data structures, and problem-solving techniques.",
+      "Strong communication skills and ability to work in a collaborative team environment.",
+      "Excellent problem-solving and debugging skills.",
+      "Ability to manage time effectively and handle multiple priorities."
+    ],
+  
+ benefits: [
+    "Competitive Salary: Based on experience and qualifications.",
+    "Health Insurance: Comprehensive medical, dental, and vision coverage.",
+    "Retirement Plan: 401(k) plan with company match.",
+    "Paid Time Off: 20 days of paid vacation per year + public holidays.",
+    "Professional Development: Access to online learning platforms, training, and certifications.",
+    "Flexible Work Hours: Work remotely with flexible hours.",
+    "Team Building: Regular virtual team-building activities and annual off-site retreats.",
+    "Wellness Program: Gym memberships, mental health support, and wellness initiatives.",
+    "Work-Life Balance: A supportive environment that prioritizes work-life balance."
+  ],
+
+};
+
 
 export const SAMPLE_JOBS: ManyJobsProps[] = [
     {
-        "company_name": "Google",
+        "company_name": "Google Google Google",
         "logo": "https://logo.clearbit.com/google.com",
         "job_name": "Software Engineer",
         "categories": ["engineering", "technology"],
