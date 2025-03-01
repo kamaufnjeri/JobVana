@@ -26,11 +26,45 @@ export interface ManyJobsProps {
     job_name: string;
     date_posted: string;
 }
+export interface JobApplicationProps {
+          job_name: string;
+          status: string;
+          availability: string;
+          linkedin_url: string;
+          cover_letter: string;
+          resume: string; 
+          date_applied: string;
+        };
+
+        export interface ApplicationReceivedProps {
+            first_name: string
+            last_name: string;
+            status: string;
+            availability: string;
+            linkedin_url: string;
+            cover_letter: string;
+            resume: string; 
+            date_applied: string;
+          };
+
+        export interface CompanyProps {
+            name: string;
+            description: string;
+            logo: string;
+        }
+
+export interface UserProps {
+    first_name: string;
+    last_name: string;
+    email: string;
+    role: string;
+    company?: CompanyProps;
+}
 
 export interface JobDetailsProps {
-    responsibilities?: string[];
-    benefits?: string[];
-    requirements?: string[];
+    responsibilities: string[];
+    benefits: string[];
+    requirements: string[];
     description: string;
     company_name: string;
     logo?: string;
@@ -40,6 +74,10 @@ export interface JobDetailsProps {
     level: string;
     job_name: string;
     date_posted: string;
+}
+
+export interface JobPostedDetailsProps {
+
 }
 
 export interface TestimonialProps {

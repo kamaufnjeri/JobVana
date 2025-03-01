@@ -1,15 +1,57 @@
-import { FAQSProps, JobDetailsProps, ManyJobsProps, SelectValuesProps, TeamMembersProps, TestimonialProps, TopCompaniesProps } from "@/interfaces";
+import { ApplicationReceivedProps, FAQSProps, JobApplicationProps, JobDetailsProps, ManyJobsProps, SelectValuesProps, TeamMembersProps, TestimonialProps, TopCompaniesProps, UserProps } from "@/interfaces";
+
 
 export const USER_ROLES: SelectValuesProps[] = [
   { value: "applicant", label: "Applicant" },
   { value: "employer", label: "Employer" },
 ]
 
-export const EXPERIENCE_LEVELS: string[] = ["Internship", "Entry-Level", "Mid-Level", "Senior", 'Others'];
+export const AVAILABILITY_OPTIONS: SelectValuesProps[] = [
+  { label: "Available Immediately", value: "immediate" },
+    { label: "Available in 1 Month", value: "one_month" },
+    { label: "Available in 2 Months", value: "two_months" },
+   { label: "Available in 3 Months", value: "three_months" },
+    { label: "Available in 6 Months", value: "six_months" }
+]
 
-export const JOB_TYPES: string[] = ["Hybrid", "Remote", "Full-Time", "Part-Time", "Contract"];
+
+export const EXPERIENCE_LEVELS_OPTIONS: SelectValuesProps[] = [
+  { value: "internship", label: "Internship" },
+  { value: "entry-level", label: "Entry-Level" },
+  { value: "mid-level", label: "Mid-Level" },
+  { value: "senior", label: "Senior" },
+  { value: "others", label: "Others" },
+]
 
 
+export const JOB_TYPES_OPTIONS: SelectValuesProps[] = [
+  { value: "hybrid", label: "Hybrid" },
+  { value: "remote", label: "Remote" },
+  { value: "full-time", label: "Full-Time" },
+  { value: "part-time", label: "Part-Time" },
+  { value: "contract", label: "Contract" },
+];
+
+export const EXPERIENCE_LEVELS = EXPERIENCE_LEVELS_OPTIONS;
+
+
+export const JOB_TYPES = JOB_TYPES_OPTIONS;
+
+
+export const APPLICATIONS_STATUS_OPTIONS: SelectValuesProps[] = [
+
+    { label: "Pending", value: "pending" },
+    { label: "Reviewed", value: "reviewed" },
+    { label: "Hired", value: "hired" },
+    { label: "Rejected", value: "rejected" },
+    { label: "Forwarded for Interview", value: "forwarded_interview"}
+  
+]
+
+export const SORT_BY_OPTIONS: SelectValuesProps[] =[
+  { label: 'Latest', value: 'latest' },
+  { label: 'Oldest', value: 'oldest' },
+]
 
 export const JOB_CATEGORIES: SelectValuesProps[] = [
   { value: "accounting_finance", label: "Accounting and Finance" },
@@ -32,6 +74,138 @@ export const JOB_CATEGORIES: SelectValuesProps[] = [
   { value: "transportation_delivery", label: "Transportation and Delivery" },
   { value: "others", label: "Others" }
 ];
+
+export const SAMPLE_USER_APPLICANT: UserProps = {
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "johndoe@example.com",
+  "role": "applicant"
+}
+
+export const SAMPLE_USER_EMPLOYER: UserProps = {
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "johndoe@example.com",
+  "role": "employer",
+  "company": {
+    "name": "Microsoft",
+    "logo": "https://logo.clearbit.com/microsoft.com",
+    "description": "A leading software development company specializing in AI and cloud solutions."
+  }
+}
+
+export const APPLICATIONS_RECEIVED: ApplicationReceivedProps[] = [
+  {
+    first_name: "John",
+    last_name: "Doe",
+    linkedin_url: "https://www.linkedin.com/in/johndoe",
+    date_applied: "2025-02-28",
+    status: "pending",
+    availability: "immediate",
+    resume: "https://writing.colostate.edu/guides/documents/resume/functionalsample.pdf",
+    cover_letter: "I am excited to apply for this position as it aligns perfectly with my skills and experience. I believe my background in software development will be valuable to your team."
+  },
+  {
+    first_name: "Jane",
+    last_name: "Smith",
+    linkedin_url: "https://www.linkedin.com/in/janesmith",
+    date_applied: "2025-02-27",
+    status: "forwarded_interview",
+    availability: "immediate",
+    resume: "https://writing.colostate.edu/guides/documents/resume/functionalsample.pdf",
+    cover_letter: "With a strong background in business analytics and problem-solving, I am eager to contribute my expertise to your organization. I look forward to the opportunity to discuss further."
+  },
+  {
+    first_name: "Michael",
+    last_name: "Brown",
+    linkedin_url: "https://www.linkedin.com/in/michaelbrown",
+    date_applied: "2025-02-26",
+    status: "forwarded_interview",
+    availability: "immediate",
+    resume: "https://writing.colostate.edu/guides/documents/resume/functionalsample.pdf",
+    cover_letter: "I have a passion for data-driven decision-making and would love to bring my analytical skills to your team. My experience in financial analysis makes me a great fit for this role."
+  },
+  {
+    first_name: "Emily",
+    last_name: "Clark",
+    linkedin_url: "https://www.linkedin.com/in/emilyclark",
+    date_applied: "2025-02-25",
+    status: "rejected",
+    availability: "two_months",
+    resume: "https://writing.colostate.edu/guides/documents/resume/functionalsample.pdf",
+    cover_letter: "As a dedicated professional with expertise in customer relations, I am confident in my ability to enhance client satisfaction and operational efficiency within your organization."
+  },
+  {
+    first_name: "Daniel",
+    last_name: "Wilson",
+    linkedin_url: "https://www.linkedin.com/in/danielwilson",
+    date_applied: "2025-02-24",
+    status: "hired",
+    availability: "one_month",
+    resume: "https://writing.colostate.edu/guides/documents/resume/functionalsample.pdf",
+    cover_letter: "I am eager to leverage my experience in software engineering to drive innovation and efficiency in your company. Looking forward to contributing to your success."
+  }
+];
+
+
+
+export const SAMPLE_JOB_APPLICATIONS: JobApplicationProps[] = [
+  {
+    "job_name": "Software Engineer",
+    "status": "pending",
+    "availability": "immediate",
+    "linkedin_url": "https://www.linkedin.com/in/johndoe",
+    "cover_letter": "I am excited about this role because of my passion for software development...",
+    "date_applied": "2024-02-25",
+    "resume": "https://writing.colostate.edu/guides/documents/resume/functionalsample.pdf"
+  },
+  {
+    "job_name": "Backend Developer",
+    "status": "hired",
+    "availability": "one_month",
+    "linkedin_url": "https://www.linkedin.com/in/janedoe",
+    "cover_letter": "With my experience in backend development and databases, I believe I can add value...",
+    "date_applied": "2024-02-25",
+    "resume": "https://writing.colostate.edu/guides/documents/resume/functionalsample.pdf"
+  },
+  {
+    "job_name": "Data Analyst",
+    "status": "rejected",
+    "availability": "two_months",
+    "linkedin_url": "https://www.linkedin.com/in/mikebrown",
+    "cover_letter": "I have a strong background in data analysis and visualization...",
+    "date_applied": "2024-02-25",
+    "resume": "https://writing.colostate.edu/guides/documents/resume/functionalsample.pdf"
+  },
+  {
+    "job_name": "Product Manager",
+    "status": "pending",
+    "availability": "three_months",
+    "linkedin_url": "https://www.linkedin.com/in/sarasmith",
+    "cover_letter": "My experience in product strategy and agile development makes me a great fit...",
+    "date_applied": "2024-02-25",
+    "resume": "https://writing.colostate.edu/guides/documents/resume/functionalsample.pdf"
+  },
+  {
+    "job_name": "UX Designer",
+    "status": "hired",
+    "availability": "six_months",
+    "linkedin_url": "https://www.linkedin.com/in/kevinyang",
+    "cover_letter": "I specialize in creating user-friendly designs and improving UX...",
+    "date_applied": "2024-02-25",
+    "resume": "https://writing.colostate.edu/guides/documents/resume/functionalsample.pdf"
+  },
+  {
+    "job_name": "Cybersecurity Analyst",
+    "status": "forwarded_interview",
+    "availability": "immediate",
+    "linkedin_url": "https://www.linkedin.com/in/laurajohnson",
+    "cover_letter": "I have expertise in network security, ethical hacking, and risk assessment...",
+    "date_applied": "2024-02-25",
+    "resume": "https://writing.colostate.edu/guides/documents/resume/functionalsample.pdf"
+  }
+]
+
 
 
 export const SAMPLE_JOB:JobDetailsProps = {

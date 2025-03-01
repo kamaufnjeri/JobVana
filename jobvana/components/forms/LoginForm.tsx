@@ -23,7 +23,7 @@ const LoginForm: React.FC<LoginProps> = ({ description }) => {
         id="email"
         required
         placeholder="Enter email"
-        className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
+        className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
       />
     </span>
     <span className="flex flex-col gap-2 items-start">
@@ -36,7 +36,7 @@ const LoginForm: React.FC<LoginProps> = ({ description }) => {
         id="password"
         required
         placeholder="Enter password"
-        className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
+        className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
       />
     </span>
     <Button

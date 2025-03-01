@@ -33,6 +33,8 @@ const JobDetailSection: React.FC<JobDetailSectionProps> = ({ job }) => {
         </span>
       </div>
       <h3 className="text-h3">{job.job_name}</h3>
+      <h6 className="text-h6 opacity-80 text-secondary">Deadline - {job.date_posted}</h6>
+
       <ul className="text-p readable opacity-90 flex flex-row gap-2 text-primary">
         {job.categories &&
           job.categories.map((category, index) => (
@@ -42,7 +44,7 @@ const JobDetailSection: React.FC<JobDetailSectionProps> = ({ job }) => {
           ))}
       </ul>
       <span className="flex flex-row gap-2 opacity-80 justify-between w-full">
-        <p className="p-1 rounded-sm text-secondary">{formatName(job.level)}</p>
+        <p className="p-1 rounded-sm ">{formatName(job.level)}</p>
         <p className="p-1 rounded-sm">{formatName(job.type)}</p>
 
         <span className="p-1 rounded-sm flex flex-row gap-2 items-center">

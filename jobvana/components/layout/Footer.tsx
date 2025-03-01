@@ -1,9 +1,28 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { FaEnvelope, FaFacebook, FaLinkedin, FaPhone, FaTwitter } from "react-icons/fa";
+import Button from "../common/Button";
 
-const Footer: React.FC = () => {
+
+interface FooterProps {
+  openPostJobModal: () => void;
+}
+const Footer: React.FC<FooterProps> = ({ openPostJobModal}) => {
     const pathname = usePathname();
+    const [loggedin, setLoggedin] = useState<boolean>(false);
+
+    const router = useRouter();
+
+    const goToPostJob = () => {
+      if (loggedin) {
+        openPostJobModal();
+      } else {
+        router.push('/login');
+      }
+    }
+
 
   return (
     <div className="w-full border-borderColor border-t-2 lg:px-10 md:px-5 px-2 py-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-text">
@@ -52,9 +71,8 @@ const Footer: React.FC = () => {
           </li>
          
           <li className="border-text w-full border-b">
-            <Link href="/post-job" className={`${pathname === '/post-job' ? 'text-primary' : 'text-text'} text-h5 hover:text-primary transition-class`}>
-             Post a Job
-            </Link>
+            <Button name="Post a Job" onClick={goToPostJob} styles={`text-h5 hover:text-primary transition-class cursor-pointer`}/>
+            
           </li>
         </ul>
         </div>

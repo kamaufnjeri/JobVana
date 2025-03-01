@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../common/Button";
 import Link from "next/link";
 import Image from "next/image";
@@ -22,7 +22,7 @@ const SignUpSection: React.FC = () => {
             id="first_name"
             required
             placeholder="Enter first name"
-            className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
+            className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
           />
         </span>
         <span className="flex flex-col gap-2 items-start">
@@ -35,7 +35,7 @@ const SignUpSection: React.FC = () => {
             id="last_name"
             required
             placeholder="Enter last name"
-            className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
+            className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
           />
         </span>
         </span>
@@ -50,22 +50,10 @@ const SignUpSection: React.FC = () => {
             id="email"
             required
             placeholder="Enter email"
-            className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
+            className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
           />
         </span>
-        <span className="flex flex-col gap-2 items-start">
-          <label htmlFor="name" className="text-h6 font-medium">
-            Email
-          </label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            required
-            placeholder="Enter email"
-            className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
-          />
-        </span>
+        
         <span className="flex flex-col gap-2 items-start">
           <label htmlFor="role" className="text-h6 font-medium">
             Role
@@ -79,6 +67,19 @@ const SignUpSection: React.FC = () => {
       isSearchable
       />
         </span>
+        <span className="flex flex-col gap-2 items-start">
+              <label htmlFor="name" className="text-h6 font-medium">
+                Company Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                required
+                placeholder="Enter company name"
+                className="rounded-md outline-none bg-white w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
+              />
+            </span>
         
         <span className="flex flex-col gap-2 items-start">
           <label htmlFor="password" className="text-h6 font-medium">
@@ -90,7 +91,7 @@ const SignUpSection: React.FC = () => {
             id="password"
             required
             placeholder="Enter password"
-            className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
+            className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
           />
         </span>
         <span className="flex flex-col gap-2 items-start">
@@ -103,7 +104,7 @@ const SignUpSection: React.FC = () => {
             id="confirm_password"
             required
             placeholder="Confirm password"
-            className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
+            className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
           />
         </span>
         <Button

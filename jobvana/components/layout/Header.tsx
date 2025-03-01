@@ -3,15 +3,33 @@ import { FaBars } from "react-icons/fa";
 import ThemeToggle from "../common/ThemeToggle";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
+import Button from "../common/Button";
 
-const Header: React.FC = () => {
+
+interface HeaderProps {
+  openPostJobModal: () => void;
+}
+const Header: React.FC<HeaderProps> = ({ openPostJobModal}) => {
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const pathname = usePathname();
+  const [loggedin, setLoggedin] = useState<boolean>(true);
 
   const toggleDropDown = () => {
 
     setIsDropDownOpen(!isDropDownOpen);
   };
+
+  const router = useRouter();
+
+    const goToPostJob = () => {
+      console.log(loggedin)
+      if (loggedin) {
+        openPostJobModal();
+      } else {
+        router.push('/login');
+      }
+    }
 
  
 
@@ -61,12 +79,11 @@ const Header: React.FC = () => {
           
         </ul>
         <div className="flex gap-2 flex-row lg:items-center items-start justify-between lg:gap-4 lg:mt-0 mt-2 lg:w-1/3">
-          <Link
-            href="/post-a-job"
-            className="bg-primary p-2 rounded-sm text-center text-h5 hover:opacity-80 opacity-100 text-white"
-          >
-            Post a Job
-          </Link>
+          <Button
+          name='Post a Job'
+          onClick={goToPostJob}
+            styles="bg-primary p-2 rounded-md text-center text-h5 hover:opacity-80 opacity-100 text-white"
+          />
          
           <ThemeToggle />
         </div>
