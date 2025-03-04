@@ -1,18 +1,75 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../common/Button";
 import Select from "react-select";
 import { AVAILABILITY_OPTIONS } from "@/constants";
 import PDFInputField from "../common/PDFInputField";
+import { useRouter } from "next/router";
+import { handleApiError } from "@/utils/errorHandlerUtils";
+import api from "@/utils/api";
+import { toast } from "react-toastify";
 
-const ApplyJobForm: React.FC = () => {
+
+interface ApplyJobFormDataProps {
+  resume: string;
+  cover_letter: string,
+  job: string;
+}
+
+interface ApplyJobFormProps {
+  jobId: string;
+}
+
+const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobId=''}) => {
+  const [formData, setFormData] = useState<ApplyJobFormDataProps>({
+    resume: '',
+    cover_letter: '',
+    job: ''
+  });
+  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleResumeChange = (resumeUrl: string) => {
+
+    setFormData((prev) => ({ ...prev, resume: resumeUrl}));
+  }
+
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+  
+    setFormData((prev) => ({ ...prev, job: jobId }));
+  
+    try {
+      const response = await api.post("applications/", formData);
+  
+      if (response.status === 201) {
+        toast.success("Application submitted successfully!");
+        setFormData((prev) => ({ ...prev, cover_letter: "", resume: "" }));
+
+      }
+    } catch (error) {
+      console.error("Application submission failed:", error);
+      handleApiError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
   return (
-    <form className=" flex flex-col w-full gap-2 p-4">
+    <form onSubmit={handleSubmit} className=" flex flex-col w-full gap-2 p-4">
       <h2 className="text-h2">Apply for Your Next Opportunity</h2>
       <h5 className="text-h5">
         Apply now and take the next step in your career. Fill out the form below
         to get started!
       </h5>
-      <span className="flex flex-col gap-2 items-start">
+    {/*   <span className="flex flex-col gap-2 items-start">
         <label
           htmlFor="available"
           className="text-h6 font-medium flex flex-row gap-2"
@@ -26,7 +83,7 @@ const ApplyJobForm: React.FC = () => {
           placeholder={"Select when can you start"}
           isSearchable
         />
-      </span>
+      </span> */}
 
       <span className="flex flex-col gap-2 items-start">
         <label
@@ -40,11 +97,13 @@ const ApplyJobForm: React.FC = () => {
           name="cover_letter"
           id="cover_letter"
           required
+          value={formData.cover_letter}
+          onChange={handleChange}
           placeholder="Start typing cover letter"
           className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900 min-h-[100px]"
         ></textarea>
       </span>
-      <span className="flex flex-col gap-2 items-start">
+     {/*  <span className="flex flex-col gap-2 items-start">
         <label htmlFor="linkedin_url" className="text-h6 font-medium">
           LinkedIn Profile URL
         </label>
@@ -56,7 +115,7 @@ const ApplyJobForm: React.FC = () => {
           placeholder="Enter linkedin profile url"
           className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
         />
-      </span>
+      </span> */}
 
       <span className="flex flex-col gap-2 items-start">
         <label
@@ -67,7 +126,7 @@ const ApplyJobForm: React.FC = () => {
           <h6 className="text-red-500">*</h6>
         </label>
 
-        <PDFInputField />
+       <PDFInputField handleResumeChange={handleResumeChange} resume={formData.resume}/>
       </span>
       <div className="self-center lg:w-1/2 w-full md:w-2/3">
       
@@ -75,6 +134,7 @@ const ApplyJobForm: React.FC = () => {
       <Button
         type="submit"
         name="Apply"
+        loading={loading}
         styles="bg-primary rounded-md text-white h-10 p-2 w-full self-center"
       />
        </div> 

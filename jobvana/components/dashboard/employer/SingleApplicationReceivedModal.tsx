@@ -1,4 +1,5 @@
 import Button from "@/components/common/Button";
+import FileViewer from "@/components/common/FileViewer";
 import { APPLICATIONS_STATUS_OPTIONS, AVAILABILITY_OPTIONS } from "@/constants";
 import { ApplicationReceivedProps } from "@/interfaces";
 import { capitalizeWords, getLabelByValue } from "@/utils";
@@ -123,14 +124,8 @@ const SingleApplicationReceivedModal: React.FC<
             <h6 className="text-h6 font-bold flex flex-row gap-2">
               Resume/CV (pdf, doc)
             </h6>
-            <div className="w-full h-[600px] border border-borderColor p-2 rounded-md">
-              <iframe
-                src={application.resume}
-                width="100%"
-                className="rounded-md h-full"
-                title="Resume"
-              ></iframe>
-            </div>
+            <FileViewer fileUrl={application.resume}/>
+           
           </span>
         </div>
       </div>

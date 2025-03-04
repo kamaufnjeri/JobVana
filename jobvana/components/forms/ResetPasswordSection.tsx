@@ -1,15 +1,65 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../common/Button";
 import Link from "next/link";
 import Image from "next/image";
+import { ResetPasswordProps } from "@/interfaces";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import api from "@/utils/api";
+import { handleApiError } from "@/utils/errorHandlerUtils";
 
 const ResetPasswordSection: React.FC = () => {
+
+  const [formData, setFormData] = useState<ResetPasswordProps>({
+    email: "",
+    confirmPassword: "",
+    otp: 0,
+    new_password: "",
+  });
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
+
+  // handling change of input field
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // submiting for login data
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const confirmPassword = formData.confirmPassword;
+    delete formData.confirmPassword;
+
+    if (confirmPassword === formData.new_password) {
+      try {
+        const response = await api.post("auth/password-reset/reset/", formData);
+
+        if (response.status === 201) {
+          toast.success("User password reset successful!");
+          router.push("/login");
+        }
+      } catch (error) {
+        console.error("Reset password failed:", error);
+        handleApiError(error);
+      } finally {
+        setLoading(false);
+        setFormData((prev) => ({ ...prev, new_password: "", confirmPassword: "" }));
+      }
+    } else {
+      toast.error("Confirm password and new password must match");
+    }
+  };
   return (
     <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 h-full items-center justify-center lg:w-4/5">
-      <form className="flex flex-col gap-2 rounded-lg shadow-lg p-5">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-2 rounded-lg shadow-lg p-5">
         <h2 className="text-h2">Reset Password</h2>
+
         <h5 className="text-h5">
-          Set a new password to keep your account secure.
+        For your security, the OTP sent to your email will expire in five minutes.          
         </h5>
 
         <span className="flex flex-col gap-2 items-start">
@@ -21,38 +71,61 @@ const ResetPasswordSection: React.FC = () => {
             name="email"
             id="email"
             required
+            value={formData.email}
+            onChange={handleChange}
             placeholder="Enter email"
             className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
           />
         </span>
         <span className="flex flex-col gap-2 items-start">
-          <label htmlFor="password" className="text-h6 font-medium">
-            Password
+          <label htmlFor="otp" className="text-h6 font-medium">
+            OTP
           </label>
           <input
-            type="password"
-            name="password"
-            id="password"
+            type="number"
+            name="otp"
+            id="otp"
             required
-            placeholder="Enter password"
+            min={0}
+            value={formData.otp}
+            onChange={handleChange}
+            placeholder="Enter otp"
             className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
           />
         </span>
         <span className="flex flex-col gap-2 items-start">
-          <label htmlFor="confirm_password" className="text-h6 font-medium">
+          <label htmlFor="new_password" className="text-h6 font-medium">
+            New Password
+          </label>
+          <input
+            type="password"
+            name="new_password"
+            id="new_password"
+            required
+            value={formData.new_password}
+            onChange={handleChange}
+            placeholder="Enter new password"
+            className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
+          />
+        </span>
+        <span className="flex flex-col gap-2 items-start">
+          <label htmlFor="confirmPassword" className="text-h6 font-medium">
             Confirm Password
           </label>
           <input
             type="password"
-            name="confirm_password"
-            id="confirm_password"
+            name="confirmPassword"
+            id="confirmPassword"
             required
+            value={formData.confirmPassword}
+            onChange={handleChange}
             placeholder="Confirm password"
             className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
           />
         </span>
         <Button
           type="submit"
+          loading={loading}
           name="Reset Password"
           styles="bg-primary rounded-md text-white h-10 p-2 w-full self-center"
         />

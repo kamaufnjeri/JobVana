@@ -72,7 +72,7 @@ const Header: React.FC<HeaderProps> = ({ openPostJobModal}) => {
             </Link>
           </li>
           <li>
-            <Link href="/sign-up" className={`${pathname === '/login' ? 'text-primary' : 'text-text'} text-h4 hover:text-primary transition-class`}>
+            <Link href="/sign-up" className={`${pathname === '/sign-up' ? 'text-primary' : 'text-text'} text-h4 hover:text-primary transition-class`}>
              Sign Up
             </Link>
           </li>

@@ -2,8 +2,8 @@ import { ApplicationReceivedProps, FAQSProps, JobApplicationProps, JobDetailsPro
 
 
 export const USER_ROLES: SelectValuesProps[] = [
-  { value: "applicant", label: "Applicant" },
-  { value: "employer", label: "Employer" },
+  { value: "Applicant", label: "Applicant" },
+  { value: "Employer", label: "Employer" },
 ]
 
 export const AVAILABILITY_OPTIONS: SelectValuesProps[] = [
@@ -79,7 +79,8 @@ export const SAMPLE_USER_APPLICANT: UserProps = {
   "first_name": "John",
   "last_name": "Doe",
   "email": "johndoe@example.com",
-  "role": "applicant"
+  "role": "applicant",
+  "id": "1"
 }
 
 export const SAMPLE_USER_EMPLOYER: UserProps = {
@@ -87,6 +88,7 @@ export const SAMPLE_USER_EMPLOYER: UserProps = {
   "last_name": "Doe",
   "email": "johndoe@example.com",
   "role": "employer",
+  "id": "1",
   "company": {
     "name": "Microsoft",
     "logo": "https://logo.clearbit.com/microsoft.com",
@@ -102,7 +104,7 @@ export const APPLICATIONS_RECEIVED: ApplicationReceivedProps[] = [
     date_applied: "2025-02-28",
     status: "pending",
     availability: "immediate",
-    resume: "https://writing.colostate.edu/guides/documents/resume/functionalsample.pdf",
+    resume: "https://res.cloudinary.com/dpbkthtxd/image/upload/v1741109693/Payments_for_purchase_PURCH-1_wbt0ga.pdf",
     cover_letter: "I am excited to apply for this position as it aligns perfectly with my skills and experience. I believe my background in software development will be valuable to your team."
   },
   {

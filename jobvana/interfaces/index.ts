@@ -13,6 +13,7 @@ export interface ButtonProps {
     type?: 'submit' | 'button';
     onClick?: (...args: any[]) => void | any;
     children?: ReactNode;
+    loading?: boolean
 }
 
 
@@ -52,15 +53,43 @@ export interface JobApplicationProps {
             description: string;
             logo: string;
         }
-
+// interface for user data
 export interface UserProps {
     first_name: string;
     last_name: string;
     email: string;
     role: string;
     company?: CompanyProps;
+    id: string;
 }
 
+// interface for registering user
+
+export interface SignUpUserProps {
+    first_name: string;
+    last_name: string;
+    email: string;
+    role: string;
+    password: string;
+    confirmPassword?: string;
+}
+
+// interface for the login user
+
+export interface LoginProps {
+    email: string;
+    password: string
+  }
+
+
+  // reset password interface
+
+export interface ResetPasswordProps  {
+    email: string;
+    otp: number;
+    new_password: string;
+    confirmPassword?: string;
+  }
 export interface JobDetailsProps {
     responsibilities: string[];
     benefits: string[];

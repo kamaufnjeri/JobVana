@@ -8,6 +8,7 @@ import { FaTimes } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa6";
 import Link from "next/link";
 import { capitalizeWords } from "@/utils";
+import FileViewer from "@/components/common/FileViewer";
 
 interface ApplicationModalProps {
   application: JobApplicationProps;
@@ -32,6 +33,11 @@ const SingleJobApplicationModal: React.FC<ApplicationModalProps> = ({
   const cancelEditing = (key: string) => {
     setIsDisabled((prev) => ({ ...prev, [key]: true }));
   };
+
+  const handleResumeChange = (resumeUrl: string) => {
+
+    
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -207,16 +213,10 @@ const SingleJobApplicationModal: React.FC<ApplicationModalProps> = ({
               <h6 className="text-red-500">*</h6>
             </label>
             {isDisabled.resume ? (
-              <div className="w-full h-[600px] border border-borderColor p-2 rounded-md">
-                <iframe
-                  src={application.resume}
-                  width="100%"
-                  className="rounded-md h-full"
-                  title="Resume"
-                ></iframe>
-              </div>
+              <FileViewer fileUrl={application.resume}/>
+              
             ) : (
-              <PDFInputField />
+              <PDFInputField resume={application.resume} handleResumeChange={handleResumeChange}/>
             )}
 
             <div className="self-end flex flex-row gap-2 items-end">

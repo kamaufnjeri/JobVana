@@ -18,7 +18,7 @@ const Job = () => {
       </div>
       <div className="w-full lg:w-1/3">
         {loggedin ? 
-        <ApplyJobSection openModal={() => setOpenApplyJobModal(true)}/>
+        <ApplyJobSection openModal={() => setOpenApplyJobModal(true)} jobId="1"/>
         :
                 <LoginForm description={`Login to apply for ${SAMPLE_JOB.job_name}`}/>
 

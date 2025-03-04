@@ -1,20 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../common/Button";
+import api from "@/utils/api";
+import { toast } from "react-toastify";
+import { handleApiError } from "@/utils/errorHandlerUtils";
 
 interface ApplyJobSectionProps {
   openModal: () => void;
+  jobId: string;
 }
-const ApplyJobSection: React.FC<ApplyJobSectionProps> = ({ openModal }) => {
+const ApplyJobSection: React.FC<ApplyJobSectionProps> = ({ openModal, jobId='' }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleSaveJob = async () => {
+    setLoading(true);
+  
+ 
+  
+    try {
+      const response = await api.post(`jobs/${jobId}/save_job/`);
+  
+      if (response.status === 200) {
+        toast.success("Job saved successfully!");
+
+      }
+    } catch (error) {
+      console.error("Application submission failed:", error);
+      handleApiError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="p-4 border-borderColor border rounded-md shadow flex flex-col gap-4 items-start justify-start">
       <div className="w-full shadow-md rounded-md p-3 flex gap-2 flex-col">
         <Button
+        type='button'
         onClick={openModal}
           name="Apply"
           styles="bg-primary rounded-md text-white h-10 p-2 w-full self-center"
         />
          <Button
-        onClick={openModal}
+         type='button'
+         loading={loading}
+        onClick={handleSaveJob}
           name="Save Job for Later"
           styles="bg-gray-700 rounded-md text-white h-10 p-2 w-full self-center"
         />
