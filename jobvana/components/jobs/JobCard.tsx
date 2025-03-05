@@ -15,8 +15,10 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
 
   return (
     <Link
+      prefetch={true}
       href={"/jobs/1"}
-      target="_blank" rel="noopener noreferrer"
+      target="_blank"
+      rel="noopener noreferrer"
       className="group w-full p-4 border-borderColor border hover:border-gray-400 transitio-all ease-in duration-300 cursor-pointer rounded-md shadow flex flex-col gap-2 items-start justify-start"
     >
       <div className="flex flex-row gap-2 items-start justify-between w-full">
@@ -25,7 +27,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
             src={
               job.logo
                 ? job.logo
-                : `https://ui-avatars.com/api/?name=${job.company_name}&size=150`
+                : `https://ui-avatars.com/api/?name=${job.company_name}&size=50`
             }
             alt={job.company_name}
             width={50}
@@ -49,7 +51,9 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
         <div></div>
       </div>
       <h3 className="text-h3">{job.job_name}</h3>
-      <h6 className="text-h6 opacity-80 text-secondary">Deadline - {job.date_posted}</h6>
+      <h6 className="text-h6 opacity-80 text-secondary">
+        Deadline - {job.date_posted}
+      </h6>
 
       <ul className="text-p readable opacity-90 flex flex-row gap-2 text-primary">
         {job.categories &&

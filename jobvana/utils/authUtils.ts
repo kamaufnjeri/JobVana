@@ -3,10 +3,11 @@ import Cookies from "js-cookie";
 
 // clearing cookies
 export const clearCookiesAndRedirect = () => {
+  window.location.href = "/login";
+
   Cookies.remove("access");
   Cookies.remove("refresh");
 
-  window.location.href = "/login";
 };
 
 // setting cookies

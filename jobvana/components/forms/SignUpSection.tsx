@@ -27,7 +27,7 @@ const SignUpSection: React.FC = () => {
   // handling change of input field
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-/* 
+    /* 
     if (name === "password") {
       // ensure the password is strong 
       validatePassword(value, setError);
@@ -53,13 +53,14 @@ const SignUpSection: React.FC = () => {
         }
       } catch (error) {
         console.error("Registration failed:", error);
-        handleApiError(error);
+        toast.error(handleApiError(error));
       } finally {
         setLoading(false);
         setFormData((prev) => ({ ...prev, password: "", confirmPassword: "" }));
       }
     } else {
-      toast.error("Confirm password and password must match");
+      toast.error("Confirm password and password don't match");
+      setLoading(false);
     }
   };
 
@@ -180,7 +181,7 @@ const SignUpSection: React.FC = () => {
         />
         <span className="text-h6 flex flex-row self-end gap-1">
           <h6>Already have an a ccount?</h6>
-          <Link href="/login" className="text-primary">
+          <Link prefetch={true} href="/login" className="text-primary">
             Login
           </Link>
         </span>

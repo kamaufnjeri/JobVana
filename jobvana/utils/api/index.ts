@@ -17,86 +17,73 @@ interface DecodedToken {
 // creating an axios instance
 const api: AxiosInstance = axios.create({
     baseURL,
-    headers: { "Content-Type": "application/json" }
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
 })
 
 // request interceptor to add refresh or access token if needed
 
 api.interceptors.request.use(
-    async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig>  => {
-        // get access and refresh tokens from session storage
-      /* let accessToken = sessionStorage.getItem("accessToken");
-      const refreshToken = sessionStorage.getItem("refreshToken"); */
+  async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
+    let accessToken = Cookies.get("accessToken");
+    const refreshToken = Cookies.get("refreshToken");
 
-    let accessToken = Cookies.get('accessToken');
-    const refreshToken = Cookies.get('refreshToken');
-  
-      if (accessToken) {
-        // if access token decode to check if expired
+
+    if (accessToken && typeof accessToken === "string" && accessToken.includes(".")) {
+      try {
         const decoded: DecodedToken = jwtDecode(accessToken);
         const isTokenExpired = decoded.exp < Date.now() / 1000;
-  
-        if (isTokenExpired) {
-            if (refreshToken) {
-                try {
-                    // if expired and refresh token get access and refresh token from backend api
-                    const response: AxiosResponse<{ access: string; refresh: string }> =
-                      await axios.post(`${baseURL}/auth/refresh/`, { refresh: refreshToken });
-                    // store in session storage
-                   /*  sessionStorage.setItem("accessToken", response.data.access);
-                    sessionStorage.setItem("refreshToken", response.data.refresh); */
 
-                    // store access and refresh tokens in cookies
-                   setCookies(response.data.refresh, response.data.access)
-                    accessToken = response.data.access;
-                  } catch (err) {
-                    // in case of an error redirect user to login and clear session storage or cookies
-                    toast.error("Please log in again.");
-                    /*                 
-                 sessionStorage.clear();
- */ 
-                    clearCookiesAndRedirect();
-                    return Promise.reject(err);
-                  }
-            } else {
-                 // in case of no refresh token redirect user to login and clear session storage or cookies
-                 toast.error("Please log in again.");
-/*                 
-                 sessionStorage.clear();
- */                 
-                clearCookiesAndRedirect();
+        if (isTokenExpired) {
+          if (refreshToken) {
+            try {
+              const response: AxiosResponse<{ access: string; refresh: string }> =
+                await axios.post(`${baseURL}/auth/refresh/`, { refresh: refreshToken });
+
+              setCookies(response.data.refresh, response.data.access);
+              accessToken = response.data.access;
+            } catch (err) {
+              toast.error("Session expired. Please log in again.");
+              clearCookiesAndRedirect();
+              return Promise.reject(err);
             }
-          
+          } else {
+            toast.error("Session expired. Please log in again.");
+            clearCookiesAndRedirect();
+            return Promise.reject(new Error("No refresh token available"));
+          }
         }
-  
-        // setting headers with bearer authorization and content-typ
+
         config.headers = new AxiosHeaders({
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json'
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
         });
+
+      } catch (decodeError) {
+        console.error("JWT Decode Error:", decodeError);
+        toast.error("Invalid session. Please log in again.");
+        clearCookiesAndRedirect();
+        return Promise.reject(decodeError);
+      }
     }
 
     return config;
-},
-(error) => Promise.reject(error)
+  },
+  (error) => Promise.reject(error)
 );
+
 
 
 // Response interceptor to catch 401 errors
+const allowedUnauthRoutes = ["/jobs", "/auth/*, /jobs/seaarch"]; // Add allowed routes
+
 api.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      toast.error("Unauthorized. Please log in again.");
-      // in case of 401 error token redirect user to login and clear session storage or cookies
-      toast.error("Session expired. Please log in again.");
-      /*                 
-                       sessionStorage.clear();
-       */                 
-                      clearCookiesAndRedirect();
-    }
+   
     return Promise.reject(error);
-  }
-);
+  });
 
-export default api;
+  export default api

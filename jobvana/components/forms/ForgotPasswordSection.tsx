@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 const ForgotPasswordSection: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<{ email: string }>({
-    email: '',
+    email: "",
   });
   const router = useRouter();
 
@@ -32,22 +32,29 @@ const ForgotPasswordSection: React.FC = () => {
         router.push("/reset-password");
       }
     } catch (error) {
-      console.error("Forgot password request failed:", error);
-      handleApiError(error);
+      console.error("Error requesting reset password", error);
+      toast.error(handleApiError(error));
     } finally {
       setLoading(false);
-      setFormData((prev) => ({ ...prev, email: '' }));
+      setFormData((prev) => ({ ...prev, email: "" }));
     }
   };
 
   return (
     <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 h-full items-center justify-center lg:w-4/5">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-2 rounded-lg shadow-lg p-5">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-2 rounded-lg shadow-lg p-5"
+      >
         <h2 className="text-h2">Forgot Password</h2>
-        <h5 className="text-h5">Forgot your password? No worries, we’ll help you get back on track!</h5>
-        
+        <h5 className="text-h5">
+          Forgot your password? No worries, we’ll help you get back on track!
+        </h5>
+
         <span className="flex flex-col gap-2 items-start">
-          <label htmlFor="email" className="text-h6 font-medium">Email</label>
+          <label htmlFor="email" className="text-h6 font-medium">
+            Email
+          </label>
           <input
             type="email"
             name="email"
@@ -68,10 +75,13 @@ const ForgotPasswordSection: React.FC = () => {
         />
         <span className="text-h6 flex flex-row self-end gap-1">
           <h6>Remembered your password?</h6>
-          <Link href="/login" className="text-primary"> Log in here</Link>
+          <Link prefetch={true} href="/login" className="text-primary">
+            {" "}
+            Log in here
+          </Link>
         </span>
       </form>
-      
+
       <div className="bg-primary h-full rounded-lg text-white flex flex-col gap-2 items-center justify-center p-5">
         <div className="w-full h-auto rounded-md relative">
           <Image
@@ -86,7 +96,10 @@ const ForgotPasswordSection: React.FC = () => {
         </div>
         <div className="flex flex-col gap-2 items-end justify-end">
           <h1 className="text-h1">Welcome to JobVana.</h1>
-          <p className="text-p readable text-right">“We’re here to help you get back to your next opportunity. Simply reset your password and continue where you left off.”</p>
+          <p className="text-p readable text-right">
+            “We’re here to help you get back to your next opportunity. Simply
+            reset your password and continue where you left off.”
+          </p>
           <p className="text-p stylish italic">— Florence Kamau</p>
           <h6 className="text-h6 font-semibold">Founder & CEO</h6>
         </div>

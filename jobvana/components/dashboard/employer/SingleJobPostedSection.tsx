@@ -1,12 +1,19 @@
 import Select from "react-select";
-import { APPLICATIONS_RECEIVED, APPLICATIONS_STATUS_OPTIONS, SAMPLE_JOB } from "@/constants";
+import {
+  APPLICATIONS_RECEIVED,
+  APPLICATIONS_STATUS_OPTIONS,
+  SAMPLE_JOB,
+} from "@/constants";
 import React, { useState } from "react";
 import Button from "@/components/common/Button";
-import { ApplicationReceivedProps, JobApplicationProps, JobDetailsProps } from "@/interfaces";
+import {
+  ApplicationReceivedProps,
+  JobApplicationProps,
+  JobDetailsProps,
+} from "@/interfaces";
 import { capitalizeWords } from "@/utils";
 import SingleApplicationReceivedModal from "./SingleApplicationReceivedModal";
 import SingleJobPostedModal from "./SingleJobPostedModal";
-
 
 const defaultApplication: ApplicationReceivedProps = {
   first_name: "",
@@ -16,43 +23,55 @@ const defaultApplication: ApplicationReceivedProps = {
   linkedin_url: "",
   cover_letter: "",
   date_applied: "",
-  resume: ""
-}; 
-
-
+  resume: "",
+};
 
 const SingleJobPostedSection: React.FC = () => {
-  const [openApplicationModal, setOpenApplicationModal] = useState<boolean>(false);
-  const [applicationInModal, setApplicationInModal] = useState<ApplicationReceivedProps>(defaultApplication);
-  const [openJobDetailsModal, setOpenJobDetailsModal] = useState<boolean>(false);
+  const [openApplicationModal, setOpenApplicationModal] =
+    useState<boolean>(false);
+  const [applicationInModal, setApplicationInModal] =
+    useState<ApplicationReceivedProps>(defaultApplication);
+  const [openJobDetailsModal, setOpenJobDetailsModal] =
+    useState<boolean>(false);
 
   const openApplicationModalFunc = (application: ApplicationReceivedProps) => {
     setOpenApplicationModal(true);
     setApplicationInModal(application);
-  }
+  };
 
   const closeApplicationModal = () => {
     setOpenApplicationModal(false);
     setApplicationInModal(defaultApplication);
-  }
+  };
 
   const openJobDetailsModalFunc = () => {
     setOpenJobDetailsModal(true);
-  }
+  };
   const closeJobDetailsModal = () => {
     setOpenJobDetailsModal(false);
-  }
-
+  };
 
   return (
     <div className="p-4 border border-borderColor rounded-md shadow flex flex-col gap-4 w-full">
-      {openApplicationModal && <SingleApplicationReceivedModal closeModal={closeApplicationModal} application={applicationInModal}/>}
-    {openJobDetailsModal && <SingleJobPostedModal closeModal={closeJobDetailsModal}/>}
+      {openApplicationModal && (
+        <SingleApplicationReceivedModal
+          closeModal={closeApplicationModal}
+          application={applicationInModal}
+        />
+      )}
+      {openJobDetailsModal && (
+        <SingleJobPostedModal closeModal={closeJobDetailsModal} />
+      )}
       <div className="w-full flex lg:flex-row flex-col gap-2 justify-between">
         <div className="w-full flex flex-wrap justify-between gap-2">
-          <h2 className="text-h2">Applications for {SAMPLE_JOB.job_name} job</h2>
-          <Button styles="bg-gray-800 rounded-md text-white h-10 px-4" name="Job Details" onClick={openJobDetailsModalFunc} />
-
+          <h2 className="text-h2">
+            Applications for {SAMPLE_JOB.job_name} job
+          </h2>
+          <Button
+            styles="bg-gray-800 rounded-md text-white h-10 px-4"
+            name="Job Details"
+            onClick={openJobDetailsModalFunc}
+          />
         </div>
 
         <span className="flex flex-row gap-2 self-end items-center justify-between lg:w-1/3 w-full">
@@ -73,24 +92,41 @@ const SingleJobPostedSection: React.FC = () => {
         <table className="min-w-[700px] w-full border border-borderColor rounded-lg">
           <thead>
             <tr className="bg-primary text-left text-white">
-              <th className="p-3 border-b border-borderColor min-w-[140px]">First Name</th>
-              <th className="p-3 border-b border-borderColor min-w-[140px]">Last Name</th>
-              <th className="p-3 border-b border-borderColor min-w-[140px]">Date Applied</th>
+              <th className="p-3 border-b border-borderColor min-w-[140px]">
+                First Name
+              </th>
+              <th className="p-3 border-b border-borderColor min-w-[140px]">
+                Last Name
+              </th>
+              <th className="p-3 border-b border-borderColor min-w-[140px]">
+                Date Applied
+              </th>
 
-              <th className="p-3 border-b border-borderColor min-w-[140px]">Status</th>
-              <th className="p-3 border-b border-borderColor min-w-[140px]">Action</th>
+              <th className="p-3 border-b border-borderColor min-w-[140px]">
+                Status
+              </th>
+              <th className="p-3 border-b border-borderColor min-w-[140px]">
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
             {APPLICATIONS_RECEIVED.map((application) => (
-              <tr key={`${application.first_name}-${application.last_name}`} className="border-b border-borderColor hover:opacity-100 opacity-80">
+              <tr
+                key={`${application.first_name}-${application.last_name}`}
+                className="border-b border-borderColor hover:opacity-100 opacity-80"
+              >
                 <td className="p-3">{application.first_name}</td>
                 <td className="p-3">{application.last_name}</td>
                 <td className="p-3">{application.date_applied}</td>
 
                 <td className="p-3">{capitalizeWords(application.status)}</td>
                 <td className="p-3">
-                  <Button styles="bg-gray-800 rounded-md text-white h-10 px-4" name="View" onClick={() => openApplicationModalFunc(application)} />
+                  <Button
+                    styles="bg-gray-800 rounded-md text-white h-10 px-4"
+                    name="View"
+                    onClick={() => openApplicationModalFunc(application)}
+                  />
                 </td>
               </tr>
             ))}

@@ -55,13 +55,12 @@ const JobsPostedSection: React.FC = () => {
                 <td className="p-3">{job.date_posted}</td>
                 <td className="p-3">{job.date_posted}</td>
                 <td className="p-3">
-                  <Link href='/dashboard/jobs/1'>
-                  <Button
-                    styles="bg-gray-800 rounded-md text-white h-10 px-4"
-                    name="View"
-                  />
+                  <Link prefetch={true} href="/dashboard/jobs/1">
+                    <Button
+                      styles="bg-gray-800 rounded-md text-white h-10 px-4"
+                      name="View"
+                    />
                   </Link>
-                 
                 </td>
               </tr>
             ))}

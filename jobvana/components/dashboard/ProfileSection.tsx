@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import Button from '../common/Button';
-import { useAuth } from '@/context/AuthContext';
+import React, { useState } from "react";
+import Button from "../common/Button";
+import { useAuth } from "@/context/AuthContext";
 
 const ProfileSection: React.FC = () => {
   const { user } = useAuth();
@@ -15,9 +15,6 @@ const ProfileSection: React.FC = () => {
     setIsDisabled((prev) => ({ ...prev, [key]: false }));
   };
 
-  console.log(isDisabled)
- 
-
   const cancelEditing = (key: string) => {
     setIsDisabled((prev) => ({ ...prev, [key]: true }));
   };
@@ -27,7 +24,8 @@ const ProfileSection: React.FC = () => {
         <div className="w-full flex gap-2 flex-col">
           <h2 className="text-h2">User Profile</h2>
         </div>
-       
+
+        {user && (
           <div className="grid lg:grid-cols-2 grid-cols-1 gap-2 p-4">
             <span className="flex flex-col gap-2 items-start">
               <label htmlFor="first_name" className="text-h6 font-medium">
@@ -65,7 +63,7 @@ const ProfileSection: React.FC = () => {
                 )}
               </div>
             </span>
-            
+
             <span className="flex flex-col gap-2 items-start">
               <label htmlFor="last_name" className="text-h6 font-medium">
                 Last Name
@@ -139,9 +137,10 @@ const ProfileSection: React.FC = () => {
               </div>
             </span>
           </div>
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProfileSection
+export default ProfileSection;

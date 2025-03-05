@@ -11,10 +11,13 @@ interface Location {
 
 interface LocationSelectProps {
   selected: string; // Store only values (strings)
-  setSelected: React.Dispatch<React.SetStateAction<string>>; // Update selected values (strings)
+  setSelected: (Location: string) => void; // Update selected values (strings)
 }
 
-const LocationSelectSingle: React.FC<LocationSelectProps> = ({ setSelected, selected }) => {
+const LocationSelectSingle: React.FC<LocationSelectProps> = ({
+  setSelected,
+  selected,
+}) => {
   const { locations, searchLocations, error, loading } = useLocation();
   const [searchQuery, setSearchQuery] = useState(""); // Local state to manage search query
 
@@ -30,25 +33,28 @@ const LocationSelectSingle: React.FC<LocationSelectProps> = ({ setSelected, sele
   const customStyles = {
     menu: (provided: any) => ({
       ...provided,
-      backgroundColor: '#f0f0f0', // Your desired background color
+      backgroundColor: "#f0f0f0", // Your desired background color
     }),
   };
   // Map selected values to objects with label and value for display
-  const selectedOption = {label: selected, value: selected};
+  const selectedOption = locations.find((loc) =>
+  selected.includes(loc.value)
+);;
+
 
   return (
     <div className="w-full flex-col gap-2 items-start ">
       <Select
         className="rounded-md text-gray-800 outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
         options={locations} // Use filtered locations based on search
-        value={selectedOption} // Keep selected options intact
+        value={selectedOption } // Keep selected options intact
         getOptionLabel={(e) => `${e.label}`} // Display label and type
         getOptionValue={(e) => e.value} // Use value to identify selected option
         isLoading={loading}
         onInputChange={handleSearchChange} // Handle search input change
         onChange={(selectedOption) => {
-            setSelected(selectedOption?.value || ""); // Store only the value as a string
-          }}
+          setSelected(selectedOption?.value || ""); // Store only the value as a string
+        }}
         placeholder={"Country/city/location"}
         isSearchable
         menuPlacement="top"

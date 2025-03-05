@@ -33,7 +33,9 @@ const JobDetailSection: React.FC<JobDetailSectionProps> = ({ job }) => {
         </span>
       </div>
       <h3 className="text-h3">{job.job_name}</h3>
-      <h6 className="text-h6 opacity-80 text-secondary">Deadline - {job.date_posted}</h6>
+      <h6 className="text-h6 opacity-80 text-secondary">
+        Deadline - {job.date_posted}
+      </h6>
 
       <ul className="text-p readable opacity-90 flex flex-row gap-2 text-primary">
         {job.categories &&

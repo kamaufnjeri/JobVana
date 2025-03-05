@@ -24,9 +24,9 @@ const about: React.FC = () => {
       />
       <StatsSection />
       <WhyJobVanaSection />
-      <OurTeamSection/>
-      <FAQSection/>
-      <ContactUsSection/>
+      <OurTeamSection />
+      <FAQSection />
+      <ContactUsSection />
     </div>
   );
 };

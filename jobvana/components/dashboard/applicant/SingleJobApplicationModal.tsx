@@ -34,10 +34,7 @@ const SingleJobApplicationModal: React.FC<ApplicationModalProps> = ({
     setIsDisabled((prev) => ({ ...prev, [key]: true }));
   };
 
-  const handleResumeChange = (resumeUrl: string) => {
-
-    
-  }
+  const handleResumeChange = (resumeUrl: string) => {};
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -52,7 +49,12 @@ const SingleJobApplicationModal: React.FC<ApplicationModalProps> = ({
             <h2 className="text-h2">
               Application for - {application.job_name}
             </h2>
-            <Link href="jobs/1" className="self-end" target="_blank" rel="noopener noreferrer">
+            <Link
+              href="jobs/1"
+              className="self-end"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Button
                 name="View Job"
                 styles="bg-background rounded-md text-h6 border-text border-2 h-10 p-1 w-[150px]  group-hover:bg-text group-hover:text-background"
@@ -181,28 +183,27 @@ const SingleJobApplicationModal: React.FC<ApplicationModalProps> = ({
               className="rounded-md outline-none bg-white w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
             />
             <div className="self-end flex flex-row gap-2 items-end">
-            {isDisabled.linkedin_url === false ? (
-              <>
+              {isDisabled.linkedin_url === false ? (
+                <>
+                  <Button
+                    name="Save"
+                    styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
+                  />
+                  <Button
+                    name="Cancel"
+                    onClick={() => cancelEditing("linkedin_url")}
+                    styles="bg-gray-700 rounded-md text-white h-10 p-2 w-full self-end"
+                  />
+                </>
+              ) : (
                 <Button
-                  name="Save"
+                  name="Edit"
+                  onClick={() => enableEditing("linkedin_url")}
                   styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
                 />
-                <Button
-                  name="Cancel"
-                  onClick={() => cancelEditing("linkedin_url")}
-                  styles="bg-gray-700 rounded-md text-white h-10 p-2 w-full self-end"
-                />
-              </>
-            ) : (
-              <Button
-                name="Edit"
-                onClick={() => enableEditing("linkedin_url")}
-                styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
-              />
-            )}
-          </div>
+              )}
+            </div>
           </span>
-          
 
           <span className="flex flex-col gap-2 items-start">
             <label
@@ -213,10 +214,12 @@ const SingleJobApplicationModal: React.FC<ApplicationModalProps> = ({
               <h6 className="text-red-500">*</h6>
             </label>
             {isDisabled.resume ? (
-              <FileViewer fileUrl={application.resume}/>
-              
+              <FileViewer fileUrl={application.resume} />
             ) : (
-              <PDFInputField resume={application.resume} handleResumeChange={handleResumeChange}/>
+              <PDFInputField
+                resume={application.resume}
+                handleResumeChange={handleResumeChange}
+              />
             )}
 
             <div className="self-end flex flex-row gap-2 items-end">

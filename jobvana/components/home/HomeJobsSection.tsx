@@ -13,6 +13,7 @@ const HomeJobsSection: React.FC = () => {
           Discover the newest job opportunities from top companies.
         </p>
         <Link
+          prefetch={true}
           href="/jobs"
           className="bg-primary p-2 rounded-sm text-center text-h5 hover:opacity-80 opacity-100 text-white"
         >

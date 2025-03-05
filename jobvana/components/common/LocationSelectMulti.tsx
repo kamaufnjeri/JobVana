@@ -14,7 +14,10 @@ interface LocationSelectProps {
   setSelected: React.Dispatch<React.SetStateAction<string[]>>; // Update selected values (strings)
 }
 
-const LocationSelectMulti: React.FC<LocationSelectProps> = ({ setSelected, selected }) => {
+const LocationSelectMulti: React.FC<LocationSelectProps> = ({
+  setSelected,
+  selected,
+}) => {
   const { locations, searchLocations, error, loading } = useLocation();
   const [searchQuery, setSearchQuery] = useState(""); // Local state to manage search query
 
@@ -30,11 +33,11 @@ const LocationSelectMulti: React.FC<LocationSelectProps> = ({ setSelected, selec
   const customStyles = {
     menu: (provided: any) => ({
       ...provided,
-      backgroundColor: '#f0f0f0', // Your desired background color
+      backgroundColor: "#f0f0f0", // Your desired background color
     }),
   };
   // Map selected values to objects with label and value for display
-  const selectedOptions = selected.map((loc) => ({label: loc, value: loc}));
+  const selectedOptions = selected.map((loc) => ({ label: loc, value: loc }));
 
   return (
     <div className="w-full flex-col gap-2 items-start ">

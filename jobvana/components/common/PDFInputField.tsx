@@ -14,7 +14,7 @@ const PDFInputField: React.FC<{
 
   const handleUploadResume = async (file: File) => {
     setLoading(true);
-    setError(null);  // Reset error before upload
+    setError(null); // Reset error before upload
 
     try {
       const resumeUrl = await uploadFile(file);
@@ -28,7 +28,7 @@ const PDFInputField: React.FC<{
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
-      "application/pdf": [".pdf"]
+      "application/pdf": [".pdf"],
     },
     multiple: false,
     onDrop: (acceptedFiles) => {
@@ -37,7 +37,6 @@ const PDFInputField: React.FC<{
       }
     },
   });
-  
 
   return (
     <div className="self-center flex flex-col gap-4">
@@ -54,9 +53,7 @@ const PDFInputField: React.FC<{
           <p className="text-gray-600 mt-2">
             Drag & Drop or click to select a file
           </p>
-          <p className="text-sm text-gray-400">
-            Only PDF files allowed
-          </p>
+          <p className="text-sm text-gray-400">Only PDF files allowed</p>
         </div>
       </div>
 
@@ -67,16 +64,13 @@ const PDFInputField: React.FC<{
       ) : (
         resume && (
           <div className="mt-4 flex justify-between items-center bg-gray-100 p-2 rounded-lg">
-            <FileViewer fileUrl={resume}/>
-          
+            <FileViewer fileUrl={resume} />
           </div>
         )
       )}
 
       {/* Error Message */}
-      {error && (
-        <p className="text-red-500 text-sm mt-2">{error}</p>
-      )}
+      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
     </div>
   );
 };

@@ -12,7 +12,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <LocationProvider>
         <Layout>
           <Component {...pageProps} />
-          <ToastContainer/>
+          <ToastContainer />
         </Layout>
       </LocationProvider>
     </AuthProvider>

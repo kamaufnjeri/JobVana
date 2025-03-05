@@ -1,15 +1,19 @@
 import Button from "@/components/common/Button";
 import PDFInputField from "@/components/common/PDFInputField";
 import Select from "react-select";
-import { AVAILABILITY_OPTIONS, EXPERIENCE_LEVELS_OPTIONS, JOB_TYPES_OPTIONS, SAMPLE_JOB } from "@/constants";
+import {
+  AVAILABILITY_OPTIONS,
+  EXPERIENCE_LEVELS_OPTIONS,
+  JOB_TYPES_OPTIONS,
+  SAMPLE_JOB,
+} from "@/constants";
 import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
-import ListInputField from "@/components/common/ListInputField";
+import ListInputField from "@/components/common/DetailInputField";
 import LocationSelectSingle from "@/components/common/LocationSelectSingle";
 import CategorySelectMulti from "@/components/common/CategorySelectMulti";
 import Job from "@/pages/jobs/[id]";
 import ListDisplay from "@/components/common/ListDisplay";
-
 
 interface ApplicationModalProps {
   closeModal: () => void;
@@ -38,8 +42,7 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
     setIsDisabled((prev) => ({ ...prev, [key]: true }));
   };
   const [categories, setCategories] = useState<string[]>([]);
-  const [location, setLocation] = useState<string>('');
-  
+  const [location, setLocation] = useState<string>("");
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -64,26 +67,25 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
             />
           </div>
 
-          
           <span className="flex flex-col gap-2 items-start">
-      <label
-          htmlFor="title"
-          className="text-h6 font-medium flex flex-row gap-2"
-        >
-          <h6>Job Title</h6>
-          <h6 className="text-red-500">*</h6>
-        </label>
-        <input
-          type="text"
-          name="title"
-          id="title"
-          value={SAMPLE_JOB.job_name}
-          required
-          disabled={isDisabled.job_name}
-          placeholder="Enter job title"
-          className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-        />
-        <div className="self-end flex flex-row gap-2 items-end">
+            <label
+              htmlFor="title"
+              className="text-h6 font-medium flex flex-row gap-2"
+            >
+              <h6>Job Title</h6>
+              <h6 className="text-red-500">*</h6>
+            </label>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              value={SAMPLE_JOB.job_name}
+              required
+              disabled={isDisabled.job_name}
+              placeholder="Enter job title"
+              className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+            />
+            <div className="self-end flex flex-row gap-2 items-end">
               {isDisabled.job_name === false ? (
                 <>
                   <Button
@@ -104,27 +106,26 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
                 />
               )}
             </div>
-      </span>
-      <span className="flex flex-col gap-2 items-start">
-
-      <label
-          htmlFor="deadline"
-          className="text-h6 font-medium flex flex-row gap-2"
-        >
-          <h6>Deadline</h6>
-          <h6 className="text-red-500">*</h6>
-        </label>
-        <input
-          type="date"
-          name="deadline"
-          id="deadline"
-          required
-          value={SAMPLE_JOB.date_posted}
-          disabled={isDisabled.date_posted}
-          placeholder="Enter job deadline"
-          className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-        />
-        <div className="self-end flex flex-row gap-2 items-end">
+          </span>
+          <span className="flex flex-col gap-2 items-start">
+            <label
+              htmlFor="deadline"
+              className="text-h6 font-medium flex flex-row gap-2"
+            >
+              <h6>Deadline</h6>
+              <h6 className="text-red-500">*</h6>
+            </label>
+            <input
+              type="date"
+              name="deadline"
+              id="deadline"
+              required
+              value={SAMPLE_JOB.date_posted}
+              disabled={isDisabled.date_posted}
+              placeholder="Enter job deadline"
+              className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+            />
+            <div className="self-end flex flex-row gap-2 items-end">
               {isDisabled.date_posted === false ? (
                 <>
                   <Button
@@ -145,25 +146,25 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
                 />
               )}
             </div>
-      </span>
-      <span className="flex flex-col gap-2 items-start">
-        <label
-          htmlFor="description"
-          className="text-h6 font-medium flex flex-row gap-2"
-        >
-          <h6>Job Description</h6>
-          <h6 className="text-red-500">*</h6>
-        </label>
-        <textarea
-          name="description"
-          id="description"
-          required
-          value={SAMPLE_JOB.description}
-          disabled={isDisabled.description}
-          placeholder="Start typing job description ..."
-          className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white min-h-[100px]"
-        ></textarea>
-        <div className="self-end flex flex-row gap-2 items-end">
+          </span>
+          <span className="flex flex-col gap-2 items-start">
+            <label
+              htmlFor="description"
+              className="text-h6 font-medium flex flex-row gap-2"
+            >
+              <h6>Job Description</h6>
+              <h6 className="text-red-500">*</h6>
+            </label>
+            <textarea
+              name="description"
+              id="description"
+              required
+              value={SAMPLE_JOB.description}
+              disabled={isDisabled.description}
+              placeholder="Start typing job description ..."
+              className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white min-h-[100px]"
+            ></textarea>
+            <div className="self-end flex flex-row gap-2 items-end">
               {isDisabled.description === false ? (
                 <>
                   <Button
@@ -184,22 +185,27 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
                 />
               )}
             </div>
-      </span>
-      <span className="flex flex-col gap-2 items-start">
-        <label
-          htmlFor="categories"
-          className="text-h6 font-medium flex flex-row gap-2"
-        >
-          <h6>Job Categories</h6>
-          <h6 className="text-red-500">*</h6>
-        </label>
-        {isDisabled.categories ? 
-        <ListDisplay listItems={SAMPLE_JOB.categories} type='categories'/>
-        :
-              <CategorySelectMulti selected={categories} setSelected={setCategories}/>
-
-        }
-      <div className="self-end flex flex-row gap-2 items-end">
+          </span>
+          <span className="flex flex-col gap-2 items-start">
+            <label
+              htmlFor="categories"
+              className="text-h6 font-medium flex flex-row gap-2"
+            >
+              <h6>Job Categories</h6>
+              <h6 className="text-red-500">*</h6>
+            </label>
+            {isDisabled.categories ? (
+              <ListDisplay
+                listItems={SAMPLE_JOB.categories}
+                type="categories"
+              />
+            ) : (
+              <CategorySelectMulti
+                selected={categories}
+                setSelected={setCategories}
+              />
+            )}
+            <div className="self-end flex flex-row gap-2 items-end">
               {isDisabled.categories === false ? (
                 <>
                   <Button
@@ -220,26 +226,26 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
                 />
               )}
             </div>
-      </span>
-      <span className="flex flex-col gap-2 items-start">
-        <label
-          htmlFor="type"
-          className="text-h6 font-medium flex flex-row gap-2"
-        >
-          <h6>Job Type</h6>
-          <h6 className="text-red-500">*</h6>
-        </label>
-        <Select
-          className="rounded-md text-gray-800 outline-none w-full border border-borderColor z- p-2 focus:ring-2 focus:ring-blue-500"
-          options={JOB_TYPES_OPTIONS}
-          value={JOB_TYPES_OPTIONS.find(
-            (option) => option.value === SAMPLE_JOB.type
-          )}
-          placeholder={"Select job type"}
-          isSearchable
-          menuPlacement="top"
-        />
-        <div className="self-end flex flex-row gap-2 items-end">
+          </span>
+          <span className="flex flex-col gap-2 items-start">
+            <label
+              htmlFor="type"
+              className="text-h6 font-medium flex flex-row gap-2"
+            >
+              <h6>Job Type</h6>
+              <h6 className="text-red-500">*</h6>
+            </label>
+            <Select
+              className="rounded-md text-gray-800 outline-none w-full border border-borderColor z- p-2 focus:ring-2 focus:ring-blue-500"
+              options={JOB_TYPES_OPTIONS}
+              value={JOB_TYPES_OPTIONS.find(
+                (option) => option.value === SAMPLE_JOB.type
+              )}
+              placeholder={"Select job type"}
+              isSearchable
+              menuPlacement="top"
+            />
+            <div className="self-end flex flex-row gap-2 items-end">
               {isDisabled.type === false ? (
                 <>
                   <Button
@@ -260,28 +266,27 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
                 />
               )}
             </div>
+          </span>
 
-      </span>
-    
-      <span className="flex flex-col gap-2 items-start">
-        <label
-          htmlFor="experience_level"
-          className="text-h6 font-medium flex flex-row gap-2"
-        >
-          <h6>Experience Level</h6>
-          <h6 className="text-red-500">*</h6>
-        </label>
-        <Select
-          className="rounded-md text-gray-800 outline-none w-full border border-borderColor z- p-2 focus:ring-2 focus:ring-blue-500"
-          options={EXPERIENCE_LEVELS_OPTIONS}
-          value={EXPERIENCE_LEVELS_OPTIONS.find(
-            (option) => option.value === SAMPLE_JOB.level
-          )}
-          placeholder={"Select experience level"}
-          isSearchable
-          menuPlacement="top"
-        />
-        <div className="self-end flex flex-row gap-2 items-end">
+          <span className="flex flex-col gap-2 items-start">
+            <label
+              htmlFor="experience_level"
+              className="text-h6 font-medium flex flex-row gap-2"
+            >
+              <h6>Experience Level</h6>
+              <h6 className="text-red-500">*</h6>
+            </label>
+            <Select
+              className="rounded-md text-gray-800 outline-none w-full border border-borderColor z- p-2 focus:ring-2 focus:ring-blue-500"
+              options={EXPERIENCE_LEVELS_OPTIONS}
+              value={EXPERIENCE_LEVELS_OPTIONS.find(
+                (option) => option.value === SAMPLE_JOB.level
+              )}
+              placeholder={"Select experience level"}
+              isSearchable
+              menuPlacement="top"
+            />
+            <div className="self-end flex flex-row gap-2 items-end">
               {isDisabled.level === false ? (
                 <>
                   <Button
@@ -302,16 +307,19 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
                 />
               )}
             </div>
-      </span>
-      <span className="flex flex-col gap-2 items-start">
-        <label
-          htmlFor="categories"
-          className="text-h6 font-medium flex flex-row gap-2"
-        >
-          <h6>Job Location</h6>
-        </label>
-      <LocationSelectSingle selected={location} setSelected={setLocation}/>
-      <div className="self-end flex flex-row gap-2 items-end">
+          </span>
+          <span className="flex flex-col gap-2 items-start">
+            <label
+              htmlFor="categories"
+              className="text-h6 font-medium flex flex-row gap-2"
+            >
+              <h6>Job Location</h6>
+            </label>
+            <LocationSelectSingle
+              selected={location}
+              setSelected={setLocation}
+            />
+            <div className="self-end flex flex-row gap-2 items-end">
               {isDisabled.location === false ? (
                 <>
                   <Button
@@ -332,19 +340,20 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
                 />
               )}
             </div>
-      </span>
-      <span className="flex flex-col gap-2 items-start">
-        <label
-          htmlFor="requirements"
-          className="text-h6 font-medium flex flex-row gap-2"
-        >
-          <h6>Requirements</h6>
-        </label>
-        {isDisabled.requirements ? 
-        <ListDisplay listItems={SAMPLE_JOB.requirements}/>
-        :
-      <ListInputField name='requirements'/>}
-      <div className="self-end flex flex-row gap-2 items-end">
+          </span>
+          <span className="flex flex-col gap-2 items-start">
+            <label
+              htmlFor="requirements"
+              className="text-h6 font-medium flex flex-row gap-2"
+            >
+              <h6>Requirements</h6>
+            </label>
+            {isDisabled.requirements ? (
+              <ListDisplay listItems={SAMPLE_JOB.requirements} />
+            ) : (
+              <ListInputField name="requirements" />
+            )}
+            <div className="self-end flex flex-row gap-2 items-end">
               {isDisabled.requirements === false ? (
                 <>
                   <Button
@@ -365,20 +374,20 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
                 />
               )}
             </div>
-      </span>
-      <span className="flex flex-col gap-2 items-start">
-        <label
-          htmlFor="responsibilities"
-          className="text-h6 font-medium flex flex-row gap-2"
-        >
-          <h6>Responsibilities</h6>
-        </label>
-        {isDisabled.responsibilities ? 
-        <ListDisplay listItems={SAMPLE_JOB.responsibilities}/>
-        :
-        
-      <ListInputField name='responsibilities'/>}
-      <div className="self-end flex flex-row gap-2 items-end">
+          </span>
+          <span className="flex flex-col gap-2 items-start">
+            <label
+              htmlFor="responsibilities"
+              className="text-h6 font-medium flex flex-row gap-2"
+            >
+              <h6>Responsibilities</h6>
+            </label>
+            {isDisabled.responsibilities ? (
+              <ListDisplay listItems={SAMPLE_JOB.responsibilities} />
+            ) : (
+              <ListInputField name="responsibilities" />
+            )}
+            <div className="self-end flex flex-row gap-2 items-end">
               {isDisabled.responsibilities === false ? (
                 <>
                   <Button
@@ -399,19 +408,20 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
                 />
               )}
             </div>
-      </span>
-      <span className="flex flex-col gap-2 items-start">
-        <label
-          htmlFor="benefits"
-          className="text-h6 font-medium flex flex-row gap-2"
-        >
-          <h6>Benefits</h6>
-        </label>
-        {isDisabled.benefits ? 
-        <ListDisplay listItems={SAMPLE_JOB.benefits}/>
-        :
-      <ListInputField name='benefits'/>}
-      <div className="self-end flex flex-row gap-2 items-end">
+          </span>
+          <span className="flex flex-col gap-2 items-start">
+            <label
+              htmlFor="benefits"
+              className="text-h6 font-medium flex flex-row gap-2"
+            >
+              <h6>Benefits</h6>
+            </label>
+            {isDisabled.benefits ? (
+              <ListDisplay listItems={SAMPLE_JOB.benefits} />
+            ) : (
+              <ListInputField name="benefits" />
+            )}
+            <div className="self-end flex flex-row gap-2 items-end">
               {isDisabled.benefits === false ? (
                 <>
                   <Button
@@ -432,8 +442,7 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
                 />
               )}
             </div>
-      
-      </span>
+          </span>
         </div>
       </div>
     </div>

@@ -24,7 +24,7 @@ const Home: React.FC = () => {
       <HomeJobsSection />
       <WhyJobVanaSection />
       <TestimonialSection />
-      <TopCompaniesSection/>
+      <TopCompaniesSection />
     </div>
   );
 };

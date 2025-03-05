@@ -8,10 +8,9 @@ import { handleApiError } from "@/utils/errorHandlerUtils";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
 
-
 interface ApplyJobFormDataProps {
   resume: string;
-  cover_letter: string,
+  cover_letter: string;
   job: string;
 }
 
@@ -19,11 +18,11 @@ interface ApplyJobFormProps {
   jobId: string;
 }
 
-const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobId=''}) => {
+const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobId = "" }) => {
   const [formData, setFormData] = useState<ApplyJobFormDataProps>({
-    resume: '',
-    cover_letter: '',
-    job: ''
+    resume: "",
+    cover_letter: "",
+    job: "",
   });
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -34,24 +33,21 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobId=''}) => {
   };
 
   const handleResumeChange = (resumeUrl: string) => {
-
-    setFormData((prev) => ({ ...prev, resume: resumeUrl}));
-  }
-
+    setFormData((prev) => ({ ...prev, resume: resumeUrl }));
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-  
+
     setFormData((prev) => ({ ...prev, job: jobId }));
-  
+
     try {
       const response = await api.post("applications/", formData);
-  
+
       if (response.status === 201) {
         toast.success("Application submitted successfully!");
         setFormData((prev) => ({ ...prev, cover_letter: "", resume: "" }));
-
       }
     } catch (error) {
       console.error("Application submission failed:", error);
@@ -60,7 +56,6 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobId=''}) => {
       setLoading(false);
     }
   };
-  
 
   return (
     <form onSubmit={handleSubmit} className=" flex flex-col w-full gap-2 p-4">
@@ -69,7 +64,7 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobId=''}) => {
         Apply now and take the next step in your career. Fill out the form below
         to get started!
       </h5>
-    {/*   <span className="flex flex-col gap-2 items-start">
+      {/*   <span className="flex flex-col gap-2 items-start">
         <label
           htmlFor="available"
           className="text-h6 font-medium flex flex-row gap-2"
@@ -103,7 +98,7 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobId=''}) => {
           className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900 min-h-[100px]"
         ></textarea>
       </span>
-     {/*  <span className="flex flex-col gap-2 items-start">
+      {/*  <span className="flex flex-col gap-2 items-start">
         <label htmlFor="linkedin_url" className="text-h6 font-medium">
           LinkedIn Profile URL
         </label>
@@ -126,18 +121,19 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobId=''}) => {
           <h6 className="text-red-500">*</h6>
         </label>
 
-       <PDFInputField handleResumeChange={handleResumeChange} resume={formData.resume}/>
+        <PDFInputField
+          handleResumeChange={handleResumeChange}
+          resume={formData.resume}
+        />
       </span>
       <div className="self-center lg:w-1/2 w-full md:w-2/3">
-      
-        
-      <Button
-        type="submit"
-        name="Apply"
-        loading={loading}
-        styles="bg-primary rounded-md text-white h-10 p-2 w-full self-center"
-      />
-       </div> 
+        <Button
+          type="submit"
+          name="Apply"
+          loading={loading}
+          styles="bg-primary rounded-md text-white h-10 p-2 w-full self-center"
+        />
+      </div>
     </form>
   );
 };

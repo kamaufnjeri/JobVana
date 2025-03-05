@@ -42,10 +42,9 @@ const SingleApplicationReceivedModal: React.FC<
               {application.last_name}
             </h2>
 
-           
-              <h6 className="text-h6">Date Applied - {application.date_applied}</h6>
-              
-           
+            <h6 className="text-h6">
+              Date Applied - {application.date_applied}
+            </h6>
           </div>
 
           <span className="flex flex-col gap-2 items-start">
@@ -106,6 +105,7 @@ const SingleApplicationReceivedModal: React.FC<
               LinkedIn Profile
             </label>
             <Link
+              prefetch={true}
               href="jobs/1"
               className=""
               target="_blank"
@@ -124,8 +124,7 @@ const SingleApplicationReceivedModal: React.FC<
             <h6 className="text-h6 font-bold flex flex-row gap-2">
               Resume/CV (pdf, doc)
             </h6>
-            <FileViewer fileUrl={application.resume}/>
-           
+            <FileViewer fileUrl={application.resume} />
           </span>
         </div>
       </div>

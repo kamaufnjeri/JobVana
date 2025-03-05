@@ -1,39 +1,42 @@
-import axios from "axios";
-import { toast } from "react-toastify";
+import axios, { AxiosError } from "axios";
+import { capitalizeFirstLetter } from ".";
+
+interface DjangoErrorResponse {
+  detail?: string;
+  non_field_errors?: string[];
+  [key: string]: string[] | string | undefined;
+}
 
 export const handleApiError = (error: unknown): string => {
-  let message = "An unexpected error occurred. Please try again.";
-
   if (axios.isAxiosError(error)) {
-    if (!error.response) {
-      message = "Network error! Please check your internet connection.";
-    } else {
-      const { status, data } = error.response;
+    const axiosError = error;
+    
 
-      if (status === 400 && typeof data === "object" && data !== null) {
-        // If there are multiple field errors
-        const errorMessages = Object.entries(data)
-          .map(([field, errors]) => {
-            if (Array.isArray(errors)) {
-              return `${field}: ${errors.join(", ")}`; // Join multiple errors for the same field
-            }
-            return `${field}: ${errors}`;
-          })
-          .join(" | "); // Separate errors with a |
+    if (axiosError.response) {
+      const { data } = axiosError.response.data;
 
-        message = errorMessages;
-      } else if (status === 401 || status === 403) {
-        message = data.detail || "Unauthorized request.";
-      } else if (status === 404) {
-        message = "The requested resource was not found.";
-      } else if (status >= 500) {
-        message = "Server error! Please try again later.";
+      // Handle Django's common "detail" error response
+      if (typeof data === "object" && data !== null) {
+        if (data.detail) {
+          return data.detail;
+        } 
+
+        // Handle form validation errors (field-specific)
+        const fieldErrors = Object.entries(data)
+          .map(([key, value]) =>
+            Array.isArray(value) ? `${capitalizeFirstLetter(key)} - ${value.join(", ")}` : `${capitalizeFirstLetter(key)} - ${value}`
+          )
+          .join(" | ");
+
+        return fieldErrors || `Error: An unknown error occurred.`;
       }
+    } else if (axiosError.request) {
+      return "No response from server. Please try again later.";
+    } else {
+      return `Request error: ${axiosError.message}`;
     }
   }
 
-  // Show error message using Toastify
-  toast.error(message, { position: "top-right" });
-
-  return message;
+  // Handle other non-Axios errors
+  return error instanceof Error ? error.message : "An unknown error occurred.";
 };

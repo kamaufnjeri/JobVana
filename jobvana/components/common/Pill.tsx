@@ -13,7 +13,7 @@ const Pill: React.FC<PillProps> = ({ text, onRemove }) => {
         onClick={onRemove}
         className="ml-2 focus:outline-none hover:bg-white/20 rounded-full p-1"
       >
-        <FaTimes/>
+        <FaTimes />
       </button>
     </span>
   );

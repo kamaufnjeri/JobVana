@@ -6,7 +6,10 @@ export default function ThemeToggle() {
   const [theme, setTheme] = useState<"light" | "dark">("light"); // Default to "light"
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+    const storedTheme = localStorage.getItem("theme") as
+      | "light"
+      | "dark"
+      | null;
     if (storedTheme) {
       setTheme(storedTheme);
     }
@@ -23,10 +26,14 @@ export default function ThemeToggle() {
 
   return (
     <button
-      className="outline-none border-none"
+      className="outline-none border-none lg:self-center self-end"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
     >
-      {theme === "dark" ? <FaSun className="text-h4 hover:text-primary transition-class"/> : <FaMoon className="text-h4 hover:text-primary transition-class"/>}
+      {theme === "dark" ? (
+        <FaSun className="text-h4 hover:text-primary transition-class" />
+      ) : (
+        <FaMoon className="text-h4 hover:text-primary transition-class" />
+      )}
     </button>
   );
 }
