@@ -2,9 +2,11 @@ import { SAMPLE_JOBS } from "@/constants";
 import Link from "next/link";
 import React from "react";
 import JobsSection from "../jobs/JobsSection";
+import { useJob } from "@/context/JobsContext";
 
 const latestJobs = SAMPLE_JOBS.slice(0, 6);
 const HomeJobsSection: React.FC = () => {
+  const { jobsData  } = useJob()
   return (
     <section className="w-full flex flex-col gap-2 items-start justify-start">
       <h2 className="text-h2">Latest Jobs Opening</h2>
@@ -20,7 +22,7 @@ const HomeJobsSection: React.FC = () => {
           See All jobs
         </Link>
       </span>
-      <JobsSection jobs={latestJobs} />
+      <JobsSection jobs={jobsData.results.slice(0, 6)} />
     </section>
   );
 };

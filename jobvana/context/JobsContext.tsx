@@ -6,6 +6,7 @@ import {
     ReactNode,
   } from "react";
   import axios from "axios";
+import { JobResponseProps } from "@/interfaces";
   
   interface Job {
     label: string;
@@ -14,10 +15,18 @@ import {
   }
   
   interface JobContextType {
-    jobs: Job[];
-    searchJobs: (query: string) => void;
+    jobsData: JobResponseProps;
+    setJobsData: React.Dispatch<React.SetStateAction<JobResponseProps>>
+    fetchJobs: () => void;
     error: string | null;
     loading: boolean;
+  }
+
+  const defaultJobsData: JobResponseProps = {
+    count: 0,
+    results: [],
+    previous: null,
+    next: null,
   }
   
   const JobContext = createContext<JobContextType | undefined>(
@@ -27,43 +36,32 @@ import {
   export const JobProvider: React.FC<{ children: ReactNode }> = ({
     children,
   }) => {
-    const [allJobs, setAllJobs] = useState<Job[]>([]);
-    const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
-    const [error, setError] = useState<string | null>(null);
+    const [jobsData, setJobsData] = useState<JobResponseProps>(defaultJobsData);
+    const [error, setError] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false);
+   
   
-    useEffect(() => {
-      const fetchJobs = async () => {
+    const fetchJobs = async () => {
         setLoading(true);
         try {
-          const response = await axios.get("/files/jobs.json");
-          const data = response.data;
-          setAllJobs(data);
-          setFilteredJobs(data.slice(0, 50));
-        } catch (error) {
-          setError("Failed to load jobs");
+          const response = await axios.get("/api/jobs");
+          if (response.status === 200) {
+            setJobsData(response.data.jobs)
+          }
         } finally {
           setLoading(false);
         }
       };
+    useEffect(() => {
+      
   
       fetchJobs();
     }, []);
   
-    const searchJobs = (query: string) => {
-      if (!query) {
-        setFilteredJobs(allJobs.slice(0, 50));
-        return;
-      }
-      const results = allJobs.filter((loc) =>
-        loc.label.toLowerCase().includes(query.toLowerCase())
-      );
-      setFilteredJobs(results.slice(0, 50));
-    };
-  
+   
     return (
       <JobContext.Provider
-        value={{ jobs: filteredJobs, searchJobs, error, loading }}
+        value={{ jobsData, setJobsData, fetchJobs, error, loading }}
       >
         {children}
       </JobContext.Provider>

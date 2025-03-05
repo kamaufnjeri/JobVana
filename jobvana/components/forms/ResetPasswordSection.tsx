@@ -37,7 +37,7 @@ const ResetPasswordSection: React.FC = () => {
       try {
         const response = await api.post("auth/password-reset/reset/", formData);
 
-        if (response.status === 201) {
+        if (response.status === 200) {
           toast.success("User password reset successful!");
           router.push("/login");
         }

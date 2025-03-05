@@ -1,5 +1,36 @@
 import { ReactNode } from "react";
 
+
+export interface CompanyProps {
+  name: string;
+  id: string;
+}
+
+export interface JobProps {
+  id: string;
+  title: string;
+  description: string;
+  company: CompanyProps; 
+  max_salary: number;
+  min_salary: number;
+  is_active: boolean;
+  category: string[];
+  location: string;
+  job_type: string;
+  posted_by: string; 
+  created_at: string;
+  deadline?: string;
+  experience_level?: string;
+  details: any[]; 
+}
+
+export interface JobResponseProps {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: JobProps[];
+}
+
 export interface LayoutProps {
   children: ReactNode;
 }
@@ -26,13 +57,13 @@ export interface JobDetailProps {
 export interface JobPostProps {
   title: string;
   description: string;
-  experience_level: string;
+  experience_level: string ;
   max_salary: number;
   min_salary: number;
   deadline: string;
   category: string[];
-  location: string;
-  job_type: string;
+  location: string ;
+  job_type: string ;
   details?: JobDetailProps[];
 }
 
@@ -48,6 +79,7 @@ export interface ManyJobsProps {
   job_name: string;
   date_posted: string;
 }
+
 export interface JobApplicationProps {
   job_name: string;
   status: string;
@@ -69,10 +101,7 @@ export interface ApplicationReceivedProps {
   date_applied: string;
 }
 
-export interface CompanyProps {
-  name: string;
-  id: string;
-}
+
 // interface for user data
 export interface UserProps {
   first_name: string;

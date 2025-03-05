@@ -124,36 +124,36 @@ const Header: React.FC = () => {
          
 
           {user && (
-            <div className="flex items-start text-gray-900 cursor-pointer gap-2 flex-col relative group">
-              <div className="p-1 hidden group-hover:flex flex-col gap-2 items-start absolute lg:left-0 lg:top-12 left-12 bg-gray-50 rounded-sm duration-300 transition-all ease-in-out w-[150px] text-center">
-                <p className="text-p hover:text-primary">
-                  {user.first_name} {user.last_name}
-                </p>
-
-                <span
-                  className="group relative flex justify-center"
-                  onClick={logout}
-                >
-                  <MdLogout className="text-2xl hover:text-primary" />
-                </span>
-              </div>
-
-              <span className="rounded-full w-10 h-10 hover:ring-4 ring-primary flex items-center justify-center flex-row gap-2">
-                <Image
-                  src={`https://ui-avatars.com/api/?name=${user.first_name} ${user.last_name}&size=50`}
-                  alt={user.first_name}
-                  width={50}
-                  height={50}
-                  className="rounded-full"
-                />
-              </span>
-            </div>
+          <div className="flex  p-2 items-start text-gray-900 cursor-pointer gap-2 flex-col relative group">
+          {/* Hover dropdown */}
+          <div className="p-1 hidden group-hover:flex flex-col gap-2 items-start absolute lg:left-0 lg:top-14 top-0 left-14 z-50 bg-gray-50 rounded-sm duration-300 transition-all ease-in-out w-[150px] text-center">
+            <p className="text-p hover:text-primary">
+              {user.first_name} {user.last_name}
+            </p>
+        
+            <span className=" flex justify-center" onClick={logout}>
+              <MdLogout className="text-2xl hover:text-primary" />
+            </span>
+          </div>
+        
+          {/* Avatar */}
+          <span className="rounded-full w-10 h-10 group-hover:ring-4 ring-primary flex items-center justify-center flex-row gap-2">
+            <Image
+              src={`https://ui-avatars.com/api/?name=${user.first_name} ${user.last_name}&size=50`}
+              alt={user.first_name}
+              width={50}
+              height={50}
+              className="rounded-full"
+            />
+          </span>
+        </div>
+        
           )}
            {(!user || user.role.toLowerCase() === "employer") && (
             <>
               <Link
                prefetch={true}
-               href={`/dashboard/post-a-job`}
+               href={user ? `/dashboard/post-a-job` : 'login'}
                className={`${
                  pathname === "/post-a-job" ? "opacity-80" : "text-text"
                } bg-primary p-2 h-10 rounded-md text-center text-h5 hover:opacity-80 opacity-100 text-white`}

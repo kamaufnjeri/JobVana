@@ -9,21 +9,23 @@ import DetailsInputField from "../common/DetailsInputField";
 import api from "@/utils/api";
 import { handleApiError } from "@/utils/errorHandlerUtils";
 import { toast } from "react-toastify";
+import { useJob } from "@/context/JobsContext";
 
 const todaysDate = new Date().toISOString().split("T")[0];
 
 const PostJobForm: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
+  const { fetchJobs }= useJob();
   const [formData, setFormData] = useState<JobPostProps>({
     title: "",
     description: "",
-    experience_level: "",
+    experience_level:'',
     max_salary: 0,
     min_salary: 0,
     deadline: "",
     category: [],
-    location: "",
-    job_type: ""
+    location: '',
+    job_type: ''
   });
 
   const handleChange = (
@@ -48,24 +50,26 @@ const PostJobForm: React.FC = () => {
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    console.log(formData)
 
     try {
       const response = await api.post("jobs", formData);
 
+
       if (response.status === 201) {
         toast.success("Job posted successful!");
+
         setFormData((prev) => ({
           title: "",
           description: "",
-          experience_level: "",
+          experience_level:'',
           max_salary: 0,
           min_salary: 0,
           deadline: "",
           category: [],
-          location: "",
-          job_type: ""
+          location: '',
+          job_type: ''
         }));
+        fetchJobs();
       }
     } catch (error) {
       console.error("Job posting failed:", error);
@@ -114,13 +118,11 @@ const PostJobForm: React.FC = () => {
           className="text-h6 font-medium flex flex-row gap-2"
         >
           <h6>Deadline</h6>
-          <h6 className="text-red-500">*</h6>
         </label>
         <input
           type="date"
           name="deadline"
           id="deadline"
-          required
           value={formData.deadline}
           onChange={handleChange}
           placeholder="Enter job deadline"
@@ -219,30 +221,10 @@ const PostJobForm: React.FC = () => {
       </span>
       <span className="flex flex-col gap-2 items-start">
         <label
-          htmlFor="max_salary"
-          className="text-h6 font-medium flex flex-row gap-2"
-        >
-          <h6>Max Salary ($)</h6>
-          <h6 className="text-red-500">*</h6>
-        </label>
-        <input
-          type="number"
-          name="max_salary"
-          id="max_salary"
-          required
-          value={formData.max_salary}
-          onChange={handleChange}
-          min={0}
-          placeholder="Enter max salary"
-          className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
-        />
-      </span>
-      <span className="flex flex-col gap-2 items-start">
-        <label
           htmlFor="min_salary"
           className="text-h6 font-medium flex flex-row gap-2"
         >
-          <h6>Min Salary ($)</h6>
+          <h6>Min Salary ($)/month</h6>
           <h6 className="text-red-500">*</h6>
         </label>
         <input
@@ -257,6 +239,27 @@ const PostJobForm: React.FC = () => {
           className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
         />
       </span>
+      <span className="flex flex-col gap-2 items-start">
+        <label
+          htmlFor="max_salary"
+          className="text-h6 font-medium flex flex-row gap-2"
+        >
+          <h6>Max Salary ($)/month</h6>
+          <h6 className="text-red-500">*</h6>
+        </label>
+        <input
+          type="number"
+          name="max_salary"
+          id="max_salary"
+          required
+          value={formData.max_salary}
+          onChange={handleChange}
+          min={0}
+          placeholder="Enter max salary"
+          className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
+        />
+      </span>
+     
       <div className="lg:col-span-2 place-self-center w-1/2">
         <Button
           type="submit"

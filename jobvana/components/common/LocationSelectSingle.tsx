@@ -10,7 +10,7 @@ interface Location {
 }
 
 interface LocationSelectProps {
-  selected: string; // Store only values (strings)
+  selected: string | null; // Store only values (strings)
   setSelected: (Location: string) => void; // Update selected values (strings)
 }
 
@@ -38,7 +38,7 @@ const LocationSelectSingle: React.FC<LocationSelectProps> = ({
   };
   // Map selected values to objects with label and value for display
   const selectedOption = locations.find((loc) =>
-  selected.includes(loc.value)
+  selected?.includes(loc.value)
 );;
 
 

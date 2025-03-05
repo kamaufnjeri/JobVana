@@ -1,5 +1,6 @@
 import Layout from "@/components/layout/Layout";
 import { AuthProvider } from "@/context/AuthContext";
+import { JobProvider } from "@/context/JobsContext";
 import { LocationProvider } from "@/context/LocationContext";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
@@ -8,7 +9,9 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
+    <JobProvider>
     <AuthProvider>
+
       <LocationProvider>
         <Layout>
           <Component {...pageProps} />
@@ -16,5 +19,6 @@ export default function App({ Component, pageProps }: AppProps) {
         </Layout>
       </LocationProvider>
     </AuthProvider>
+    </JobProvider>
   );
 }

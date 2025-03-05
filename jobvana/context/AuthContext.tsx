@@ -79,7 +79,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           }
         }
       } else {
-        router.push('/')
+        setLoading(false);
       }
     };
 
@@ -91,8 +91,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   
   const logout = async () => {
     router.push("/");
-    Cookies.remove("access");
-    Cookies.remove("refresh");
+    Cookies.remove("accessToken");
+    Cookies.remove("refreshToken");
     setUser(null);
     toast.success("Logout successful!");
   };

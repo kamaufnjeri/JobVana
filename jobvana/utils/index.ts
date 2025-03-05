@@ -16,3 +16,7 @@ export const getLabelByValue = (
 export const capitalizeFirstLetter = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
+
+export const formatDate = (dateString: string) => {
+  return new Date(dateString).toISOString().split("T")[0];
+};

@@ -29,8 +29,13 @@ export const JOB_EXPERIENCE_OPTIONS: SelectValuesProps[] = [
 ];
 
 export const JOB_TYPES_OPTIONS: SelectValuesProps[] = [
-  { value: "Full-time", label: "Full-time" },
-  { value: "Part-time", label: "Part-time" },
+  { label: "Full-time", value: "Full-time" },
+  { label: "Part-time", value: "Part-time" },
+  { label: "Remote", value: "Remote" },
+  { label: "Hybrid", value: "Hybrid" },
+  { label: "Contract", value: "Contract" },
+  { label: "Freelance", value: "Freelance" },
+  { label: "Internship", value: "Internship" }
 ];
 
 
