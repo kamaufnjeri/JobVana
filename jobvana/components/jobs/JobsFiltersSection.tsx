@@ -1,27 +1,32 @@
 import React, { useRef, useState } from "react";
 import { FaSync } from "react-icons/fa";
-import CheckboxList from "../common/CheckBoxList";
-import { EXPERIENCE_LEVELS, JOB_TYPES } from "@/constants";
+import { JOB_EXPERIENCE_OPTIONS, JOB_TYPES_OPTIONS } from "@/constants";
 import { FaChevronDown } from "react-icons/fa6";
-import LocationSelectMulti from "../common/LocationSelectMulti";
-import CategorySelectMulti from "../common/CategorySelectMulti";
+import Select from "react-select";
+import LocationSelectSingle from "../common/LocationSelectSingle";
 
 const JobsFiltersSection: React.FC = () => {
   const [showItem, setShowItem] = useState<{ [key: string]: string | null }>({
     experienceLevel: null,
     jobType: null,
-    categories: null,
-    locations: null,
+    category: null,
+    location: null,
   });
 
-  const [experienceLevelList, setExperienceLevelList] = useState<string[]>([]);
-  const [jobTypeList, setJobTypeList] = useState<string[]>([]);
-  const [locations, setLocations] = useState<string[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [search, setSearch] = useState<{[key: string]: string }>({
+    title: "",
+    location: "",
+    category: "",
+    job_type: "",
+    experience_level: "",
+  })
 
+  
   const itemRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const chevronRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-
+  const setLocation = (location: string) => {
+    setSearch((prev) => ({ ...prev, location }));
+  };
   const toggleItemSection = (category: string) => {
     const isCurrentlyOpen = showItem[category] === category;
 
@@ -48,6 +53,11 @@ const JobsFiltersSection: React.FC = () => {
     }
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = e.target;
+    setSearch((prev) => ({...prev, [name]: value}))
+  }
+
   return (
     <div className="w-full flex-col border border-borderColor rounded-md">
       {/* Filter Header */}
@@ -69,6 +79,39 @@ const JobsFiltersSection: React.FC = () => {
           placeholder="Search..."
           className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
         />
+      </span>
+      {/* Categories */}
+      <span className="flex flex-col gap-2 items-start border-borderColor border-b p-2">
+        <div
+          className="flex flex-row justify-between items-center gap-2 w-full"
+          onClick={() => toggleItemSection("category")}
+        >
+          <label className="text-h6 opacity-80">Category</label>
+          <div
+            className="cursor-pointer opacity-80 transition-transform"
+            ref={(el) => {
+              chevronRefs.current["category"] = el;
+            }}
+          >
+            <FaChevronDown />
+          </div>
+        </div>
+        <div
+          className="opacity-0 h-0 transition-all duration-300 w-full"
+          ref={(el) => {
+            itemRefs.current["category"] = el;
+          }}
+        >
+          <input
+            type="text"
+            name="category"
+            id="cateogory"
+            required
+            placeholder="Category..."
+
+            className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
       </span>
 
       <span className="flex flex-col gap-2 items-start border-borderColor border-b p-2">
@@ -92,10 +135,13 @@ const JobsFiltersSection: React.FC = () => {
             itemRefs.current["experienceLevel"] = el;
           }}
         >
-          <CheckboxList
-            selected={experienceLevelList}
-            options={EXPERIENCE_LEVELS}
-            setSelected={setExperienceLevelList}
+          <Select
+            className="rounded-md text-gray-800 outline-none w-full border border-borderColor z- p-2 focus:ring-2 focus:ring-blue-500"
+            options={JOB_EXPERIENCE_OPTIONS}
+            placeholder={"Select job type"}
+            isSearchable
+            menuPlacement="top"
+            
           />
         </div>
       </span>
@@ -122,40 +168,13 @@ const JobsFiltersSection: React.FC = () => {
             itemRefs.current["jobType"] = el;
           }}
         >
-          <CheckboxList
-            selected={jobTypeList}
-            options={JOB_TYPES}
-            setSelected={setJobTypeList}
+          <Select
+            className="rounded-md text-gray-800 outline-none w-full border border-borderColor z- p-2 focus:ring-2 focus:ring-blue-500"
+            options={JOB_TYPES_OPTIONS}
+            placeholder={"Select job type"}
+            isSearchable
+            menuPlacement="top"
           />
-        </div>
-      </span>
-
-      {/* Categories */}
-      <span className="flex flex-col gap-2 items-start border-borderColor border-b p-2">
-        <div
-          className="flex flex-row justify-between items-center gap-2 w-full"
-          onClick={() => toggleItemSection("categories")}
-        >
-          <label className="text-h6 opacity-80">Categories</label>
-          <div
-            className="cursor-pointer opacity-80 transition-transform"
-            ref={(el) => {
-              chevronRefs.current["categories"] = el;
-            }}
-          >
-            <FaChevronDown />
-          </div>
-        </div>
-        <div
-          className="opacity-0 h-0 transition-all duration-300 w-full"
-          ref={(el) => {
-            itemRefs.current["categories"] = el;
-          }}
-        >
-          <CategorySelectMulti
-            selected={categories}
-            setSelected={setCategories}
-          />{" "}
         </div>
       </span>
 
@@ -163,13 +182,13 @@ const JobsFiltersSection: React.FC = () => {
       <span className="flex flex-col gap-2 items-start border-borderColor border-b p-2 z-0">
         <div
           className="flex flex-row justify-between items-center gap-2 w-full"
-          onClick={() => toggleItemSection("locations")}
+          onClick={() => toggleItemSection("location")}
         >
-          <label className="text-h6 opacity-80">Locations</label>
+          <label className="text-h6 opacity-80">Location</label>
           <div
             className="cursor-pointer opacity-80 transition-transform"
             ref={(el) => {
-              chevronRefs.current["locations"] = el;
+              chevronRefs.current["location"] = el;
             }}
           >
             <FaChevronDown />
@@ -178,13 +197,10 @@ const JobsFiltersSection: React.FC = () => {
         <div
           className="opacity-0 h-0 transition-all duration-300 w-full"
           ref={(el) => {
-            itemRefs.current["locations"] = el;
+            itemRefs.current["location"] = el;
           }}
         >
-          <LocationSelectMulti
-            selected={locations}
-            setSelected={setLocations}
-          />
+          <LocationSelectSingle selected={search.location} setSelected={setLocation} />
         </div>
       </span>
     </div>

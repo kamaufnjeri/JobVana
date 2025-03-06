@@ -4,16 +4,21 @@ import {
   APPLICATIONS_STATUS_OPTIONS,
   SAMPLE_JOB,
 } from "@/constants";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@/components/common/Button";
 import {
   ApplicationReceivedProps,
   JobApplicationProps,
   JobDetailsProps,
+  JobProps,
 } from "@/interfaces";
 import { capitalizeWords } from "@/utils";
 import SingleApplicationReceivedModal from "./SingleApplicationReceivedModal";
 import SingleJobPostedModal from "./SingleJobPostedModal";
+import { useRouter } from "next/router";
+import Loading from "@/components/common/Loading";
+import api from "@/utils/api";
+import { handleApiError } from "@/utils/errorHandlerUtils";
 
 const defaultApplication: ApplicationReceivedProps = {
   first_name: "",
@@ -33,6 +38,14 @@ const SingleJobPostedSection: React.FC = () => {
     useState<ApplicationReceivedProps>(defaultApplication);
   const [openJobDetailsModal, setOpenJobDetailsModal] =
     useState<boolean>(false);
+  const router = useRouter();
+  const { id } = router.query;
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [job, setJob] = useState<JobProps | null>(null);
+  if (!id) {
+    return <Loading styles="min-h-[400px]"/>
+  }
 
   const openApplicationModalFunc = (application: ApplicationReceivedProps) => {
     setOpenApplicationModal(true);
@@ -51,8 +64,41 @@ const SingleJobPostedSection: React.FC = () => {
     setOpenJobDetailsModal(false);
   };
 
+  const fetchJob = async () => {
+    setLoading(true);
+   
+    try {
+      const response = await api.get(`jobs/${id}`);
+
+      if (response.status === 200) {
+        setJob(response.data);
+      } else if (response.data.error) {
+        throw new Error(response.data.error || "Unknown Error ");
+      } else {
+        throw new Error("Unknown error");
+      }
+    } catch (error) {
+      console.error("Job posting failed:", error);
+      const errorMessage = handleApiError(error);
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      fetchJob();
+    }
+  },[id])
+
   return (
     <div className="p-4 border border-borderColor rounded-md shadow flex flex-col gap-4 w-full">
+      
+      {loading ? <Loading styles='min-h-[400px]'/> : error ?
+     <h3 className="text-h3 text-red-500">{error}</h3>
+     : job ?
+     <>
       {openApplicationModal && (
         <SingleApplicationReceivedModal
           closeModal={closeApplicationModal}
@@ -60,9 +106,9 @@ const SingleJobPostedSection: React.FC = () => {
         />
       )}
       {openJobDetailsModal && (
-        <SingleJobPostedModal closeModal={closeJobDetailsModal} />
+        <SingleJobPostedModal closeModal={closeJobDetailsModal} job={job}/>
       )}
-      <div className="w-full flex lg:flex-row flex-col gap-2 justify-between">
+     <div className="w-full flex lg:flex-row flex-col gap-2 justify-between">
         <div className="w-full flex flex-wrap justify-between gap-2">
           <h2 className="text-h2">
             Applications for {SAMPLE_JOB.job_name} job
@@ -132,7 +178,9 @@ const SingleJobPostedSection: React.FC = () => {
             ))}
           </tbody>
         </table>
-      </div>
+      </div></>
+      : <h3 className="text-h3">No jobs found</h3>
+      }
     </div>
   );
 };

@@ -10,7 +10,7 @@ interface Location {
 }
 
 interface LocationSelectProps {
-  selected: string | null; // Store only values (strings)
+  selected: string; // Store only values (strings)
   setSelected: (Location: string) => void; // Update selected values (strings)
 }
 

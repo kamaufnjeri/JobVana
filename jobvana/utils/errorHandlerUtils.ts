@@ -1,42 +1,49 @@
-import axios, { AxiosError } from "axios";
-import { capitalizeFirstLetter } from ".";
+import axios, { AxiosError } from 'axios';
+import { capitalizeWords } from '.';
 
-interface DjangoErrorResponse {
-  detail?: string;
-  non_field_errors?: string[];
-  [key: string]: string[] | string | undefined;
+interface ErrorResponse {
+  response?: {
+    data: {
+      details?: string[] | { [key: string]: string };
+    };
+  };
+  message?: string;
 }
 
 export const handleApiError = (error: unknown): string => {
+  let errorMessage: string = "Unknown Error";
+
+  // Check if it's an AxiosError and handle it accordingly
   if (axios.isAxiosError(error)) {
-    const axiosError = error;
-    
+    const axiosError = error as AxiosError;
 
-    if (axiosError.response) {
-      const { data } = axiosError.response.data;
+    if (axiosError.response?.data) {
+      // Access the details or fallback to the full data
+      const errorData = (axiosError.response.data as { details?: string[] | { [key: string]: string } }).details || axiosError.response.data;
 
-      // Handle Django's common "detail" error response
-      if (typeof data === "object" && data !== null) {
-        if (data.detail) {
-          return data.detail;
-        } 
-
-        // Handle form validation errors (field-specific)
-        const fieldErrors = Object.entries(data)
-          .map(([key, value]) =>
-            Array.isArray(value) ? `${capitalizeFirstLetter(key)} - ${value.join(", ")}` : `${capitalizeFirstLetter(key)} - ${value}`
-          )
-          .join(" | ");
-
-        return fieldErrors || `Error: An unknown error occurred.`;
+      if (Array.isArray(errorData)) {
+        errorMessage = errorData.join("\n");
+      } else if (typeof errorData === "object") {
+        // Assuming it's an object with string values
+        errorMessage = 'Errors: '.concat(
+          Object.entries(errorData)
+            .map(([key, value]) => `${capitalizeWords(key)} - ${value}`)
+            .join("\n")
+        );
+      } else {
+        // Fallback to a string
+        errorMessage = String(errorData);
       }
-    } else if (axiosError.request) {
-      return "No response from server. Please try again later.";
-    } else {
-      return `Request error: ${axiosError.message}`;
+    } else if (axiosError.message) {
+      errorMessage = axiosError.message;
     }
+  } else if (error instanceof Error) {
+    // Handle non-Axios errors, e.g., JavaScript Errors
+    errorMessage = error.message;
+  } else {
+    // Fallback if the error is not AxiosError or a standard Error
+    errorMessage = "An unknown error occurred";
   }
 
-  // Handle other non-Axios errors
-  return error instanceof Error ? error.message : "An unknown error occurred.";
+  return errorMessage;
 };

@@ -12,14 +12,16 @@ import {
 } from "@/interfaces";
 
 export const USER_ROLES: SelectValuesProps[] = [
-  { value: "Applicant", label: "Applicant" },
-  { value: "Employer", label: "Employer" },
+  { value: "applicant", label: "Applicant" },
+  { value: "employer", label: "Employer" },
 ];
 
+
+
 export const JOB_DETAILS_OPTIONS: SelectValuesProps[] = [
-  { value: "Responsibilities", label: "Responsibilities" },
-  { value: "Requirements", label: "Requirements" },
-  { value: "Benefits", label: "Benefits" }
+  { value: "Responsibility", label: "Responsibility" },
+  { value: "Requirement", label: "Requirement" },
+  { value: "Benefit", label: "Benefit" }
 ];
 
 export const JOB_EXPERIENCE_OPTIONS: SelectValuesProps[] = [
@@ -41,12 +43,13 @@ export const JOB_TYPES_OPTIONS: SelectValuesProps[] = [
 
 
 export const AVAILABILITY_OPTIONS: SelectValuesProps[] = [
-  { label: "Available Immediately", value: "immediate" },
-  { label: "Available in 1 Month", value: "one_month" },
-  { label: "Available in 2 Months", value: "two_months" },
-  { label: "Available in 3 Months", value: "three_months" },
-  { label: "Available in 6 Months", value: "six_months" },
+  { value: "Available Immediately", label: "Available Immediately" },
+  { value: "Available in 1 Month", label: "Available in 1 Month" },
+  { value: "Available in 2 Months", label: "Available in 2 Months" },
+  { value: "Available in 3 Months", label: "Available in 3 Months" },
+  { value: "Available in 6 Months", label: "Available in 6 Months" },
 ];
+
 
 export const EXPERIENCE_LEVELS_OPTIONS: SelectValuesProps[] = [
   { value: "internship", label: "Internship" },
@@ -81,36 +84,7 @@ export const SORT_BY_OPTIONS: SelectValuesProps[] = [
   { label: "Oldest", value: "oldest" },
 ];
 
-export const JOB_CATEGORIES: SelectValuesProps[] = [
-  { value: "accounting_finance", label: "Accounting and Finance" },
-  {
-    value: "administration_office_support",
-    label: "Administration and Office Support",
-  },
-  {
-    value: "advertising_marketing_pr",
-    label: "Advertising, Marketing, and Public Relations",
-  },
-  { value: "art_design_media", label: "Art, Design, and Media" },
-  { value: "business_operations", label: "Business Operations" },
-  { value: "customer_service", label: "Customer Service" },
-  { value: "education", label: "Education" },
-  {
-    value: "engineering_manufacturing",
-    label: "Engineering and Manufacturing",
-  },
-  { value: "healthcare_medical", label: "Healthcare and Medical" },
-  { value: "human_resources", label: "Human Resources" },
-  { value: "information_technology", label: "Information Technology (IT)" },
-  { value: "legal", label: "Legal" },
-  { value: "sales", label: "Sales" },
-  { value: "science_research", label: "Science and Research" },
-  { value: "skilled_trades", label: "Skilled Trades" },
-  { value: "supply_chain_logistics", label: "Supply Chain and Logistics" },
-  { value: "technology_emerging", label: "Technology (Emerging)" },
-  { value: "transportation_delivery", label: "Transportation and Delivery" },
-  { value: "others", label: "Others" },
-];
+
 
 export const SAMPLE_USER_APPLICANT: UserProps = {
   first_name: "John",
@@ -128,6 +102,7 @@ export const SAMPLE_USER_EMPLOYER: UserProps = {
   id: "1",
   company: {
     name: "Microsoft",
+    description: "",
     id: "1",
   },
 };

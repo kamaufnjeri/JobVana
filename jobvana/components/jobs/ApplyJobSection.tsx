@@ -3,14 +3,15 @@ import Button from "../common/Button";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { handleApiError } from "@/utils/errorHandlerUtils";
+import { JobProps } from "@/interfaces";
 
 interface ApplyJobSectionProps {
   openModal: () => void;
-  jobId: string;
+  job: JobProps;
 }
 const ApplyJobSection: React.FC<ApplyJobSectionProps> = ({
   openModal,
-  jobId = "",
+  job,
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -18,14 +19,15 @@ const ApplyJobSection: React.FC<ApplyJobSectionProps> = ({
     setLoading(true);
 
     try {
-      const response = await api.post(`jobs/${jobId}/save_job/`);
+      const response = await api.post(`jobs/${job.id}/save_job`);
 
       if (response.status === 200) {
         toast.success("Job saved successfully!");
       }
     } catch (error) {
       console.error("Application submission failed:", error);
-      handleApiError(error);
+      const errorMessage = handleApiError(error);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -51,12 +53,9 @@ const ApplyJobSection: React.FC<ApplyJobSectionProps> = ({
         {/* Section about the company*/}
         <span className="w-[60px] h-[6px] rounded-lg bg-primary"></span>
 
-        <h3 className="text-h3">About JobVana</h3>
+        <h3 className="text-h3">About {job.company_details.name}</h3>
         <p className="text-stylish text-p">
-          JobVana is a leading platform connecting job seekers with top
-          employers. Our mission is to make job searching easy, efficient, and
-          accessible for everyone. Whether you're looking for your next
-          opportunity or the perfect candidate, JobVana is here to help.
+          {job.company_details.description}
         </p>
       </div>
     </div>

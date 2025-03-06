@@ -1,20 +1,22 @@
 import Button from "@/components/common/Button";
-import { ManyJobsProps } from "@/interfaces";
+import { JobProps, ManyJobsProps } from "@/interfaces";
+import { capitalizeWords, formatDate } from "@/utils";
 import api from "@/utils/api";
 import { handleApiError } from "@/utils/errorHandlerUtils";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { FaMoneyBillWave } from "react-icons/fa";
 import { FaArrowRight, FaLocationDot } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
 interface SavedJobCardProps {
-  job: ManyJobsProps;
+  job: JobProps;
+  setJobs: React.Dispatch<React.SetStateAction<JobProps[] | []>>
 }
 
-const SavedJobCard: React.FC<SavedJobCardProps> = ({ job }) => {
-  const formatName = (name: string) =>
-    name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+const SavedJobCard: React.FC<SavedJobCardProps> = ({ job, setJobs }) => {
+ 
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -24,14 +26,16 @@ const SavedJobCard: React.FC<SavedJobCardProps> = ({ job }) => {
     setLoading(true);
 
     try {
-      const response = await api.post(`jobs/${job.job_name}/remove_saved_job/`);
+      const response = await api.post(`jobs/${job.id}/remove_saved_job`);
 
       if (response.status === 200) {
         toast.success("Saved job removed successfully!");
+        setJobs((prev) => prev.filter((oldJob) => oldJob.id !== job.id));
       }
     } catch (error) {
       console.error("Saved job removal failed:", error);
-      handleApiError(error);
+      const errorMessage = handleApiError(error);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -41,24 +45,26 @@ const SavedJobCard: React.FC<SavedJobCardProps> = ({ job }) => {
     <div className="group w-full p-4 border border-borderColor hover:border-gray-400 transition-all ease-in duration-300 cursor-pointer rounded-md shadow flex flex-col gap-2 items-start justify-start">
       <Link
         prefetch={true}
-        href={`/jobs/${job.job_name}`}
+        href={`/jobs/${job.id}`}
+        rel="noopener noreferrer"
+        target="_blank"
         className="w-full flex flex-col gap-2"
       >
         <div className="flex flex-wrap gap-2 items-start justify-between w-full">
           <div className="flex flex-wrap gap-2 w-full">
             <Image
               src={
-                job.logo ||
-                `https://ui-avatars.com/api/?name=${job.company_name}&size=150`
+               
+                `https://ui-avatars.com/api/?name=${job.company_details.name}&size=150`
               }
-              alt={job.company_name}
+              alt={job.company_details.name}
               width={50}
               height={50}
             />
 
             <div className="w-full flex flex-col gap-2">
-              <h4 className="text-h4">{job.company_name}</h4>
-              <h6 className="text-h6 opacity-80">Posted - {job.date_posted}</h6>
+              <h4 className="text-h4">{job.company_details.name}</h4>
+              <h6 className="text-h6 opacity-80">Posted - {formatDate(job.created_at)}</h6>
             </div>
           </div>
 
@@ -78,26 +84,37 @@ const SavedJobCard: React.FC<SavedJobCardProps> = ({ job }) => {
         </div>
       </Link>
 
-      <h3 className="text-h3">{job.job_name}</h3>
-      <h6 className="text-h6 opacity-80 text-secondary">
-        Deadline - {job.date_posted}
-      </h6>
+      <h3 className="text-h3">{job.title}</h3>
+      {job.deadline && <h6 className="text-h6 opacity-80 text-secondary">
+        Deadline - {formatDate(job.deadline)}
+      </h6>}
 
-      <ul className="text-p readable opacity-90 flex flex-wrap gap-2 text-primary">
+      {job.categories && <ul className="text-p readable opacity-90 flex flex-wrap gap-2 text-primary">
         {job.categories?.map((category, index) => (
           <li key={index} className="p-1 rounded-sm">
-            {formatName(category)}
+            {category}
           </li>
         ))}
-      </ul>
+      </ul>}
 
-      <span className="flex flex-wrap gap-2 opacity-80 justify-between w-full">
-        <p className="p-1 rounded-sm">{formatName(job.level)}</p>
-        <p className="p-1 rounded-sm">{formatName(job.type)}</p>
+      <span className="flex flex-col gap-2 opacity-80 w-full">
+        <div className="flex flex-row gap-2 justify-between">
+          {job.experience_level && (
+            <p className="p-1 rounded-sm">{job.experience_level}</p>
+          )}
+          <p className="p-1 rounded-sm">{job.job_type}</p>
+        </div>
+        <div className="flex flex-row justify-between gap-2">
         <span className="p-1 rounded-sm flex flex-row gap-2 items-center">
-          <FaLocationDot />
-          <p>{job.location}</p>
-        </span>
+            <FaMoneyBillWave />
+            <p>${job.min_salary} - {job.max_salary}</p>
+          </span>
+          
+          <span className="p-1 rounded-sm flex flex-row gap-2 items-center">
+            <FaLocationDot />
+            <p>{job.location}</p>
+          </span>
+        </div>
       </span>
     </div>
   );

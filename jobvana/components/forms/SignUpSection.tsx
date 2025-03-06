@@ -16,7 +16,7 @@ const SignUpSection: React.FC = () => {
     email: "",
     first_name: "",
     last_name: "",
-    confirmPassword: "",
+    confirm_password: "",
     role: "",
     password: "",
   });
@@ -40,29 +40,36 @@ const SignUpSection: React.FC = () => {
     e.preventDefault();
     setLoading(true);
 
-    const confirmPassword = formData.confirmPassword;
-    delete formData.confirmPassword;
-
-    if (confirmPassword === formData.password) {
+    
       try {
-        const response = await api.post("auth/register/", formData);
+        const response = await api.post("auth/sign-up/", formData);
 
         if (response.status === 201) {
-          toast.success("User registration successful!");
           router.push("/login");
-        }
+          toast.success(response?.data?.message);
+          setFormData({
+            email: "",
+            password: "",
+            role: "",
+            confirm_password: "",
+            first_name: "",
+            last_name: "",
+        });
+    } else if (response.data.error) {
+        toast.error(response.data.error || 'Registration failed');
+    } else {
+        throw new Error('Registration failed');
+    }
       } catch (error) {
         console.error("Registration failed:", error);
         toast.error(handleApiError(error));
       } finally {
         setLoading(false);
-        setFormData((prev) => ({ ...prev, password: "", confirmPassword: "" }));
+        setFormData((prev) => ({ ...prev, password: "", confirm_password: "" }));
       }
-    } else {
-      toast.error("Confirm password and password don't match");
-      setLoading(false);
-    }
-  };
+    };
+
+    console.log(formData)
 
   return (
     <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 h-full items-center justify-center lg:w-4/5">
@@ -159,15 +166,15 @@ const SignUpSection: React.FC = () => {
           {error && <span className="text-p text-red-500">{error}</span>}
         </span>
         <span className="flex flex-col gap-2 items-start">
-          <label htmlFor="confirmPassword" className="text-h6 font-medium">
+          <label htmlFor="confirm_password" className="text-h6 font-medium">
             Confirm Password
           </label>
           <input
             type="password"
-            name="confirmPassword"
-            id="confirmPassword"
+            name="confirm_password"
+            id="confirm_password"
             required
-            value={formData.confirmPassword}
+            value={formData.confirm_password}
             onChange={handleChange}
             placeholder="Confirm password"
             className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"

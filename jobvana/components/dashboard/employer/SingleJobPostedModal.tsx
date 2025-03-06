@@ -1,26 +1,26 @@
 import Button from "@/components/common/Button";
-import PDFInputField from "@/components/common/PDFInputField";
 import Select from "react-select";
 import {
   AVAILABILITY_OPTIONS,
   EXPERIENCE_LEVELS_OPTIONS,
+  JOB_EXPERIENCE_OPTIONS,
   JOB_TYPES_OPTIONS,
-  SAMPLE_JOB,
 } from "@/constants";
 import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
-import ListInputField from "@/components/common/DetailInputField";
 import LocationSelectSingle from "@/components/common/LocationSelectSingle";
-import CategorySelectMulti from "@/components/common/CategorySelectMulti";
-import Job from "@/pages/jobs/[id]";
 import ListDisplay from "@/components/common/ListDisplay";
+import { JobProps } from "@/interfaces";
+import ListInputField from "@/components/common/ListInputField";
 
 interface ApplicationModalProps {
   closeModal: () => void;
+  job: JobProps;
 }
 
 const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
   closeModal,
+  job
 }) => {
   const [isDisabled, setIsDisabled] = useState<{ [key: string]: boolean }>({
     responsibilities: true,
@@ -30,8 +30,8 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
     categories: true,
     location: true,
     type: true,
-    level: true,
-    job_name: true,
+    experience_level: true,
+    title: true,
   });
 
   const enableEditing = (key: string) => {
@@ -54,11 +54,11 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
 
         <div className=" flex flex-col w-full gap-4 p-4">
           <div className="flex lg:flex-row flex-col justify-between items-start pr-5">
-            <h2 className="text-h2">Job - {SAMPLE_JOB.job_name}</h2>
+            <h2 className="text-h2">Job - {job.title}</h2>
           </div>
           <div className="flex gap-2 flex-wrap justify-between">
             <h6 className="text-h6 font-medium flex flex-row gap-2">
-              Date Posted - {SAMPLE_JOB.date_posted}
+              Date Posted - {job.deadline}
             </h6>
 
             <Button
@@ -79,14 +79,14 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
               type="text"
               name="title"
               id="title"
-              value={SAMPLE_JOB.job_name}
+              value={job.title}
               required
-              disabled={isDisabled.job_name}
+              disabled={isDisabled.title}
               placeholder="Enter job title"
               className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
             />
             <div className="self-end flex flex-row gap-2 items-end">
-              {isDisabled.job_name === false ? (
+              {isDisabled.title === false ? (
                 <>
                   <Button
                     name="Save"
@@ -94,14 +94,14 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
                   />
                   <Button
                     name="Cancel"
-                    onClick={() => cancelEditing("job_name")}
+                    onClick={() => cancelEditing("title")}
                     styles="bg-gray-700 rounded-md text-white h-10 p-2 w-full self-end"
                   />
                 </>
               ) : (
                 <Button
                   name="Edit"
-                  onClick={() => enableEditing("job_name")}
+                  onClick={() => enableEditing("title")}
                   styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
                 />
               )}
@@ -120,13 +120,13 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
               name="deadline"
               id="deadline"
               required
-              value={SAMPLE_JOB.date_posted}
-              disabled={isDisabled.date_posted}
+              value={job.deadline}
+              disabled={isDisabled.deadline}
               placeholder="Enter job deadline"
               className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
             />
             <div className="self-end flex flex-row gap-2 items-end">
-              {isDisabled.date_posted === false ? (
+              {isDisabled.deadline === false ? (
                 <>
                   <Button
                     name="Save"
@@ -134,14 +134,14 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
                   />
                   <Button
                     name="Cancel"
-                    onClick={() => cancelEditing("date_posted")}
+                    onClick={() => cancelEditing("deadline")}
                     styles="bg-gray-700 rounded-md text-white h-10 p-2 w-full self-end"
                   />
                 </>
               ) : (
                 <Button
                   name="Edit"
-                  onClick={() => enableEditing("date_posted")}
+                  onClick={() => enableEditing("deadline")}
                   styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
                 />
               )}
@@ -159,7 +159,7 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
               name="description"
               id="description"
               required
-              value={SAMPLE_JOB.description}
+              value={job.description}
               disabled={isDisabled.description}
               placeholder="Start typing job description ..."
               className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white min-h-[100px]"
@@ -196,14 +196,12 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
             </label>
             {isDisabled.categories ? (
               <ListDisplay
-                listItems={SAMPLE_JOB.categories}
+                listItems={job.categories}
                 type="categories"
               />
             ) : (
-              <CategorySelectMulti
-                selected={categories}
-                setSelected={setCategories}
-              />
+              <ListInputField name='Categories' items={job.categories} setItems={setCategories}/>
+
             )}
             <div className="self-end flex flex-row gap-2 items-end">
               {isDisabled.categories === false ? (
@@ -229,7 +227,7 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
           </span>
           <span className="flex flex-col gap-2 items-start">
             <label
-              htmlFor="type"
+              htmlFor="job_type"
               className="text-h6 font-medium flex flex-row gap-2"
             >
               <h6>Job Type</h6>
@@ -239,14 +237,14 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
               className="rounded-md text-gray-800 outline-none w-full border border-borderColor z- p-2 focus:ring-2 focus:ring-blue-500"
               options={JOB_TYPES_OPTIONS}
               value={JOB_TYPES_OPTIONS.find(
-                (option) => option.value === SAMPLE_JOB.type
+                (option) => option.value === job.job_type
               )}
               placeholder={"Select job type"}
               isSearchable
               menuPlacement="top"
             />
             <div className="self-end flex flex-row gap-2 items-end">
-              {isDisabled.type === false ? (
+              {isDisabled.job_type === false ? (
                 <>
                   <Button
                     name="Save"
@@ -254,14 +252,14 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
                   />
                   <Button
                     name="Cancel"
-                    onClick={() => cancelEditing("type")}
+                    onClick={() => cancelEditing("job_type")}
                     styles="bg-gray-700 rounded-md text-white h-10 p-2 w-full self-end"
                   />
                 </>
               ) : (
                 <Button
                   name="Edit"
-                  onClick={() => enableEditing("type")}
+                  onClick={() => enableEditing("job_type")}
                   styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
                 />
               )}
@@ -278,16 +276,16 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
             </label>
             <Select
               className="rounded-md text-gray-800 outline-none w-full border border-borderColor z- p-2 focus:ring-2 focus:ring-blue-500"
-              options={EXPERIENCE_LEVELS_OPTIONS}
-              value={EXPERIENCE_LEVELS_OPTIONS.find(
-                (option) => option.value === SAMPLE_JOB.level
+              options={JOB_EXPERIENCE_OPTIONS}
+              value={JOB_EXPERIENCE_OPTIONS.find(
+                (option) => option.value === job.experience_level
               )}
               placeholder={"Select experience level"}
               isSearchable
               menuPlacement="top"
             />
             <div className="self-end flex flex-row gap-2 items-end">
-              {isDisabled.level === false ? (
+              {isDisabled.experience_level === false ? (
                 <>
                   <Button
                     name="Save"
@@ -295,14 +293,14 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
                   />
                   <Button
                     name="Cancel"
-                    onClick={() => cancelEditing("level")}
+                    onClick={() => cancelEditing("experience_level")}
                     styles="bg-gray-700 rounded-md text-white h-10 p-2 w-full self-end"
                   />
                 </>
               ) : (
                 <Button
                   name="Edit"
-                  onClick={() => enableEditing("level")}
+                  onClick={() => enableEditing("experience_level")}
                   styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
                 />
               )}
@@ -341,108 +339,7 @@ const SingleJobPostedModal: React.FC<ApplicationModalProps> = ({
               )}
             </div>
           </span>
-          <span className="flex flex-col gap-2 items-start">
-            <label
-              htmlFor="requirements"
-              className="text-h6 font-medium flex flex-row gap-2"
-            >
-              <h6>Requirements</h6>
-            </label>
-            {isDisabled.requirements ? (
-              <ListDisplay listItems={SAMPLE_JOB.requirements} />
-            ) : (
-              <ListInputField name="requirements" />
-            )}
-            <div className="self-end flex flex-row gap-2 items-end">
-              {isDisabled.requirements === false ? (
-                <>
-                  <Button
-                    name="Save"
-                    styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
-                  />
-                  <Button
-                    name="Cancel"
-                    onClick={() => cancelEditing("requirements")}
-                    styles="bg-gray-700 rounded-md text-white h-10 p-2 w-full self-end"
-                  />
-                </>
-              ) : (
-                <Button
-                  name="Edit"
-                  onClick={() => enableEditing("requirements")}
-                  styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
-                />
-              )}
-            </div>
-          </span>
-          <span className="flex flex-col gap-2 items-start">
-            <label
-              htmlFor="responsibilities"
-              className="text-h6 font-medium flex flex-row gap-2"
-            >
-              <h6>Responsibilities</h6>
-            </label>
-            {isDisabled.responsibilities ? (
-              <ListDisplay listItems={SAMPLE_JOB.responsibilities} />
-            ) : (
-              <ListInputField name="responsibilities" />
-            )}
-            <div className="self-end flex flex-row gap-2 items-end">
-              {isDisabled.responsibilities === false ? (
-                <>
-                  <Button
-                    name="Save"
-                    styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
-                  />
-                  <Button
-                    name="Cancel"
-                    onClick={() => cancelEditing("responsibilities")}
-                    styles="bg-gray-700 rounded-md text-white h-10 p-2 w-full self-end"
-                  />
-                </>
-              ) : (
-                <Button
-                  name="Edit"
-                  onClick={() => enableEditing("responsibilities")}
-                  styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
-                />
-              )}
-            </div>
-          </span>
-          <span className="flex flex-col gap-2 items-start">
-            <label
-              htmlFor="benefits"
-              className="text-h6 font-medium flex flex-row gap-2"
-            >
-              <h6>Benefits</h6>
-            </label>
-            {isDisabled.benefits ? (
-              <ListDisplay listItems={SAMPLE_JOB.benefits} />
-            ) : (
-              <ListInputField name="benefits" />
-            )}
-            <div className="self-end flex flex-row gap-2 items-end">
-              {isDisabled.benefits === false ? (
-                <>
-                  <Button
-                    name="Save"
-                    styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
-                  />
-                  <Button
-                    name="Cancel"
-                    onClick={() => cancelEditing("benefits")}
-                    styles="bg-gray-700 rounded-md text-white h-10 p-2 w-full self-end"
-                  />
-                </>
-              ) : (
-                <Button
-                  name="Edit"
-                  onClick={() => enableEditing("benefits")}
-                  styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
-                />
-              )}
-            </div>
-          </span>
+          
         </div>
       </div>
     </div>

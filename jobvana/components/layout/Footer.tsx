@@ -70,7 +70,7 @@ const Footer: React.FC = () => {
               <li className="border-text w-full border-b">
                 <Link
                   prefetch={true}
-                  href={`/dashboard/${user.role.toLocaleLowerCase()}`}
+                  href={`/dashboard/${user.role}`}
                   className={`${
                     pathname === "/login" ? "text-primary" : "text-text"
                   } text-h5 hover:text-primary transition-class`}
@@ -106,7 +106,7 @@ const Footer: React.FC = () => {
             </>
           )}
 
-          {(!user || user.role.toLocaleLowerCase() === "employer") && (
+          {(!user || user.role === "employer") && (
             <>
               {" "}
               <li className="border-text w-full border-b">

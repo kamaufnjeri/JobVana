@@ -36,9 +36,9 @@ const JobDetails: React.FC<{detailsList: JobDetailsProps[]}> = ({ detailsList })
 
   // Define mapping of type to titles
   const typeToTitle: { [key: string]: string } = {
-    "benefits": "What's in It for You",
-    "requirements": "What We're Looking For",
-    "responsibilities": "What You'll Do",
+    "Benefit": "What's in It for You",
+    "Requirement": "What We're Looking For",
+    "Responsibility": "What You'll Do",
   };
 
   return (

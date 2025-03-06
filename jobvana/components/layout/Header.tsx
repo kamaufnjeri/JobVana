@@ -82,7 +82,7 @@ const Header: React.FC = () => {
               <li>
                 <Link
                   prefetch={true}
-                  href={`/dashboard/${user.role.toLowerCase()}`}
+                  href={`/dashboard/${user.role}`}
                   className={`${
                     pathname === "/login" ? "text-primary" : "text-text"
                   } text-h4 hover:text-primary transition-class`}
@@ -149,7 +149,7 @@ const Header: React.FC = () => {
         </div>
         
           )}
-           {(!user || user.role.toLowerCase() === "employer") && (
+           {(!user || user.role === "employer") && (
             <>
               <Link
                prefetch={true}

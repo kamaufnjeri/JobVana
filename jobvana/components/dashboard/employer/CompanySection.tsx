@@ -1,139 +1,157 @@
-import Button from "@/components/common/Button";
-import DeleteModal from "@/components/common/DeleteModal";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { CompanyProps } from "@/interfaces";
 import api from "@/utils/api";
-import { handleApiError } from "@/utils/errorHandlerUtils";
-import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { handleApiError } from "@/utils/errorHandlerUtils";
+import { capitalizeFirstLetter } from "@/utils";
+import DeleteModal from "@/components/common/DeleteModal";
+import Button from "@/components/common/Button";
 
-const CompanySection: React.FC = () => {
-  const { user } = useAuth();
+const ProfileSection: React.FC = () => {
+  const { company, setCompany } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
-  const [company, setCompany] = useState<CompanyProps | null>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
-  const [formData, setFormData] = useState<{ name: string }>({
+  const [formData, setFormData] = useState<CompanyProps>({
     name: "",
+    description: "",
   });
-
-  useEffect(() => {
-    if (user && user.company) {
-      setCompany(user.company);
-      setFormData({ name: user.company.name }); // Initialize form data with company name
-    }
-  }, [user]);
 
   const [isDisabled, setIsDisabled] = useState<{ [key: string]: boolean }>({
     name: true,
+    description: true,
   });
 
   const enableEditing = (key: string) => {
     setIsDisabled((prev) => ({ ...prev, [key]: false }));
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const cancelEditing = (key: string) => {
+    setIsDisabled((prev) => ({ ...prev, [key]: true }));
+    if (company) {
+      setFormData(company);
+    }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleUpdateCompany = async () => {
+  useEffect(() => {
     if (company) {
-      setLoading(true);
+      setFormData(company);
+    } else {
+      setFormData({ name: "", description: "" }); // Ensure formData is always initialized
+    }
+  }, [company]);
+  
 
+  const handleUpdateCompany = async (key: "name" | "description") => {
+    if (company && formData) {
+      if (formData[key]) {
+        setLoading(true);
+        const data = { [key]: formData[key] }; // Corrected object structure
+
+        try {
+          const response = await api.patch(`auth/company/${company.id}/`, data);
+          if (response.status === 200) {
+            console.log(response.data)
+            const updatedCompany = response.data.company;
+            toast.success(response.data.message);
+            setCompany(updatedCompany);
+            setIsDisabled((prev) => ({ ...prev, [key]: true })); // Disable input after save
+          } else if (response.data.error) {
+            toast.error(response.data.error || "Company update failed");
+          } else {
+            throw new Error("Company update failed");
+          }
+        } catch (error) {
+          console.error("Company update failed:", error);
+          toast.error(handleApiError(error));
+          setFormData(company);
+        } finally {
+          setLoading(false);
+          
+        }
+      }
+    }
+  };
+
+  const handleCompanyAdd = async (e: React.ChangeEvent<HTMLFormElement>) => {
+
+    e.preventDefault();
+    setLoading(true)
+    if (formData) {
       try {
-        const response = await api.patch(`company/${company.id}`, formData);
-
-        if (response.status === 200) {
-          const company = response.data.data;
-          setCompany((prev) => ({
-            ...prev,
-            id: company.name,
-            name: company.name,
-          }));
-          toast.success("Company updated successfully!");
+        const response = await api.post(`auth/company/`, formData);
+        if (response.status === 201) {
+          const updatedCompany = response.data.company;
+          toast.success(response.data.message);
+          setCompany(updatedCompany);
+          setFormData(updatedCompany)
+        } else if (response.data.error) {
+          toast.error(response.data.error || "Company add failed");
+        } else {
+          throw new Error("Company add failed");
         }
       } catch (error) {
         console.error("Company update failed:", error);
         toast.error(handleApiError(error));
       } finally {
         setLoading(false);
-        setIsDisabled({ name: true }); // Disable input after save
       }
     }
   };
-
+  const closeModal = () => setDeleteModalOpen(false);
+  const openModal = () => setDeleteModalOpen(true);
   const handleDeleteCompany = async () => {
     if (company) {
       setLoading(true);
-
       try {
-        const response = await api.delete(`company/${company.id}`);
-
+        const response = await api.delete(`auth/company/${company.id}/`);
         if (response.status === 204) {
           setCompany(null);
-          setFormData({ name: "" });
+          setFormData({
+            name: "",
+            description: "",
+          });
+
           toast.success("Company deleted successfully!");
+        } else if (response.data.error) {
+          toast.error(response.data.error || "Company delete failed");
+        } else {
+          throw new Error("Company delete failed");
         }
       } catch (error) {
         console.error("Company delete failed:", error);
         toast.error(handleApiError(error));
       } finally {
         setLoading(false);
+        closeModal();
       }
     }
   };
 
-  const cancelEditing = (key: string) => {
-    setIsDisabled((prev) => ({ ...prev, [key]: true }));
-    setFormData({ name: company ? company.name : "" }); // Reset form data to original value
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const response = await api.post("company", formData);
-
-      if (response.status === 201) {
-        const company = response.data.data;
-        setCompany((prev) => ({
-          ...prev,
-          id: company.id,
-          name: company.name,
-        }));
-        setFormData({
-          name: company.name,
-        });
-
-        toast.success("Company created successfully!");
-      }
-    } catch (error) {
-      console.error("Company creation failed:", error);
-      toast.error(handleApiError(error));
-    } finally {
-      setLoading(false);
-      closeModal();
-    }
-  };
-
-  const closeModal = () => setDeleteModalOpen(false);
-  const openModal = () => setDeleteModalOpen(true);
+  
 
   return (
     <div className="p-4 border border-borderColor rounded-md shadow flex flex-col gap-4 w-full">
-      {deleteModalOpen && company && (
+      {deleteModalOpen && company !== null && (
         <DeleteModal
           loading={loading}
           deleteItem={handleDeleteCompany}
           closeModal={closeModal}
-          itemName={`Company - ${company.name}`}
+          itemName={`Company - ${company?.name}`}
         />
       )}
       <div className="w-full flex-col gap-2 justify-between">
         <div className="w-full flex gap-2 flex-col">
-          <h2 className="text-h2">Company Section</h2>
+          <h2 className="text-h2">Company Profile</h2>
         </div>
+
         {company ? (
           <div className="grid lg:grid-cols-2 grid-cols-1 gap-2 p-4">
             <span className="flex flex-col gap-2 items-start">
@@ -145,57 +163,91 @@ const CompanySection: React.FC = () => {
                 name="name"
                 id="name"
                 required
-                onChange={handleChange}
                 disabled={isDisabled.name}
-                value={formData.name}
-                placeholder="Enter company name"
+                value={formData?.name}
+                onChange={handleChange}
+                placeholder="Enter name"
                 className="rounded-md outline-none bg-white w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
               />
-            </span>
-            <div className="place-self-end grid grid-cols-1 lg:grid-cols-3 md:grid-cols-3 gap-2 items-end">
-              {isDisabled.name === false ? (
-                <>
-               
-                <Button
-                    name="Save"
-                    type='button'
-                    loading={loading}
-                    onClick={handleUpdateCompany}
-                    styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
-                  />
-                   <Button
-                    name="Delete"
-                    type='button'
-                    onClick={openModal}
-                    styles="bg-red-500 hover:bg-red-600 rounded-md text-white h-10 p-2 w-full self-end"
-                  />
-                  
-                  <Button
-                  type='button'
-                    name="Cancel"
-                    onClick={() => cancelEditing("name")}
-                    styles="bg-gray-700 rounded-md text-white h-10 p-2 w-full self-end"
-                  />
-                </>
-              ) : (
-                <>
+              <div className="self-end flex flex-row gap-2 items-end">
+                {isDisabled.name === false ? (
+                  <>
+                    <Button
+                      name="Save"
+                      loading={loading}
+                      onClick={() => handleUpdateCompany("name")}
+                      type="button"
+                      styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
+                    />
+                    <Button
+                      name="Cancel"
+                      type="button"
+                      onClick={() => cancelEditing("name")}
+                      styles="bg-gray-700 rounded-md text-white h-10 p-2 w-full self-end"
+                    />
+                  </>
+                ) : (
                   <Button
                     name="Edit"
-                    type='button'
+                    type="button"
                     onClick={() => enableEditing("name")}
                     styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
                   />
-                 
-                </>
-              )}
-            </div>
+                )}
+              </div>
+            </span>
+
+            <span className="flex flex-col gap-2 items-start">
+              <label htmlFor="description" className="text-h6 font-medium">
+                Description
+              </label>
+              <textarea
+                name="description"
+                id="description"
+                required
+                disabled={isDisabled.description}
+                value={formData?.description}
+                onChange={handleChange}
+                placeholder="Enter description"
+                className="rounded-md min-h-[120px] outline-none bg-white w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
+              ></textarea>
+              <div className="self-end flex flex-row gap-2 items-end">
+                {isDisabled.description === false ? (
+                  <>
+                    <Button
+                      name="Save"
+                      loading={loading}
+                      onClick={() => handleUpdateCompany("description")}
+                      type="button"
+                      styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
+                    />
+                    <Button
+                      name="Cancel"
+                      type="button"
+                      onClick={() => cancelEditing("description")}
+                      styles="bg-gray-700 rounded-md text-white h-10 p-2 w-full self-end"
+                    />
+                  </>
+                ) : (
+                  <Button
+                    name="Edit"
+                    type="button"
+                    onClick={() => enableEditing("description")}
+                    styles="bg-primary rounded-md text-white h-10 p-2 w-full self-end"
+                  />
+                )}
+              </div>
+            </span>
+            <Button
+                name="Delete"
+                type="button"
+                onClick={openModal}
+                styles="bg-red-500 hover:bg-red-600 lg:col-span-2 rounded-md text-white h-10 p-2 place-self-end"
+              />
           </div>
         ) : (
-          <form
-            onSubmit={handleSubmit}
-            className="grid lg:grid-cols-2 grid-cols-1 gap-2 p-4"
-          >
-            <span className="flex flex-col gap-2">
+          <form onSubmit={handleCompanyAdd} className="grid lg:grid-cols-2 grid-cols-1 gap-2 p-4">
+            <span className="flex flex-col gap-2 items-start">
               <label htmlFor="name" className="text-h6 font-medium">
                 Company Name
               </label>
@@ -204,20 +256,34 @@ const CompanySection: React.FC = () => {
                 name="name"
                 id="name"
                 required
+                value={formData?.name}
                 onChange={handleChange}
-                value={formData.name}
-                placeholder="Enter company name"
+                placeholder="Enter name"
                 className="rounded-md outline-none bg-white w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
               />
             </span>
-            <div className="place-self-end">
-              <Button
-                name="Save"
-                type="submit"
-                loading={loading}
-                styles="bg-primary rounded-md text-white h-10 p-2"
-              />
-            </div>
+
+            <span className="flex flex-col gap-2 items-start">
+              <label htmlFor="description" className="text-h6 font-medium">
+                Description
+              </label>
+              <textarea
+                name="description"
+                id="description"
+                required
+                value={formData?.description}
+                onChange={handleChange}
+                placeholder="Enter description"
+                className="rounded-md min-h-[120px] outline-none bg-white w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
+              ></textarea>
+            </span>
+
+            <Button
+              name="Save"
+              loading={loading}
+              type="submit"
+              styles="bg-primary rounded-md text-white h-10 p-2 lg:col-span-2 place-self-end"
+            />
           </form>
         )}
       </div>
@@ -225,4 +291,4 @@ const CompanySection: React.FC = () => {
   );
 };
 
-export default CompanySection;
+export default ProfileSection;

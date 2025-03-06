@@ -25,18 +25,28 @@ const ForgotPasswordSection: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await api.post("auth/password-reset/request/", formData);
-
+      const response = await api.post("auth/forgot-password/", formData);
       if (response.status === 200) {
-        toast.success("Check your email for reset password OTP!");
-        router.push("/reset-password");
+        // Handle success
+        router.push('/reset-password');
+        toast.success(response?.data?.message);
+
+        setFormData({
+          email: "",
+        });
+      } else if (response.data.error) {
+        toast.error(
+          response.data.error || "Reset password otp not sent failed"
+        );
+      } else {
+        throw new Error("Reset password otp not sent failed");
       }
     } catch (error) {
-      console.error("Error requesting reset password", error);
-      toast.error(handleApiError(error));
+      const errorMessage = handleApiError(error);
+
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
-      setFormData((prev) => ({ ...prev, email: "" }));
     }
   };
 

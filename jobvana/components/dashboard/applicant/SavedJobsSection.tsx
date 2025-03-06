@@ -1,12 +1,46 @@
-import JobsSection from "@/components/jobs/JobsSection";
-import { SAMPLE_JOBS } from "@/constants";
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import SavedJobCard from "./SavedJobCard";
-
-const jobs = SAMPLE_JOBS.slice(0, 6);
+import Loading from "@/components/common/Loading";
+import { JobProps } from "@/interfaces";
+import api from "@/utils/api";
+import { handleApiError } from "@/utils/errorHandlerUtils";
+import { toast } from "react-toastify";
 
 const SavedJobsSection: React.FC = () => {
-  console.log(jobs);
+  const [jobs, setJobs] = useState<JobProps[] | []>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchSavedJobs = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await api.get("jobs/saved_jobs"); // Replace with your actual API endpoint
+
+      if (response.status === 200) {
+        let jobs = [];
+        if (Array.isArray(response.data.data.message)) {
+          jobs = response.data.data.message;
+        } else {
+          jobs = response.data.data;
+        }
+        setJobs(jobs);
+      } else {
+        throw new Error("Failed to fetch jobs");
+      }
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      setError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSavedJobs();
+  }, [fetchSavedJobs]);
 
   return (
     <div className="p-4 border border-borderColor rounded-md shadow flex flex-col gap-4 w-full">
@@ -20,13 +54,17 @@ const SavedJobsSection: React.FC = () => {
         </div>
         <section
           className={
-            "w-full grid gap-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1"
+            "w-full grid gap-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1"
           }
         >
-          {jobs.length > 0 ? (
-            jobs.map((job, index) => <SavedJobCard job={job} key={index} />)
+          {loading ? (
+            <Loading styles="h-[400px]" />
+          ) : error ? (
+            <p className="text-center text-red-500">{error}</p>
+          ) : jobs && jobs.length > 0 ? (
+            jobs.map((job, index) => <SavedJobCard job={job} key={index} setJobs={setJobs}/>)
           ) : (
-            <h3 className="text-h3">No jobs found</h3>
+            <h3 className="text-h3">No saved jobs found</h3>
           )}
         </section>
       </div>

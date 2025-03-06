@@ -11,9 +11,9 @@ import { handleApiError } from "@/utils/errorHandlerUtils";
 const ResetPasswordSection: React.FC = () => {
   const [formData, setFormData] = useState<ResetPasswordProps>({
     email: "",
-    confirmPassword: "",
+    confirm_password: "",
     otp: 0,
-    new_password: "",
+    password: "",
   });
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -30,32 +30,28 @@ const ResetPasswordSection: React.FC = () => {
     e.preventDefault();
     setLoading(true);
 
-    const confirmPassword = formData.confirmPassword;
-    delete formData.confirmPassword;
+    try {
+      const response = await api.post('auth/reset-password/', formData);
 
-    if (confirmPassword === formData.new_password) {
-      try {
-        const response = await api.post("auth/password-reset/reset/", formData);
-
-        if (response.status === 200) {
-          toast.success("User password reset successful!");
-          router.push("/login");
-        }
-      } catch (error) {
-        console.error("Reset password failed:", error);
-        toast.error(handleApiError(error));
-      } finally {
-        setLoading(false);
-        setFormData((prev) => ({
-          ...prev,
-          new_password: "",
-          confirmPassword: "",
-          otp: 0,
-        }));
+      if (response.status === 201 || response.status === 200 || response.status === 202) {
+        router.push('/login')
+        toast.success(response?.data?.message);
         
+        setFormData({
+          email: '',
+          otp: 0,
+          password: '',
+          confirm_password: ''
+        });
+      } else if (response.data.error) {
+        toast.error(response.data.error || 'Password reset failed');
+      } else {
+        throw new Error('Password reset failed');
       }
-    } else {
-      toast.error("Confirm password and new password must match");
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      toast.error(errorMessage);
+    } finally {
       setLoading(false);
     }
   };
@@ -103,30 +99,30 @@ const ResetPasswordSection: React.FC = () => {
           />
         </span>
         <span className="flex flex-col gap-2 items-start">
-          <label htmlFor="new_password" className="text-h6 font-medium">
+          <label htmlFor="password" className="text-h6 font-medium">
             New Password
           </label>
           <input
             type="password"
-            name="new_password"
-            id="new_password"
+            name="password"
+            id="password"
             required
-            value={formData.new_password}
+            value={formData.password}
             onChange={handleChange}
             placeholder="Enter new password"
             className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
           />
         </span>
         <span className="flex flex-col gap-2 items-start">
-          <label htmlFor="confirmPassword" className="text-h6 font-medium">
+          <label htmlFor="confirm_password" className="text-h6 font-medium">
             Confirm Password
           </label>
           <input
             type="password"
-            name="confirmPassword"
-            id="confirmPassword"
+            name="confirm_password"
+            id="confirm_password"
             required
-            value={formData.confirmPassword}
+            value={formData.confirm_password}
             onChange={handleChange}
             placeholder="Confirm password"
             className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"

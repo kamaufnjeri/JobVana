@@ -24,14 +24,14 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
       <div className="flex flex-row gap-2 items-start justify-between w-full">
         <div className="flex flex-wrap gap-2 w-3/4">
           <Image
-            src={`https://ui-avatars.com/api/?name=${job.company.name}&size=50`}
-            alt={job.company.name}
+            src={`https://ui-avatars.com/api/?name=${job.company_details.name}&size=50`}
+            alt={job.company_details.name}
             width={50}
             height={50}
           />
 
           <div className="w-full flex flex-col gap-2">
-            <h4 className="text-h4">{job.company.name}</h4>
+            <h4 className="text-h4">{job.company_details.name}</h4>
 
             <h6 className="text-h6 opacity-80">
               Posted - {formatDate(job.created_at)}
@@ -56,10 +56,10 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
       )}
 
       <ul className="text-p readable opacity-90 flex flex-row gap-2 text-primary">
-        {job.category &&
-          job.category.map((category, index) => (
+        {job.categories &&
+          job.categories.map((category, index) => (
             <li key={index} className="p-1  rounded-sm">
-              {capitalizeWords(category)}
+              {category}
             </li>
           ))}
       </ul>

@@ -1,7 +1,11 @@
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Sidebar from "@/components/dashboard/Sidebar";
 import SavedJobsSection from "@/components/dashboard/applicant/SavedJobsSection";
-import React from "react";
+import { JobProps } from "@/interfaces";
+import api from "@/utils/api";
+import { handleApiError } from "@/utils/errorHandlerUtils";
+import { toast } from "react-toastify";
+import Loading from "@/components/common/Loading";
 
 const SavedJobs: React.FC = () => {
   return (

@@ -3,25 +3,38 @@ import { ReactNode } from "react";
 
 export interface CompanyProps {
   name: string;
-  id: string;
+  description: string,
+  id?: string;
 }
+
+
+export interface PaginatedResponse<T> {
+  total_count: number; // Total number of items
+  total_pages: number; // Total number of pages
+  current_page: number; // Current page number
+  page_size: number; // Number of items per page
+  next: string | null; // URL for the next page
+  previous: string | null; // URL for the previous page
+  results: T[]; // Array of items
+}
+
 
 export interface JobProps {
   id: string;
   title: string;
   description: string;
-  company: CompanyProps; 
+  company_details: CompanyProps; 
   max_salary: number;
   min_salary: number;
   is_active: boolean;
-  category: string[];
+  categories: string[];
   location: string;
   job_type: string;
   posted_by: string; 
   created_at: string;
   deadline?: string;
   experience_level?: string;
-  details: any[]; 
+  details?: any[]; 
 }
 
 export interface JobResponseProps {
@@ -58,13 +71,13 @@ export interface JobPostProps {
   title: string;
   description: string;
   experience_level: string ;
-  max_salary: number;
-  min_salary: number;
+  max_salary: number | null;
+  min_salary: number | null;
   deadline: string;
-  category: string[];
+  categories: string[];
   location: string ;
   job_type: string ;
-  details?: JobDetailProps[];
+  details: JobDetailProps[];
 }
 
 
@@ -120,7 +133,7 @@ export interface SignUpUserProps {
   email: string;
   role: string;
   password: string;
-  confirmPassword?: string;
+  confirm_password?: string;
 }
 
 // interface for the login user
@@ -135,8 +148,8 @@ export interface LoginProps {
 export interface ResetPasswordProps {
   email: string;
   otp: number;
-  new_password: string;
-  confirmPassword?: string;
+  password: string;
+  confirm_password?: string;
 }
 export interface JobDetailsProps {
   responsibilities: string[];

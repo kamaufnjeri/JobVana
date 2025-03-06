@@ -7,18 +7,19 @@ import { useRouter } from "next/router";
 import { handleApiError } from "@/utils/errorHandlerUtils";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
+import { JobProps } from "@/interfaces";
 
 interface ApplyJobFormDataProps {
   resume: string;
   cover_letter: string;
-  job: string;
+  job: JobProps | "";
 }
 
 interface ApplyJobFormProps {
-  jobId: string;
+  job: JobProps;
 }
 
-const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobId = "" }) => {
+const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ job }) => {
   const [formData, setFormData] = useState<ApplyJobFormDataProps>({
     resume: "",
     cover_letter: "",
@@ -40,10 +41,10 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobId = "" }) => {
     e.preventDefault();
     setLoading(true);
 
-    setFormData((prev) => ({ ...prev, job: jobId }));
+    setFormData((prev) => ({ ...prev, job: job }));
 
     try {
-      const response = await api.post("applications/", formData);
+      const response = await api.post("applications", formData);
 
       if (response.status === 201) {
         toast.success("Application submitted successfully!");
@@ -51,7 +52,8 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobId = "" }) => {
       }
     } catch (error) {
       console.error("Application submission failed:", error);
-      handleApiError(error);
+      const errorMessage = handleApiError(error);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -59,7 +61,7 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ jobId = "" }) => {
 
   return (
     <form onSubmit={handleSubmit} className=" flex flex-col w-full gap-2 p-4">
-      <h2 className="text-h2">Apply for Your Next Opportunity</h2>
+      <h3 className="text-h3">Take the Next Step in Your Career—Apply for the {job.title} Position Today!</h3>
       <h5 className="text-h5">
         Apply now and take the next step in your career. Fill out the form below
         to get started!

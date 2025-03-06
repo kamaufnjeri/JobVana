@@ -6,9 +6,10 @@ import { LoginProps } from "@/interfaces";
 
 interface LoginComponentProps {
   description?: string;
+  toDashboard: boolean;
 }
 
-const LoginForm: React.FC<LoginComponentProps> = ({ description }) => {
+const LoginForm: React.FC<LoginComponentProps> = ({ description, toDashboard=true }) => {
   const { login } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<LoginProps>({
@@ -26,7 +27,7 @@ const LoginForm: React.FC<LoginComponentProps> = ({ description }) => {
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
-    await login(formData, setFormData);
+    await login(formData, setFormData, toDashboard);
     setLoading(false);
   };
   return (
