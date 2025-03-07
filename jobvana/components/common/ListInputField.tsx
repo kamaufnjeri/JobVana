@@ -8,15 +8,15 @@ interface ListInputFieldProps {
     setItems: (items: string[]) => void; // Update selected values (strings)
 }
 const ListInputField: React.FC<ListInputFieldProps> = ({ name, items, setItems  }) => {
-    const [tags, setTags] = useState<string[]>([]);
+   
   const [tagInput, setTagInput] = useState<string>("");
 
-   // Handle adding tags
+   // Handle adding items
    const addTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagInput.trim()) {
       e.preventDefault();
-      if (!tags.includes(tagInput.trim())) {
-        setTags([...tags, tagInput.trim()]);
+      if (!items.includes(tagInput.trim())) {
+        setItems([...items, tagInput.trim()]);
       }
       setTagInput("");
     }
@@ -24,7 +24,7 @@ const ListInputField: React.FC<ListInputFieldProps> = ({ name, items, setItems  
 
   // Remove tag
   const removeTag = (tagToRemove: string) => {
-    setTags(tags.filter((tag) => tag !== tagToRemove));
+    setItems(items.filter((tag) => tag !== tagToRemove));
   };
     return (
         <div className="w-full flex flex-col gap-2">
@@ -40,9 +40,9 @@ const ListInputField: React.FC<ListInputFieldProps> = ({ name, items, setItems  
       
 
       {/* Display added categories */}
-      {tags.length > 0 && (
+      {items.length > 0 && (
         <div className="flex flex-wrap gap-2">
-          {tags.map((tag, index) => (
+          {items.map((tag, index) => (
             <span
               key={index}
               className="flex items-center bg-primary px-3 py-1 rounded-md text-sm text-white"

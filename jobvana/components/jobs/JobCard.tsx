@@ -51,7 +51,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
       <h3 className="text-h3">{job.title}</h3>
       {job.deadline && (
         <h6 className="text-h6 opacity-80 text-secondary">
-          Deadline - {formatDate(job.deadline)}
+          Deadline - {job.deadline}
         </h6>
       )}
 

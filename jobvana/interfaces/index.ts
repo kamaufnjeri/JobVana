@@ -64,7 +64,13 @@ export interface ButtonProps {
 // Define a TypeScript interface for the job props (as a dictionary)
 export interface JobDetailProps {
   description: string;
+  id?: string | number
   type: string;
+}
+
+export interface JobFilterProps {
+
+  [key: string]: any; // Allow additional properties
 }
 
 export interface JobPostProps {

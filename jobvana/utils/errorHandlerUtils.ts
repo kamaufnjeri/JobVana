@@ -25,11 +25,12 @@ export const handleApiError = (error: unknown): string => {
         errorMessage = errorData.join("\n");
       } else if (typeof errorData === "object") {
         // Assuming it's an object with string values
-        errorMessage = 'Errors: '.concat(
-          Object.entries(errorData)
-            .map(([key, value]) => `${capitalizeWords(key)} - ${value}`)
-            .join("\n")
-        );
+        errorMessage = Object.entries(errorData)
+        .map(([key, value]) => 
+          key === "non_field_errors" ? `${value}` : `${capitalizeWords(key)} - ${value}`
+        )
+        .join("\n")
+  
       } else {
         // Fallback to a string
         errorMessage = String(errorData);

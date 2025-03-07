@@ -4,8 +4,18 @@ import { JOB_EXPERIENCE_OPTIONS, JOB_TYPES_OPTIONS } from "@/constants";
 import { FaChevronDown } from "react-icons/fa6";
 import Select from "react-select";
 import LocationSelectSingle from "../common/LocationSelectSingle";
+import { JobFilterProps } from "@/interfaces";
 
-const JobsFiltersSection: React.FC = () => {
+interface FilterSectionProps {
+  filters: JobFilterProps;
+  setFilters: React.Dispatch<React.SetStateAction<JobFilterProps>>;
+  fetchJobs: (filters?: JobFilterProps) => void;
+}
+const JobsFiltersSection: React.FC<FilterSectionProps> = ({
+  filters,
+  setFilters,
+  fetchJobs,
+}) => {
   const [showItem, setShowItem] = useState<{ [key: string]: string | null }>({
     experienceLevel: null,
     jobType: null,
@@ -13,19 +23,13 @@ const JobsFiltersSection: React.FC = () => {
     location: null,
   });
 
-  const [search, setSearch] = useState<{[key: string]: string }>({
-    title: "",
-    location: "",
-    category: "",
-    job_type: "",
-    experience_level: "",
-  })
-
-  
   const itemRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const chevronRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const setLocation = (location: string) => {
-    setSearch((prev) => ({ ...prev, location }));
+    const newFilters = { ...filters, location }
+    fetchJobs(newFilters)
+    setFilters((prev) => ({...newFilters}));
+  
   };
   const toggleItemSection = (category: string) => {
     const isCurrentlyOpen = showItem[category] === category;
@@ -54,155 +58,210 @@ const JobsFiltersSection: React.FC = () => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = e.target;
-    setSearch((prev) => ({...prev, [name]: value}))
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      fetchJobs(filters); // Call your fetchJobs function when Enter is pressed
+    }
+  };
+
+  const reset = () => {
+    fetchJobs();
+    setFilters({
+      search: '',
+      location: '',
+      job_type: '',
+      experience_level: '',
+      categories: '',
+      page: 1,
+    })
   }
+
 
   return (
     <div className="w-full flex-col border border-borderColor rounded-md">
       {/* Filter Header */}
       <span className="flex flex-row gap-2 items-center justify-between border-borderColor border-b p-2">
         <h3 className="text-h3">Filter</h3>
-        <FaSync />
+        <button onClick={() => reset()}><FaSync /></button>
+        
       </span>
 
-      {/* Job Title */}
-      <span className="flex flex-col gap-2 items-start border-borderColor border-b p-2">
-        <label htmlFor="name" className="text-h6 opacity-80">
-          Job Title/Name
-        </label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          required
-          placeholder="Search..."
-          className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
-        />
-      </span>
-      {/* Categories */}
-      <span className="flex flex-col gap-2 items-start border-borderColor border-b p-2">
-        <div
-          className="flex flex-row justify-between items-center gap-2 w-full"
-          onClick={() => toggleItemSection("category")}
-        >
-          <label className="text-h6 opacity-80">Category</label>
-          <div
-            className="cursor-pointer opacity-80 transition-transform"
-            ref={(el) => {
-              chevronRefs.current["category"] = el;
-            }}
-          >
-            <FaChevronDown />
-          </div>
-        </div>
-        <div
-          className="opacity-0 h-0 transition-all duration-300 w-full"
-          ref={(el) => {
-            itemRefs.current["category"] = el;
-          }}
-        >
+      
+        <span className="flex flex-col gap-2 items-start border-borderColor border-b p-2">
+          <label htmlFor="search" className="text-h6 opacity-80">
+            Search
+          </label>
           <input
             type="text"
-            name="category"
-            id="cateogory"
+            name="search"
+            id="search"
             required
-            placeholder="Category..."
-
-            className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
+            onKeyDown={handleKeyDown}
+            value={filters.search}
+            onChange={handleChange}
+            placeholder="Type a keyword and press Enter to search..."
+            className="rounded-md outline-none text-gray-800 w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
           />
-        </div>
-      </span>
-
-      <span className="flex flex-col gap-2 items-start border-borderColor border-b p-2">
-        <div
-          className="flex flex-row justify-between items-center gap-2 w-full"
-          onClick={() => toggleItemSection("experienceLevel")}
-        >
-          <label className="text-h6 opacity-80">Experience Level</label>
+        </span>
+     
+      {/* Categories */}
+     
+        <span className="flex flex-col gap-2 items-start border-borderColor border-b p-2">
           <div
-            className="cursor-pointer opacity-80 transition-transform"
+            className="flex flex-row justify-between items-center gap-2 w-full"
+            onClick={() => toggleItemSection("category")}
+          >
+            <label className="text-h6 opacity-80">Category</label>
+            <div
+              className="cursor-pointer opacity-80 transition-transform"
+              ref={(el) => {
+                chevronRefs.current["category"] = el;
+              }}
+            >
+              <FaChevronDown />
+            </div>
+          </div>
+          <div
+            className="opacity-0 h-0 transition-all duration-300 w-full"
             ref={(el) => {
-              chevronRefs.current["experienceLevel"] = el;
+              itemRefs.current["category"] = el;
             }}
           >
-            <FaChevronDown />
+            <input
+              type="text"
+              name="categories"
+              id="cateogories"
+              required
+              value={filters.categories}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Type a category and press Enter to search..."
+              className="rounded-md text-gray-800 outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
+            />
           </div>
-        </div>
-        <div
-          className="opacity-0 h-0 transition-all duration-300"
-          ref={(el) => {
-            itemRefs.current["experienceLevel"] = el;
-          }}
-        >
-          <Select
-            className="rounded-md text-gray-800 outline-none w-full border border-borderColor z- p-2 focus:ring-2 focus:ring-blue-500"
-            options={JOB_EXPERIENCE_OPTIONS}
-            placeholder={"Select job type"}
-            isSearchable
-            menuPlacement="top"
-            
-          />
-        </div>
-      </span>
+        </span>
+     
 
-      {/* Job Type */}
-      <span className="flex flex-col gap-2 items-start border-borderColor border-b p-2">
-        <div
-          className="flex flex-row justify-between items-center gap-2 w-full"
-          onClick={() => toggleItemSection("jobType")}
-        >
-          <label className="text-h6 opacity-80">Job Type</label>
+     
+        <span className="flex flex-col gap-2 items-start border-borderColor border-b p-2">
           <div
-            className="cursor-pointer opacity-80 transition-transform"
+            className="flex flex-row justify-between items-center gap-2 w-full"
+            onClick={() => toggleItemSection("experienceLevel")}
+          >
+            <label className="text-h6 opacity-80">Experience Level</label>
+            <div
+              className="cursor-pointer opacity-80 transition-transform"
+              ref={(el) => {
+                chevronRefs.current["experienceLevel"] = el;
+              }}
+            >
+              <FaChevronDown />
+            </div>
+          </div>
+          <div
+            className="opacity-0 h-0 transition-all duration-300"
             ref={(el) => {
-              chevronRefs.current["jobType"] = el;
+              itemRefs.current["experienceLevel"] = el;
             }}
           >
-            <FaChevronDown />
+            <Select
+              className="rounded-md text-gray-800 outline-none w-full border border-borderColor z- p-2 focus:ring-2 focus:ring-blue-500"
+              options={JOB_EXPERIENCE_OPTIONS}
+              placeholder={"Select experience level"}
+              isSearchable
+              value={
+                JOB_EXPERIENCE_OPTIONS.find(
+                  (level) => level.value === filters.experience_level
+                ) || null
+              }
+              onChange={(selectedOption) =>{
+                const newFilters = {
+                  ...filters,
+                  experience_level: selectedOption?.value || "",
+                }
+                fetchJobs(newFilters)
+                setFilters({...newFilters})
+              }
+              }
+              menuPlacement="top"
+            />
           </div>
-        </div>
-        <div
-          className="opacity-0 h-0 transition-all duration-300"
-          ref={(el) => {
-            itemRefs.current["jobType"] = el;
-          }}
-        >
-          <Select
-            className="rounded-md text-gray-800 outline-none w-full border border-borderColor z- p-2 focus:ring-2 focus:ring-blue-500"
-            options={JOB_TYPES_OPTIONS}
-            placeholder={"Select job type"}
-            isSearchable
-            menuPlacement="top"
-          />
-        </div>
-      </span>
+        </span>
+    
 
-      {/* Location */}
-      <span className="flex flex-col gap-2 items-start border-borderColor border-b p-2 z-0">
-        <div
-          className="flex flex-row justify-between items-center gap-2 w-full"
-          onClick={() => toggleItemSection("location")}
-        >
-          <label className="text-h6 opacity-80">Location</label>
+    
+        <span className="flex flex-col gap-2 items-start border-borderColor border-b p-2">
           <div
-            className="cursor-pointer opacity-80 transition-transform"
+            className="flex flex-row justify-between items-center gap-2 w-full"
+            onClick={() => toggleItemSection("jobType")}
+          >
+            <label className="text-h6 opacity-80">Job Type</label>
+            <div
+              className="cursor-pointer opacity-80 transition-transform"
+              ref={(el) => {
+                chevronRefs.current["jobType"] = el;
+              }}
+            >
+              <FaChevronDown />
+            </div>
+          </div>
+          <div
+            className="opacity-0 h-0 transition-all duration-300"
             ref={(el) => {
-              chevronRefs.current["location"] = el;
+              itemRefs.current["jobType"] = el;
             }}
           >
-            <FaChevronDown />
+            <Select
+              className="rounded-md text-gray-800 outline-none w-full border border-borderColor z- p-2 focus:ring-2 focus:ring-blue-500"
+              options={JOB_TYPES_OPTIONS}
+              placeholder={"Select job type"}
+              isSearchable
+              menuPlacement="top"
+              value={
+                JOB_TYPES_OPTIONS.find(
+                  (level) => level.value === filters.job_type
+                ) || null
+              }
+              onChange={(selectedOption) => {
+                const newFilters = {...filters, job_type: selectedOption?.value || ""};
+                fetchJobs(newFilters)
+                setFilters({...newFilters})
+              }}
+            />
           </div>
-        </div>
-        <div
-          className="opacity-0 h-0 transition-all duration-300 w-full"
-          ref={(el) => {
-            itemRefs.current["location"] = el;
-          }}
-        >
-          <LocationSelectSingle selected={search.location} setSelected={setLocation} />
-        </div>
-      </span>
+        </span>
+     
+        <span className="flex flex-col gap-2 items-start border-borderColor border-b p-2 z-0">
+          <div
+            className="flex flex-row justify-between items-center gap-2 w-full"
+            onClick={() => toggleItemSection("location")}
+          >
+            <label className="text-h6 opacity-80">Location</label>
+            <div
+              className="cursor-pointer opacity-80 transition-transform"
+              ref={(el) => {
+                chevronRefs.current["location"] = el;
+              }}
+            >
+              <FaChevronDown />
+            </div>
+          </div>
+          <div
+            className="opacity-0 h-0 transition-all duration-300 w-full"
+            ref={(el) => {
+              itemRefs.current["location"] = el;
+            }}
+          >
+            <LocationSelectSingle
+              selected={filters.location}
+              setSelected={setLocation}
+            />
+          </div>
+        </span>
+    
     </div>
   );
 };

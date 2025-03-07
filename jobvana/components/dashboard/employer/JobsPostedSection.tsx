@@ -40,7 +40,7 @@ const JobsPostedSection: React.FC = () => {
     } catch (error) {
       console.error("Job posting failed:", error);
       const errorMessage = handleApiError(error);
-      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -58,7 +58,7 @@ const JobsPostedSection: React.FC = () => {
           throw new Error();
         }
       } catch (error) {
-        toast.error(`Error': Error fetching ministries`);
+        toast.error(`Error': Error fetching jobs`);
       } finally {
         setLoading(false);
       }
@@ -137,9 +137,9 @@ const JobsPostedSection: React.FC = () => {
                     >
                       <td className="p-3">{job.title}</td>
                       <td className="p-3">{formatDate(job.created_at)}</td>
-                      {job.deadline && (
-                        <td className="p-3">{formatDate(job.deadline)}</td>
-                      )}
+                     
+                        <td className="p-3"> {job.deadline && <p>{job.deadline}</p>}</td>
+                      
                       <td className="p-3">
                         <Link
                           prefetch={true}

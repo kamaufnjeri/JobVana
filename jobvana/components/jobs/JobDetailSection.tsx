@@ -31,7 +31,7 @@ const JobDetailSection: React.FC<JobDetailSectionProps> = ({ job }) => {
       </div>
       <h3 className="text-h3">{job.title}</h3>
       {job?.deadline &&<h6 className="text-h6 opacity-80 text-secondary">
-        Deadline - {formatDate(job.deadline)}
+        Deadline - {job.deadline}
       </h6>}
 
       <ul className="text-p readable opacity-90 flex flex-row gap-2 text-primary">

@@ -1,5 +1,5 @@
 import Button from "@/components/common/Button";
-import { JobProps, ManyJobsProps } from "@/interfaces";
+import { JobFilterProps, JobProps, ManyJobsProps } from "@/interfaces";
 import { capitalizeWords, formatDate } from "@/utils";
 import api from "@/utils/api";
 import { handleApiError } from "@/utils/errorHandlerUtils";
@@ -10,14 +10,21 @@ import { FaMoneyBillWave } from "react-icons/fa";
 import { FaArrowRight, FaLocationDot } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
-interface SavedJobCardProps {
-  job: JobProps;
-  setJobs: React.Dispatch<React.SetStateAction<JobProps[] | []>>
+
+interface SavedJobProps {
+  id: string;
+  job_details: JobProps;
 }
 
-const SavedJobCard: React.FC<SavedJobCardProps> = ({ job, setJobs }) => {
- 
+interface SavedJobCardProps {
+  savedJob: SavedJobProps;
+  fetchJobs: (params?: JobFilterProps) => void;
 
+
+}
+
+const SavedJobCard: React.FC<SavedJobCardProps> = ({ savedJob, fetchJobs }) => {
+  const [job, setJob] = useState<JobProps>(savedJob.job_details);
   const [loading, setLoading] = useState<boolean>(false);
 
   const removeSavedJob = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -26,11 +33,15 @@ const SavedJobCard: React.FC<SavedJobCardProps> = ({ job, setJobs }) => {
     setLoading(true);
 
     try {
-      const response = await api.post(`jobs/${job.id}/remove_saved_job`);
+      const response = await api.delete(`jobs/saved-jobs/${savedJob.id}/`);
 
-      if (response.status === 200) {
+      if (response.status === 204) {
         toast.success("Saved job removed successfully!");
-        setJobs((prev) => prev.filter((oldJob) => oldJob.id !== job.id));
+        fetchJobs()
+      } else if (response.data.error) {
+        toast.error(response.data.error || "Unknown Error ");
+      } else {
+        throw new Error("Unknown error");
       }
     } catch (error) {
       console.error("Saved job removal failed:", error);
@@ -86,7 +97,7 @@ const SavedJobCard: React.FC<SavedJobCardProps> = ({ job, setJobs }) => {
 
       <h3 className="text-h3">{job.title}</h3>
       {job.deadline && <h6 className="text-h6 opacity-80 text-secondary">
-        Deadline - {formatDate(job.deadline)}
+        Deadline - {job.deadline}
       </h6>}
 
       {job.categories && <ul className="text-p readable opacity-90 flex flex-wrap gap-2 text-primary">

@@ -19,11 +19,16 @@ const ApplyJobSection: React.FC<ApplyJobSectionProps> = ({
     setLoading(true);
 
     try {
-      const response = await api.post(`jobs/${job.id}/save_job`);
+      const response = await api.post(`jobs/${job.id}/save-job/`);
 
-      if (response.status === 200) {
-        toast.success("Job saved successfully!");
+      if (response.status === 201) {
+        toast.success(response.data.message);
       }
+      else if (response.data.error) {
+        toast.error(response.data.error || 'Job saving failed');
+    } else {
+        throw new Error('Job saving failed');
+    }
     } catch (error) {
       console.error("Application submission failed:", error);
       const errorMessage = handleApiError(error);

@@ -16,8 +16,6 @@ export const USER_ROLES: SelectValuesProps[] = [
   { value: "employer", label: "Employer" },
 ];
 
-
-
 export const JOB_DETAILS_OPTIONS: SelectValuesProps[] = [
   { value: "Responsibility", label: "Responsibility" },
   { value: "Requirement", label: "Requirement" },

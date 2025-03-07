@@ -17,14 +17,14 @@ const PostJobForm: React.FC = () => {
   const [formData, setFormData] = useState<JobPostProps>({
     title: "",
     description: "",
-    experience_level:'',
+    experience_level: "",
     max_salary: null,
     min_salary: null,
     deadline: "",
     categories: [],
-    location: '',
-    job_type: '',
-    details: []
+    location: "",
+    job_type: "",
+    details: [],
   });
 
   const handleChange = (
@@ -42,9 +42,9 @@ const PostJobForm: React.FC = () => {
     setFormData((prev) => ({ ...prev, categories: categories }));
   };
 
- const setDetails = (details: JobDetailProps[]) => {
+  const setDetails = (details: JobDetailProps[]) => {
     setFormData((prev) => ({ ...prev, details: details }));
-  }; 
+  };
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -59,20 +59,20 @@ const PostJobForm: React.FC = () => {
         setFormData((prev) => ({
           title: "",
           description: "",
-          experience_level:'',
+          experience_level: "",
           max_salary: null,
           min_salary: null,
           deadline: "",
           categories: [],
-          location: '',
-          job_type: '',
+          location: "",
+          job_type: "",
           details: [],
         }));
       } else if (response.data.error) {
-        toast.error(response.data.error || 'Registration failed');
-    } else {
-        throw new Error('Registration failed');
-    }
+        toast.error(response.data.error || "Registration failed");
+      } else {
+        throw new Error("Registration failed");
+      }
     } catch (error) {
       console.error("Job posting failed:", error);
       toast.error(handleApiError(error));
@@ -120,11 +120,13 @@ const PostJobForm: React.FC = () => {
           className="text-h6 font-medium flex flex-row gap-2"
         >
           <h6>Deadline</h6>
+          <h6 className="text-red-500">*</h6>
         </label>
         <input
           type="date"
           name="deadline"
           id="deadline"
+          required
           value={formData.deadline}
           onChange={handleChange}
           placeholder="Enter job deadline"
@@ -157,8 +159,11 @@ const PostJobForm: React.FC = () => {
           <h6>Job Categories</h6>
           <h6 className="text-red-500">*</h6>
         </label>
-        <ListInputField name='Categories' items={formData.categories} setItems={setCategories}/>
-      
+        <ListInputField
+          name="Categories"
+          items={formData.categories}
+          setItems={setCategories}
+        />
       </span>
       <span className="flex flex-col gap-2 items-start">
         <label
@@ -173,7 +178,11 @@ const PostJobForm: React.FC = () => {
           options={JOB_TYPES_OPTIONS}
           placeholder={"Select job type"}
           isSearchable
-          value={JOB_TYPES_OPTIONS.find(level => level.value === formData.job_type) || null}
+          value={
+            JOB_TYPES_OPTIONS.find(
+              (level) => level.value === formData.job_type
+            ) || null
+          }
           onChange={(selectedOption) =>
             setFormData((prev) => ({
               ...prev,
@@ -198,17 +207,25 @@ const PostJobForm: React.FC = () => {
           placeholder={"Select experience level"}
           isSearchable
           menuPlacement="top"
-          value={JOB_EXPERIENCE_OPTIONS.find(level => level.value === formData.experience_level) || null}          onChange={(selectedOption) =>
-            setFormData((prev) => ({ ...prev, experience_level: selectedOption?.value || "" }))
+          value={
+            JOB_EXPERIENCE_OPTIONS.find(
+              (level) => level.value === formData.experience_level
+            ) || null
+          }
+          onChange={(selectedOption) =>
+            setFormData((prev) => ({
+              ...prev,
+              experience_level: selectedOption?.value || "",
+            }))
           }
         />
       </span>
       <span className="flex flex-col gap-2 items-start">
         <label
-          htmlFor="categories"
+          htmlFor="location"
           className="text-h6 font-medium flex flex-row gap-2"
         >
-          <h6>Job Location</h6>
+          <h6>Location</h6>
           <h6 className="text-red-500">*</h6>
         </label>
         <LocationSelectSingle
@@ -256,9 +273,8 @@ const PostJobForm: React.FC = () => {
           className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
         />
       </span>
-     
-     
-       <span className="flex flex-col gap-2 items-start lg:col-span-2">
+
+      <span className="flex flex-col gap-2 items-start lg:col-span-2">
         <label
           htmlFor="details"
           className="text-h6 font-medium flex flex-row gap-2"
@@ -277,7 +293,7 @@ const PostJobForm: React.FC = () => {
           name="Post Job"
           styles="bg-primary w-full rounded-md text-white h-10 p-2 self-center"
         />
-      {/*
+        {/*
        <span className="flex flex-col gap-2 items-start">
         <label
           htmlFor="responsibilities"
@@ -296,7 +312,6 @@ const PostJobForm: React.FC = () => {
         </label>
         <ListInputField name="benefits" />
       </span> */}
-     
       </div>
     </form>
   );
