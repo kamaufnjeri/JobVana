@@ -55,7 +55,6 @@ const PDFInputField: React.FC<{
           <div className="mt-4 flex justify-between items-center bg-gray-100 p-2 rounded-lg">
             <FileViewer fileUrl={resumeUrl} />
             
-            <p>{resumeUrl}</p>
           </div>
         
       }

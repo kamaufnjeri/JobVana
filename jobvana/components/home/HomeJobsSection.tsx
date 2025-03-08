@@ -17,7 +17,7 @@ const HomeJobsSection: React.FC<HomeJobsSectionProps> = ({ jobsData }) => {
         <Link
           prefetch={true}
           href="/jobs"
-          className="bg-primary p-2 rounded-sm text-center text-h5 hover:opacity-80 opacity-100 text-white"
+          className="bg-primary p-2 rounded-md text-center text-h5 hover:opacity-80 opacity-100 text-white"
         >
           See All Jobs
         </Link>

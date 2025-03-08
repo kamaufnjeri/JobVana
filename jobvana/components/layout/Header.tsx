@@ -1,20 +1,24 @@
 import Link from "next/link";
-import { FaBars } from "react-icons/fa";
+import { FaBars, FaBell } from "react-icons/fa";
 import ThemeToggle from "../common/ThemeToggle";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
 import { MdLogout } from "react-icons/md";
+import NotificationsContainer from "../dashboard/NotificationsContainer";
+import { useNotifications } from "@/context/NotificationProvider";
 
 
 const Header: React.FC = () => {
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+  const { unreadCount } = useNotifications();
   const pathname = usePathname();
   const { user, isAuthenticated, logout } = useAuth();
   const toggleDropDown = () => {
     setIsDropDownOpen(!isDropDownOpen);
   };
+  const { toggleShowNotifications} = useNotifications();
 
 
 
@@ -22,6 +26,7 @@ const Header: React.FC = () => {
 
   return (
     <header className="text-text flex flex-col lg:flex-row items-center lg:justify-between w-full  min-h-20 border-b-2 border-borderColor gap-2 z-10">
+      {user && <NotificationsContainer/>}
       <div className="flex items-center justify-between gap-4 w-full lg:w-1/3 lg:px-10 md:px-5 px-2 pt-5">
         <Link
           prefetch={true}
@@ -130,6 +135,12 @@ const Header: React.FC = () => {
             <p className="text-p hover:text-primary">
               {user.first_name} {user.last_name}
             </p>
+           
+              <button onClick={() => toggleShowNotifications()} className="relative hover:text-primary">
+              <FaBell className="text-2xl "/>
+              {unreadCount > -1 && <p className="rounded-full text-white h-6 text-center w-6 bg-red-600 font-bold absolute -top-2 -right-2">{unreadCount}</p>}
+
+              </button>
         
             <span className=" flex justify-center" onClick={logout}>
               <MdLogout className="text-2xl hover:text-primary" />

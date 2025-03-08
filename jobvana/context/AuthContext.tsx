@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { clearCookiesAndRedirect, setCookies } from "@/utils/authUtils";
 import api from "@/utils/api";
 import { handleApiError } from "@/utils/errorHandlerUtils";
+import { useNotifications } from "./NotificationProvider";
 // interface for the context
 
 interface AuthContextType {
@@ -43,6 +44,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [company, setCompany] = useState<CompanyProps | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
+  const { fetchNotifications, setNotificationsData} = useNotifications();
+
 
   const isAuthenticated = () => {
     return user !== null;
@@ -61,6 +64,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
           if (response.status === 200) {
             const userMe = response.data;
+            fetchNotifications()
             setUser(userMe); // If it's already a string, set it directly
             if (userMe.role === "employer" && userMe?.company) {
               setCompany(userMe.company);
@@ -99,6 +103,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           router.push("/");
           Cookies.remove("accessToken");
           Cookies.remove("refreshToken");
+          setNotificationsData(null);
           setUser(null);
           toast.success("Logout successful!");
         } else {
@@ -125,6 +130,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         const { access, refresh, user: loggedinUser } = response.data;
 
         const dashboardUrl = loggedinUser.role;
+        fetchNotifications();
+        setLoginData({
+          email: "",
+          password: ""
+        })
 
         if (toDashboard) {
           router.push(`/dashboard/${dashboardUrl}`);

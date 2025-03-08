@@ -10,8 +10,8 @@ interface PaginationProps {
   prevNext: (url: string | null) => void;
   noOfPages: number;
   currentPage: number;
-  getItems: (params: JobFilterProps) => Promise<void>;
-  searchItems: { [key: string]: any };
+  getItems: (params?: JobFilterProps) => void;
+  searchItems?: { [key: string]: any };
 }
 
 const PagesSection: React.FC<PaginationProps> = ({

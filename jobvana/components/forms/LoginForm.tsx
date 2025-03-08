@@ -3,10 +3,11 @@ import Button from "../common/Button";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { LoginProps } from "@/interfaces";
+import { useNotifications } from "@/context/NotificationProvider";
 
 interface LoginComponentProps {
   description?: string;
-  toDashboard: boolean;
+  toDashboard?: boolean;
 }
 
 const LoginForm: React.FC<LoginComponentProps> = ({ description, toDashboard=true }) => {
