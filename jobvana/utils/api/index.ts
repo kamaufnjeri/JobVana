@@ -67,10 +67,17 @@ api.interceptors.request.use(
         // Attach the access token to the request header
         if (accessToken) {
           config.headers = new AxiosHeaders({
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`
           });
-        }
+      
+          if (!(config.data instanceof FormData)) {
+              config.headers["Content-Type"] = "application/json";
+          } else {
+              // Let the browser set the proper boundary for FormData
+              delete config.headers["Content-Type"];
+          }
+      }
+      
       } catch (decodeError) {
         console.error("JWT Decode Error:", decodeError);
         toast.error("Invalid session. Please log in again.");

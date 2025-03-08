@@ -70,11 +70,11 @@ export const EXPERIENCE_LEVELS = EXPERIENCE_LEVELS_OPTIONS;
 export const JOB_TYPES = JOB_TYPES_OPTIONS;
 
 export const APPLICATIONS_STATUS_OPTIONS: SelectValuesProps[] = [
-  { label: "Pending", value: "pending" },
-  { label: "Reviewed", value: "reviewed" },
-  { label: "Hired", value: "hired" },
-  { label: "Rejected", value: "rejected" },
-  { label: "Forwarded for Interview", value: "forwarded_interview" },
+  { label: "Pending", value: "Pending" },
+  { label: "Reviewed", value: "Reviewed" },
+  { label: "Hired", value: "Hired" },
+  { label: "Rejected", value: "Rejected" },
+  { label: "Forwarded for Interview", value: "Forwarded for Interview" },
 ];
 
 export const SORT_BY_OPTIONS: SelectValuesProps[] = [

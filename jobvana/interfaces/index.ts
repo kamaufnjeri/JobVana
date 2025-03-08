@@ -37,6 +37,19 @@ export interface JobProps {
   details?: any[]; 
 }
 
+export interface ApplicationProps {
+  resume: string | File;
+  resume_url: string;
+  linkedin_url: string | null;
+  availability: string | null;
+  cover_letter: string;
+  id: string;
+  created_at: string;
+  status: string;
+  applicant_details: { name: string };
+  job_details: { id: string; title: string }
+}
+
 export interface JobResponseProps {
     count: number;
     next: string | null;

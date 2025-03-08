@@ -60,11 +60,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           const response = await api.get("auth/me/");
 
           if (response.status === 200) {
-           
             const userMe = response.data;
             setUser(userMe); // If it's already a string, set it directly
-            if (userMe.role === 'employer' && userMe?.company) {
-              setCompany(userMe.company)
+            if (userMe.role === "employer" && userMe?.company) {
+              setCompany(userMe.company);
             }
           } else {
             throw new Error();
@@ -76,7 +75,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           Cookies.remove("refreshToken");
         } finally {
           setLoading(false);
-         
         }
       }
     } else {
@@ -133,8 +131,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         }
 
         setUser(loggedinUser);
-        if (loggedinUser.role === 'employer' && loggedinUser.company) {
-          setCompany(loggedinUser.company)
+        if (loggedinUser.role === "employer" && loggedinUser.company) {
+          setCompany(loggedinUser.company);
         }
 
         setCookies(refresh, access);
@@ -147,8 +145,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     } catch (error: unknown) {
       const errorMessage = handleApiError(error);
       toast.error(errorMessage);
-    } finally {
-      // Clear the password field
       setLoginData((prev) => ({ ...prev, password: "" }));
     }
   };

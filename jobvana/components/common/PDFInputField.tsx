@@ -1,29 +1,22 @@
-import { uploadFile } from "@/utils/fileUploadUtils";
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { FaTrashAlt } from "react-icons/fa";
 import { FaUpload } from "react-icons/fa6";
 import FileViewer from "./FileViewer";
 
 const PDFInputField: React.FC<{
-  handleResumeChange: (resume: string) => void;
-  resume: string;
-}> = ({ handleResumeChange, resume }) => {
+  handleResumeChange: (resume: string | File) => void;
+  resume: string | File;
+  resumeUrl: string | null;
+  setResumeUrl: React.Dispatch<React.SetStateAction<string | null>>
+}> = ({ handleResumeChange, resume, resumeUrl, setResumeUrl }) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [displayResumeUrl, setDisplayResumeUrl] = useState(resumeUrl);
 
   const handleUploadResume = async (file: File) => {
-    setLoading(true);
-    setError(null); // Reset error before upload
-
-    try {
-      const resumeUrl = await uploadFile(file);
-      handleResumeChange(resumeUrl);
-    } catch (err) {
-      setError("Failed to upload file. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+   
+      handleResumeChange(file);
+      const fileUrl = URL.createObjectURL(file);
+      setResumeUrl(fileUrl);   
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -57,20 +50,17 @@ const PDFInputField: React.FC<{
         </div>
       </div>
 
-      {loading ? (
-        <div className="flex justify-center items-center mt-4">
-          <span className="h-6 w-6 border-4 border-t-gray-900 border-gray-300 rounded-full animate-spin"></span>
-        </div>
-      ) : (
-        resume && (
+    {
+        resumeUrl && 
           <div className="mt-4 flex justify-between items-center bg-gray-100 p-2 rounded-lg">
-            <FileViewer fileUrl={resume} />
+            <FileViewer fileUrl={resumeUrl} />
+            
+            <p>{resumeUrl}</p>
           </div>
-        )
-      )}
+        
+      }
 
-      {/* Error Message */}
-      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+     
     </div>
   );
 };
