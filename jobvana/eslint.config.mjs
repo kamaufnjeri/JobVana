@@ -15,6 +15,8 @@ const eslintConfig = [
     rules: {
       '@typescript-eslint/no-unused-vars': 'off', // Disable for TypeScript
       'no-unused-vars': 'off', // Disable for JavaScript
+      "react/no-children-prop": "off", // Disable the react/no-children-prop rule globally
+      "@typescript-eslint/no-explicit-any": "off",
     },
   },
 ];
