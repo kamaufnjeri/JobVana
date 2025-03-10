@@ -103,7 +103,7 @@ const SingleJobPostedSection: React.FC<SingleJobPostedSectionProps> = ({
 
   useEffect(() => {
     fetchApplications();
-  }, [job]);
+  }, [fetchApplications]);
 
   
 

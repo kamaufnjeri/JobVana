@@ -38,8 +38,6 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
         </div>
 
         <div className="flex items-end justify-end w-1/4">
-        /* eslint-disable react/no-children-prop */
-
           <Button
             name="View"
             styles="bg-background rounded-md text-h6 border-text border-2 h-10 p-1 w-full  group-hover:bg-text group-hover:text-background"
