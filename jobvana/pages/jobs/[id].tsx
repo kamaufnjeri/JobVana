@@ -1,17 +1,12 @@
-import Loading from "@/components/common/Loading";
 import LoginForm from "@/components/forms/LoginForm";
 import ApplyJobModal from "@/components/jobs/ApplyJobModal";
 import ApplyJobSection from "@/components/jobs/ApplyJobSection";
 import JobDetailSection from "@/components/jobs/JobDetailSection";
-import { SAMPLE_JOB } from "@/constants";
 import { useAuth } from "@/context/AuthContext";
 import { JobProps } from "@/interfaces";
 import api from "@/utils/api";
 import { handleApiError } from "@/utils/errorHandlerUtils";
-import axios from "axios";
-import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { toast } from "react-toastify";
 
 interface JobPropsPage {
   job: JobProps | null;

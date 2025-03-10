@@ -13,7 +13,6 @@ export const uploadFile = async (file: File) => {
     formData.append('api_key', apiKey);
     formData.append("resource_type", "raw");
   
-    console.log('Uploading to:', cloudinaryUrl);
   
     try {
       const response = await axios.post(cloudinaryUrl, formData, {
@@ -21,8 +20,7 @@ export const uploadFile = async (file: File) => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log('Doc URL:', response.data.secure_url); // Get the file URL after successful upload
-      return response.data.secure_url; // You can use this URL in your app
+      return { resume_url: response.data.secure_url, resume_public_id: response.data.resume_public_id}; // You can use this URL in your app
   } catch (error) {
     console.log('Error uploading image:', error);
     toast.error(JSON.stringify(error))

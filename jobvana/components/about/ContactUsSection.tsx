@@ -1,7 +1,6 @@
 import Image from "next/image";
 import React from "react";
 import Button from "../common/Button";
-import { FaArrowPointer } from "react-icons/fa6";
 import { FaArrowRight } from "react-icons/fa";
 
 const ContactUsSection: React.FC = () => {

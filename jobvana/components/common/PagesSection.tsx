@@ -30,6 +30,7 @@ const PagesSection: React.FC<PaginationProps> = ({
       page: num,
     });
   };
+  
 
   return (
     <div className="cursor-pointer z-3 p-1">

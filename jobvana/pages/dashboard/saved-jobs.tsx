@@ -18,7 +18,8 @@ interface SavedJobProps {
 type SavedJobsDataProps = PaginatedResponse<SavedJobProps>;
 
 const SavedJobs: React.FC = () => {
-  const [filters, setFilters] = useState<JobFilterProps>({ page: 1 });
+  
+  const [filters, setFilters] = useState<JobFilterProps>({ page: 1 }); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState<boolean>(false);
   const [savedJobs, setSavedJobs] = useState<SavedJobsDataProps | null>(null);
 

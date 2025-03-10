@@ -2,18 +2,17 @@ import Button from "@/components/common/Button";
 import PDFInputField from "@/components/common/PDFInputField";
 import Select from "react-select";
 import { AVAILABILITY_OPTIONS } from "@/constants";
-import { ApplicationProps, JobApplicationProps, JobFilterProps } from "@/interfaces";
+import { ApplicationProps, JobFilterProps } from "@/interfaces";
 import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa6";
 import Link from "next/link";
-import { capitalizeWords, formatDate } from "@/utils";
+import { formatDate } from "@/utils";
 import FileViewer from "@/components/common/FileViewer";
-import { Update } from "next/dist/build/swc/types";
 import { toast } from "react-toastify";
 import { handleApiError } from "@/utils/errorHandlerUtils";
 import api from "@/utils/api";
-import { isNull } from "util";
+
 
 interface ApplicationModalProps {
   application: ApplicationProps;

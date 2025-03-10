@@ -9,7 +9,7 @@ import api from "@/utils/api";
 import { useRouter } from "next/router";
 import { handleApiError } from "@/utils/errorHandlerUtils";
 import { toast } from "react-toastify";
-import { validatePassword } from "@/utils/authUtils";
+import { routeToNextPage } from "@/utils/navigateUtils";
 
 const SignUpSection: React.FC = () => {
   const [formData, setFormData] = useState<SignUpUserProps>({
@@ -45,7 +45,7 @@ const SignUpSection: React.FC = () => {
         const response = await api.post("auth/sign-up/", formData);
 
         if (response.status === 201) {
-          router.push("/login");
+          routeToNextPage(router, { pageRoute: "/login" });
           toast.success(response?.data?.message);
           setFormData({
             email: "",

@@ -10,7 +10,6 @@ import { handleApiError } from "@/utils/errorHandlerUtils";
 import { toast } from "react-toastify";
 import ListInputField from "../common/ListInputField";
 
-const todaysDate = new Date().toISOString().split("T")[0];
 
 const PostJobForm: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);

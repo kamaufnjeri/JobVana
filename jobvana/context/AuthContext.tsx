@@ -14,6 +14,7 @@ import { clearCookiesAndRedirect, setCookies } from "@/utils/authUtils";
 import api from "@/utils/api";
 import { handleApiError } from "@/utils/errorHandlerUtils";
 import { useNotifications } from "./NotificationProvider";
+import { routeToNextPage } from "@/utils/navigateUtils";
 // interface for the context
 
 interface AuthContextType {
@@ -75,6 +76,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         } catch (error) {
           console.error("Error fetching user");
           toast.error(handleApiError(error));
+
+          if (router.pathname.startsWith("/dashboard")) {
+            routeToNextPage(router, { pageRoute: "/" });
+
+          }
           Cookies.remove("accessToken");
           Cookies.remove("refreshToken");
         } finally {
@@ -100,7 +106,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           refresh: refreshToken,
         });
         if (response.status === 200) {
-          router.push("/");
+          if (router.pathname.startsWith("/dashboard")) {
+            routeToNextPage(router, { pageRoute: "/" });
+
+          }
           Cookies.remove("accessToken");
           Cookies.remove("refreshToken");
           setNotificationsData(null);
@@ -112,6 +121,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       } catch (error) {
         const errorMessage = handleApiError(error);
         toast.error(errorMessage);
+        routeToNextPage(router, { pageRoute: "/" });
+        Cookies.remove("accessToken");
+        Cookies.remove("refreshToken");
       }
     }
   };
@@ -130,15 +142,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         const { access, refresh, user: loggedinUser } = response.data;
 
         const dashboardUrl = loggedinUser.role;
+        
+
+        if (toDashboard) {
+          routeToNextPage(router, { pageRoute: `dashboard/${dashboardUrl}`})
+        }
         fetchNotifications();
         setLoginData({
           email: "",
           password: ""
         })
-
-        if (toDashboard) {
-          router.push(`/dashboard/${dashboardUrl}`);
-        }
 
         setUser(loggedinUser);
         if (loggedinUser.role === "employer" && loggedinUser.company) {

@@ -1,12 +1,13 @@
 import { ButtonProps } from "@/interfaces";
 
+
 const Button: React.FC<ButtonProps> = ({
-  name,
-  styles,
-  children,
-  type,
-  onClick,
-  loading,
+  name, // button name
+  styles, // aditional unique styles to button
+  children, // other components like icons to be added to button
+  type, // type of button i.e subit or button
+  onClick, // click event, function to run on clicking button
+  loading, // if loading display spin animation
 }) => {
   return (
     <button

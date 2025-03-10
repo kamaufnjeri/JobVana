@@ -1,24 +1,19 @@
 import Select from "react-select";
 import {
-  APPLICATIONS_RECEIVED,
   APPLICATIONS_STATUS_OPTIONS,
   AVAILABILITY_OPTIONS,
-  SAMPLE_JOB,
 } from "@/constants";
 import React, { useEffect, useState } from "react";
 import Button from "@/components/common/Button";
 import {
   ApplicationProps,
-  ApplicationReceivedProps,
   JobFilterProps,
   JobProps,
   PaginatedResponse,
 } from "@/interfaces";
 import SingleApplicationReceivedModal from "./SingleApplicationReceivedModal";
-import SingleJobPostedModal from "./SingleJobPostedDetails";
-import { useRouter } from "next/router";
 import api from "@/utils/api";
-import { capitalizeWords, formatDate } from "@/utils";
+import { formatDate } from "@/utils";
 import Link from "next/link";
 import { FaArrowRight, FaSync } from "react-icons/fa";
 import { toast } from "react-toastify";

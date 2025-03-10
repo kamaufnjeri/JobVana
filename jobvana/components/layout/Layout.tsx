@@ -3,7 +3,7 @@ import Footer from "./Footer";
 import { LayoutProps } from "@/interfaces";
 import { useAuth } from "@/context/AuthContext";
 import Loading from "../common/Loading";
-import { useState } from "react";
+
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { loading } = useAuth();

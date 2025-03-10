@@ -1,4 +1,4 @@
-import { capitalizeWords, getLabelByValue } from "@/utils";
+import { capitalizeWords } from "@/utils";
 import React from "react";
 
 interface ListDisplayProps {

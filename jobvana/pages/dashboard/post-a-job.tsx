@@ -1,8 +1,5 @@
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Sidebar from "@/components/dashboard/Sidebar";
-import JobApplicationsSection from "@/components/dashboard/applicant/JobApplicationsSection";
-import CompanySection from "@/components/dashboard/employer/CompanySection";
-import JobsPostedSection from "@/components/dashboard/employer/JobsPostedSection";
 import PostJobForm from "@/components/forms/PostJobForm";
 import React from "react";
 

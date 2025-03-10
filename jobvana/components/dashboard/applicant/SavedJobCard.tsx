@@ -1,6 +1,6 @@
 import Button from "@/components/common/Button";
-import { JobFilterProps, JobProps, ManyJobsProps } from "@/interfaces";
-import { capitalizeWords, formatDate } from "@/utils";
+import { JobFilterProps, JobProps } from "@/interfaces";
+import { formatDate } from "@/utils";
 import api from "@/utils/api";
 import { handleApiError } from "@/utils/errorHandlerUtils";
 import Image from "next/image";
@@ -19,8 +19,6 @@ interface SavedJobProps {
 interface SavedJobCardProps {
   savedJob: SavedJobProps;
   fetchJobs: (params?: JobFilterProps) => void;
-
-
 }
 
 const SavedJobCard: React.FC<SavedJobCardProps> = ({ savedJob, fetchJobs }) => {

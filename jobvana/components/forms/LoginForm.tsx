@@ -3,7 +3,7 @@ import Button from "../common/Button";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { LoginProps } from "@/interfaces";
-import { useNotifications } from "@/context/NotificationProvider";
+
 
 interface LoginComponentProps {
   description?: string;
@@ -90,7 +90,7 @@ const LoginForm: React.FC<LoginComponentProps> = ({ description, toDashboard=tru
         <span className="text-h6 flex flex-row gap-1">
           <h6>Don't have an account?</h6>
           <Link prefetch={true} href="/sign-up" className="text-primary">
-            Register
+            Sign Up
           </Link>
         </span>
       </span>

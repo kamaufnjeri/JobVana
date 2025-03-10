@@ -1,7 +1,6 @@
 import Select from "react-select";
 import {
-  APPLICATIONS_STATUS_OPTIONS,
-  SAMPLE_JOB_APPLICATIONS,
+  APPLICATIONS_STATUS_OPTIONS
 } from "@/constants";
 import React, { useEffect, useState } from "react";
 import Button from "@/components/common/Button";

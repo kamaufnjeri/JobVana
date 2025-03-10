@@ -47,23 +47,51 @@ const JobDetailsEditContainer: React.FC<{
   job: JobProps | null;
 }> = ({ detailsList, setDetailsList, job }) => {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [editingData, setEditingData] = useState<JobDetailProps | null>(null);
+  const [editingData, setEditingData] = useState<{
+    [key: string]: JobDetailProps;
+  } | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [addData, setAddData] = useState<JobDetailProps>({
     description: "",
     type: "",
   });
-
+  const [loadingDelete, setLoadingDelete] = useState<{ [key: number]: boolean }>({});
   const [addDetail, setAddDetail] = useState<boolean>(false);
 
+  // Handle edit by setting editing data for the corresponding index in detailsList
   const handleEdit = (index: number) => {
     setEditingIndex(index);
-    setEditingData(detailsList[index]);
+    setEditingData((prevData) => ({
+      ...prevData,
+      [index]: { ...detailsList[index] },
+    }));
   };
 
+  // Handle changes in input fields
   const handleChange = (key: string, value: string) => {
-    if (editingData) {
-      setEditingData({ ...editingData, [key]: value });
+    if (editingData && editingIndex !== null) {
+      setEditingData((prevData) =>
+        prevData
+          ? {
+              ...prevData,
+              [editingIndex]: {
+                ...prevData[editingIndex], // keep other details intact
+                [key]: value, // update the key that was changed
+              },
+            }
+          : {}
+      );
+    }
+  };
+
+  // Cancel editing for the current item (restores the original data for that index)
+  const cancelEditing = () => {
+    if (editingIndex !== null) {
+      setEditingData((prevData) => ({
+        ...prevData,
+        [editingIndex]: { ...detailsList[editingIndex] }, // Restore original data for the index
+      }));
+      setEditingIndex(null); // Reset editing index
     }
   };
 
@@ -72,14 +100,14 @@ const JobDetailsEditContainer: React.FC<{
     try {
       setLoading(true);
       const response = await api.patch(
-        `jobs/details/${editingData.id}/`,
-        editingData
+        `jobs/details/${editingData[index].id}/`,
+        editingData[index]
       );
 
       if (response.status === 200) {
         const updatedDetail = response.data.job_detail;
         const updatedList = [...detailsList];
-        console.log(response.data)
+        console.log(response.data);
         updatedList[index] = updatedDetail;
         setDetailsList(updatedList);
         toast.success(response.data.message);
@@ -99,10 +127,11 @@ const JobDetailsEditContainer: React.FC<{
   const handleDelete = async (index: number, detailId?: number | string) => {
     if (detailId) {
       try {
-        setLoading(true);
+        setLoadingDelete((prev) => ({...prev, [index]: true}));
         const response = await api.delete(`jobs/details/${detailId}/`);
 
         if (response.status === 204) {
+          console.log(response)
           toast.success(response.data.message);
 
           setDetailsList(
@@ -116,7 +145,7 @@ const JobDetailsEditContainer: React.FC<{
       } catch (error) {
         toast.error(handleApiError(error));
       } finally {
-        setLoading(false);
+        setLoadingDelete((prev) => ({...prev, [index]: false}));
       }
     }
   };
@@ -155,7 +184,11 @@ const JobDetailsEditContainer: React.FC<{
           >
             <div className="flex flex-col gap-2 w-full">
               <InputField
-                detail={editingData || item}
+                detail={
+                  editingData && editingIndex === index
+                    ? editingData[index]
+                    : item
+                } // Ensure editingIndex is not null before using it
                 setDetail={handleChange}
                 isEditing={editingIndex === index}
               />
@@ -169,7 +202,7 @@ const JobDetailsEditContainer: React.FC<{
                   />
                   <Button
                     name="Cancel"
-                    onClick={() => setEditingIndex(null)}
+                    onClick={() => cancelEditing()}
                     styles="bg-gray-400 rounded-md text-white h-10 p-2"
                   />
                 </div>
@@ -184,7 +217,7 @@ const JobDetailsEditContainer: React.FC<{
                     name="Delete"
                     onClick={() => handleDelete(index, item.id)}
                     styles="bg-red-500 rounded-md text-white h-10 p-2"
-                    loading={loading}
+                    loading={loadingDelete[index]}
                   />
                 </div>
               )}
@@ -214,9 +247,11 @@ const JobDetailsEditContainer: React.FC<{
               />
               <Select
                 options={JOB_DETAILS_OPTIONS}
-                value={JOB_DETAILS_OPTIONS.find(
-                  (option) => option.value === addData.type
-                )}
+                value={
+                  addData.type
+                    ? JOB_DETAILS_OPTIONS.find((option) => option.value === addData.type)
+                    : null // When addData.type is "", reset the value
+                }
                 onChange={(selectedOption) =>
                   setAddData((prev) => ({
                     ...prev,

@@ -15,6 +15,7 @@ const PDFInputField: React.FC<{
   const handleUploadResume = async (file: File) => {
    
       handleResumeChange(file);
+      console.log(file)
       const fileUrl = URL.createObjectURL(file);
       setResumeUrl(fileUrl);   
   };
@@ -54,7 +55,6 @@ const PDFInputField: React.FC<{
         resumeUrl && 
           <div className="mt-4 flex justify-between items-center bg-gray-100 p-2 rounded-lg">
             <FileViewer fileUrl={resumeUrl} />
-            
           </div>
         
       }

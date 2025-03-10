@@ -4,7 +4,7 @@ import { FaCircleArrowRight } from "react-icons/fa6";
 
 const HeroSection: React.FC<HeroProps> = ({ name, description }) => {
   return (
-    <section className="hero w-full rounded-lg h-auto">
+    <section className="hero w-full rounded-lg h-auto lg:h-[450px]">
       <div className="w-full h-full bg-gray-900  bg-opacity-50 rounded-lg text-white flex flex-col items-start p-5 justify-start">
         <div className="flex flex-col gap-2 lg:w-1/2 md:w-2/3 w-full">
           <h1 className="text-4xl lg:text-6xl md:text-6xl font-extrabold">

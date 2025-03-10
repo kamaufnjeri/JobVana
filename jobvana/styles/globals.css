@@ -81,17 +81,21 @@ p.readable {
   align-items: center;
   position: relative;
   justify-content: center;
-  background-image: var(--background-1);
   background-repeat: no-repeat;
   background-size: cover;
-  animation: change 20s infinite ease-in-out;
+  background-image: var(--background-1);
+  animation: changeBackground 40s infinite ease-in-out;
 }
 
-@keyframes change {
+@keyframes changeBackground {
+  0% {
+    background-image: var(--background-1);
+  }
   50% {
-    background-image: (--background-2);
+    background-image: var(--background-2);
   }
   100% {
     background-image: var(--background-1);
   }
 }
+

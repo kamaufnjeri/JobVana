@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { CompanyProps } from "@/interfaces";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { handleApiError } from "@/utils/errorHandlerUtils";
-import { capitalizeFirstLetter } from "@/utils";
-import DeleteModal from "@/components/common/DeleteModal";
 import Button from "@/components/common/Button";
 
 const CompanySection: React.FC = () => {
@@ -49,13 +47,15 @@ const CompanySection: React.FC = () => {
   };
 
   return (
-    <div className="p-4 border border-borderColor rounded-md shadow flex flex-col gap-4 w-full">
-      <div className="w-full flex-col gap-2 justify-between">
-        <div className="w-full flex gap-2 flex-col">
-          <h2 className="text-h2">Add Company</h2>
-        </div>
-
+     <>
         {!company && (
+          <div className="p-4 border border-borderColor rounded-md shadow flex flex-col gap-4 w-full">
+
+           <div className="w-full flex-col gap-2 justify-between">
+           <div className="w-full flex gap-2 flex-col">
+             <h2 className="text-h2">Add Company</h2>
+           </div>
+   
           <form
             onSubmit={handleCompanyAdd}
             className="grid lg:grid-cols-2 grid-cols-1 gap-2 p-4"
@@ -98,9 +98,11 @@ const CompanySection: React.FC = () => {
               styles="bg-primary rounded-md text-white h-10 p-2 lg:col-span-2 place-self-end"
             />
           </form>
+          </div>
+          </div>
         )}
-      </div>
-    </div>
+     
+    </>
   );
 };
 

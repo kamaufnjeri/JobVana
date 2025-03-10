@@ -56,8 +56,10 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ job }) => {
         
         const response = await api.post(
           `applications/job/${job.id}/`,
-          newFormData
+          newFormData,
         );
+
+        console.log(response)
 
         if (response.status === 201) {
           toast.success(response.data.message);

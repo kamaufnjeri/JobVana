@@ -1,5 +1,5 @@
 import { GetServerSideProps } from "next";
-import { JobFilterProps, JobProps, JobResponseProps, PaginatedResponse } from "@/interfaces";
+import { JobFilterProps, JobProps, PaginatedResponse } from "@/interfaces";
 import JobsFiltersSection from "@/components/jobs/JobsFiltersSection";
 import JobsSection from "@/components/jobs/JobsSection";
 import api from "@/utils/api";
@@ -9,6 +9,7 @@ import { useState } from "react";
 import PagesSection from "@/components/common/PagesSection";
 import Loading from "@/components/common/Loading";
 import Pill from "@/components/common/Pill";
+
 
 interface JobsPageProps {
   jobsData: PaginatedResponse<JobProps>;

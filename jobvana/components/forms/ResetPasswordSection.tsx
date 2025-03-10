@@ -7,6 +7,8 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import api from "@/utils/api";
 import { handleApiError } from "@/utils/errorHandlerUtils";
+import { routeToNextPage } from "@/utils/navigateUtils";
+
 
 const ResetPasswordSection: React.FC = () => {
   const [formData, setFormData] = useState<ResetPasswordProps>({
@@ -34,7 +36,7 @@ const ResetPasswordSection: React.FC = () => {
       const response = await api.post('auth/reset-password/', formData);
 
       if (response.status === 201 || response.status === 200 || response.status === 202) {
-        router.push('/login')
+        routeToNextPage(router, { pageRoute: '/login'})
         toast.success(response?.data?.message);
         
         setFormData({

@@ -1,7 +1,6 @@
 import Button from "@/components/common/Button";
 import Loading from "@/components/common/Loading";
 import PagesSection from "@/components/common/PagesSection";
-import { SAMPLE_JOBS, SORT_BY_OPTIONS } from "@/constants";
 import { JobProps, PaginatedResponse } from "@/interfaces";
 import { formatDate } from "@/utils";
 import api from "@/utils/api";
@@ -9,8 +8,8 @@ import { handleApiError } from "@/utils/errorHandlerUtils";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaSearch, FaSync } from "react-icons/fa";
-import Select from "react-select";
 import { toast } from "react-toastify";
+
 
 const JobsPostedSection: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);

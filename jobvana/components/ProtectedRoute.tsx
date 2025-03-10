@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthContext";
 import Loading from "./common/Loading";
+import { routeToNextPage } from "@/utils/navigateUtils";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -19,7 +20,7 @@ const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
       // If not authenticated, redirect to login
       if (!isRedirecting) {
         setIsRedirecting(true);
-        router.push("/login");
+        routeToNextPage(router, { pageRoute: "/"});
       }
     } else {
       const userRole = user.role as "applicant" | "employer";

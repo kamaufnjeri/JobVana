@@ -1,3 +1,4 @@
+import ErrorBoundary from "@/components/ErrorBoundary";
 import Layout from "@/components/layout/Layout";
 import { AuthProvider } from "@/context/AuthContext";
 import { LocationProvider } from "@/context/LocationContext";
@@ -9,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
+    <ErrorBoundary>
     <LocationProvider>
       <NotificationProvider>
         <AuthProvider>
@@ -19,5 +21,6 @@ export default function App({ Component, pageProps }: AppProps) {
         </AuthProvider>
       </NotificationProvider>
     </LocationProvider>
+    </ErrorBoundary>
   );
 }

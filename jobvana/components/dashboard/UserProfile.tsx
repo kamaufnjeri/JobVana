@@ -6,10 +6,9 @@ import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { handleApiError } from "@/utils/errorHandlerUtils";
 import DeleteModal from "../common/DeleteModal";
-import { useRouter } from "next/router";
-import { update } from "lodash";
 import { clearCookiesAndRedirect } from "@/utils/authUtils";
 import { capitalizeFirstLetter } from "@/utils";
+
 
 const UserProfile: React.FC = () => {
   const { user, setUser } = useAuth();

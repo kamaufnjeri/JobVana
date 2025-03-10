@@ -7,6 +7,7 @@ import { handleApiError } from "@/utils/errorHandlerUtils";
 import DeleteModal from "@/components/common/DeleteModal";
 import Button from "@/components/common/Button";
 
+
 const CompanyProfile: React.FC = () => {
   const { company, setCompany } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);

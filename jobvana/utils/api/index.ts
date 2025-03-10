@@ -74,9 +74,11 @@ api.interceptors.request.use(
               config.headers["Content-Type"] = "application/json";
           } else {
               // Let the browser set the proper boundary for FormData
-              delete config.headers["Content-Type"];
+              config.headers["Content-Type"] = 'multipart/form-data';
           }
       }
+     
+      return config;
       
       } catch (decodeError) {
         console.error("JWT Decode Error:", decodeError);

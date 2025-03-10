@@ -2,7 +2,6 @@ import Button from "@/components/common/Button";
 import Select from "react-select";
 import { JOB_EXPERIENCE_OPTIONS, JOB_TYPES_OPTIONS } from "@/constants";
 import React, { useEffect, useState } from "react";
-import { FaTimes } from "react-icons/fa";
 import LocationSelectSingle from "@/components/common/LocationSelectSingle";
 import ListDisplay from "@/components/common/ListDisplay";
 import { JobDetailProps, JobPostProps, JobProps } from "@/interfaces";
