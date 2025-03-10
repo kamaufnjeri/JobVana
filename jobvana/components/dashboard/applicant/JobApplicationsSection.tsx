@@ -2,7 +2,7 @@ import Select from "react-select";
 import {
   APPLICATIONS_STATUS_OPTIONS
 } from "@/constants";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Button from "@/components/common/Button";
 import { ApplicationProps, JobFilterProps, PaginatedResponse } from "@/interfaces";
 import SingleJobApplicationModal from "./SingleJobApplicationModal";
@@ -36,25 +36,29 @@ const JobApplicationsSection: React.FC = () => {
     setApplicationInModal(null);
   };
 
-  const fetchApplications = async (filters?: { [key: string]: string | number }) => {
-    setLoading(true);
-    try {
-      const response = await api.get(`applications/mine/`, {
-        params: filters ? filters : {},
-      });
-      if (response.status === 200) {
-        setApplicationsData(response.data);
-      } else {
-        toast.error(response.data.error || "Unknown Error");
+  const fetchApplications = useCallback(
+    async (filters?: { [key: string]: string | number }) => {
+      setLoading(true);
+      try {
+        const response = await api.get("applications/mine/", {
+          params: filters || {}, // Default to empty object if filters is undefined
+        });
+
+        if (response.status === 200) {
+          setApplicationsData(response.data);
+        } else {
+          toast.error(response.data.error || "Unknown Error");
+        }
+      } catch (error) {
+        console.error("Application fetching failed:", error);
+        const errorMessage = handleApiError(error);
+        toast.error(errorMessage);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Application fetching failed:", error);
-      const errorMessage = handleApiError(error);
-      toast.error(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [] // No dependencies, so the function won't be recreated unless necessary
+  )
 
   const prevNext = async (url: string | null) => {
     setLoading(true);

@@ -42,7 +42,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
             name="View"
             styles="bg-background rounded-md text-h6 border-text border-2 h-10 p-1 w-full  group-hover:bg-text group-hover:text-background"
             children={<FaArrowRight />}
-          />{/* eslint-disable-line react/no-children-prop */}
+          />
         </div>
         <div></div>
       </div>

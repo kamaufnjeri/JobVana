@@ -51,8 +51,6 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ job }) => {
         const newFormData = new FormData();
 
         Object.keys(formData).forEach((key) => {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-
           newFormData.append(key, (formData as Record<string, any>)[key]);
         });
         
