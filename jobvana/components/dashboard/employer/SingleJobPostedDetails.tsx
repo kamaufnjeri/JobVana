@@ -69,7 +69,8 @@ const SingleJobPostedDetails: React.FC<ApplicationModalProps> = ({
     if (originalJobData) {
       setFormData(originalJobData);
     }
-  }, [job]);
+  }, [originalJobData]);
+  
   const enableEditing = (key: UpdateProps) => {
     setIsDisabled((prev) =>
       Object.fromEntries(

@@ -88,7 +88,7 @@ const LoginForm: React.FC<LoginComponentProps> = ({ description, toDashboard=tru
           </Link>
         </span>
         <span className="text-h6 flex flex-row gap-1">
-          <h6>Don't have an account?</h6>
+          <h6>Don&apos;t have an account?</h6>
           <Link prefetch={true} href="/sign-up" className="text-primary">
             Sign Up
           </Link>
