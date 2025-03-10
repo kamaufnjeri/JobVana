@@ -55,8 +55,6 @@ const SavedJobCard: React.FC<SavedJobCardProps> = ({ savedJob, fetchJobs }) => {
       <Link
         prefetch={true}
         href={`/jobs/${job.id}`}
-        rel="noopener noreferrer"
-        target="_blank"
         className="w-full flex flex-col gap-2"
       >
         <div className="flex flex-wrap gap-2 items-start justify-between w-full">

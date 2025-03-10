@@ -1,7 +1,7 @@
-import { JobDetailsProps, JobProps } from "@/interfaces";
+import { JobProps } from "@/interfaces";
 import Image from "next/image";
 import { FaLocationDot, FaMoneyBillWave } from "react-icons/fa6";
-import { capitalizeWords, formatDate } from "@/utils";
+import { formatDate } from "@/utils";
 import JobDetails from "../common/JobDetails";
 
 interface JobDetailSectionProps {

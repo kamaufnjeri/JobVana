@@ -1,41 +1,18 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import api from "@/utils/api";
-import { handleApiError } from "@/utils/errorHandlerUtils";
-import type { NextApiRequest, NextApiResponse } from "next";
-import Cookies from "js-cookie";
+// /pages/api/hello.ts
 
-type Data = {
-  data?: any;
-  error?: string;
-  accessToken?: string;
-};
+import { NextApiRequest, NextApiResponse } from 'next';
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  try {
-    // Fetching the saved jobs from your API
-    const response = await api.get("jobs/saved_jobs");
-
-    // Check if the response status is successful
-    if (response.status === 200) {
-      return res.status(200).json({ data: response.data });
-    }
-
-    // If the API response is not successful, handle it gracefully
-    return res.status(response.status).json({
-      error: `Failed to fetch saved jobs. Status code: ${response.status}`,
-    });
-  } catch (error: any) {
-    // Handle any errors that might have occurred during the fetch
-    console.error("Error fetching saved jobs:",error);
-
-    const errorMessage =  handleApiError(error)
-
-    // Return a generic error message to the client
-    return res.status(500).json({
-      error: errorMessage,
-      accessToken: Cookies.get('accessToken')
-    });
+// Define the API handler
+export default function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  // Check the HTTP method (GET, POST, etc.)
+  if (req.method === 'GET') {
+    // Return a JSON response
+    res.status(200).json({ message: 'Hello, World!' });
+  } else {
+    // Handle any other HTTP method
+    res.status(405).json({ error: 'Method Not Allowed' });
   }
-};
-
-export default handler;
+}

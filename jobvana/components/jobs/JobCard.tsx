@@ -17,8 +17,6 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
     <Link
       prefetch={true}
       href={`jobs/${job.id}`}
-      target="_blank"
-      rel="noopener noreferrer"
       className="group w-full p-4 border-borderColor border hover:border-gray-400 transitio-all ease-in duration-300 cursor-pointer rounded-md shadow flex flex-col gap-2 items-start justify-start"
     >
       <div className="flex flex-row gap-2 items-start justify-between w-full">

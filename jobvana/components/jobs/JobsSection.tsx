@@ -1,4 +1,4 @@
-import { JobProps, ManyJobsProps } from "@/interfaces";
+import { JobProps } from "@/interfaces";
 import JobCard from "./JobCard"; // Ensure this component is imported
 
 interface JobsSectionProps {

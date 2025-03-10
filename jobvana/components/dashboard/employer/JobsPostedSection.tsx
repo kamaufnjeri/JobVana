@@ -142,8 +142,6 @@ const JobsPostedSection: React.FC = () => {
                       <td className="p-3">
                         <Link
                           prefetch={true}
-                          target='_blank'
-                          rel="noopener noreferrer"
                           href={`/dashboard/jobs/${job.id}`}
                         >
                           <Button
