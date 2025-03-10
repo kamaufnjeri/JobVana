@@ -17,6 +17,7 @@ const eslintConfig = [
       'no-unused-vars': 'off', // Disable for JavaScript
       "react/no-children-prop": "off", // Disable the react/no-children-prop rule globally
       "@typescript-eslint/no-explicit-any": "off",
+      "react/no-unescaped-entities": "off", // Disable the react/no-unescaped-entities rule globally
     },
   },
 ];
