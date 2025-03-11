@@ -9,7 +9,6 @@ import DeleteModal from "../common/DeleteModal";
 import { clearCookiesAndRedirect } from "@/utils/authUtils";
 import { capitalizeFirstLetter } from "@/utils";
 
-
 const UserProfile: React.FC = () => {
   const { user, setUser } = useAuth(); // get user from AuthContext
   const [loading, setLoading] = useState<boolean>(false);
@@ -23,16 +22,19 @@ const UserProfile: React.FC = () => {
     role: "",
   });
 
+  // enables editing based on key or field
   const [isDisabled, setIsDisabled] = useState<{ [key: string]: boolean }>({
     first_name: true,
     last_name: true,
     email: true,
   });
 
+  // function to enable editing of a key or field
   const enableEditing = (key: string) => {
     setIsDisabled((prev) => ({ ...prev, [key]: false }));
   };
 
+  // cancel's editing of a key or field
   const cancelEditing = (key: string) => {
     setIsDisabled((prev) => ({ ...prev, [key]: true }));
     if (user) {
@@ -40,17 +42,20 @@ const UserProfile: React.FC = () => {
     }
   };
 
+  // handle's change of input field
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // set formdata to user data on page load
   useEffect(() => {
     if (user) {
       setFormData(user);
     }
   }, [user]);
 
+  // function to updatae user
   const handleUpdateUser = async (
     key: "first_name" | "last_name" | "email"
   ) => {
@@ -62,6 +67,7 @@ const UserProfile: React.FC = () => {
         try {
           const response = await api.patch(`auth/me/`, data);
           if (response.status === 200) {
+            // on success set user to updated data
             const updatedUser = response.data.data;
             toast.success(response.data.message);
             setUser(updatedUser);
@@ -82,12 +88,14 @@ const UserProfile: React.FC = () => {
     }
   };
 
+  // handles deleting data
   const handleDeleteUser = async () => {
     if (user) {
       setLoading(true);
       try {
         const response = await api.delete(`auth/me/`);
         if (response.status === 204) {
+          // on suggess redirect to home page and clear data
           clearCookiesAndRedirect();
           setUser(null);
           setFormData((prev) => ({
@@ -111,8 +119,8 @@ const UserProfile: React.FC = () => {
     }
   };
 
-  const closeModal = () => setDeleteModalOpen(false);
-  const openModal = () => setDeleteModalOpen(true);
+  const closeModal = () => setDeleteModalOpen(false); // function to open delete modal
+  const openModal = () => setDeleteModalOpen(true); // close delete modal function
 
   return (
     <div className="p-4 border border-borderColor rounded-md shadow flex flex-col gap-4 w-full">

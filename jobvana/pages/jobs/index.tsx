@@ -115,15 +115,16 @@ const JobsPage: React.FC<JobsPageProps> = ({ jobsData }) => {
   );
 };
 
+// server side getting jobs
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const response = await api.get("jobs/"); // Replace with your actual API endpoint
+    const response = await api.get("jobs/"); 
     if (response.status === 200) {
       const jobsData = response.data;
 
       return {
         props: {
-          jobsData, // Pass fetched jobs to the page
+          jobsData, 
         },
       };
     } else {

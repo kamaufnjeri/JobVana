@@ -8,13 +8,14 @@ import api from "@/utils/api";
 import { handleApiError } from "@/utils/errorHandlerUtils";
 import React, { useState } from "react";
 
+// single job page interfaces
 interface JobPropsPage {
   job: JobProps | null;
 }
 
 const Job = ({ job }: JobPropsPage) => {
   const { isAuthenticated, user } = useAuth();
-  const [openApplyModal, setOpenApplyJobModal] = useState<boolean>(false);
+  const [openApplyModal, setOpenApplyJobModal] = useState<boolean>(false); // state for closing and opening apply job modal
 
   return (
     <div className="flex flex-col lg:flex-row gap-4 lg:px-10 md:px-5 px-2 py-2 min-w-screen">
@@ -55,7 +56,7 @@ const Job = ({ job }: JobPropsPage) => {
 
 export default Job;
 
-// Move the fetchJob logic to getServerSideProps
+// server side getting job by id
 export async function getServerSideProps(context: { params: { id: string } }) {
   const { id } = context.params;
 
@@ -66,7 +67,7 @@ export async function getServerSideProps(context: { params: { id: string } }) {
 
       return {
         props: {
-          job, // Pass the fetched job as a prop
+          job,
         },
       };
     }

@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import PagesSection from "@/components/common/PagesSection";
 import { FaSync } from "react-icons/fa";
 
+// interface for saved jobs page
 interface SavedJobProps {
   id: string;
   job_details: JobProps;
@@ -18,17 +19,18 @@ interface SavedJobProps {
 type SavedJobsDataProps = PaginatedResponse<SavedJobProps>;
 
 const SavedJobs: React.FC = () => {
-  
   const [filters, setFilters] = useState<JobFilterProps>({ page: 1 }); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState<boolean>(false);
   const [savedJobs, setSavedJobs] = useState<SavedJobsDataProps | null>(null);
 
+  // handles fetching saved jobs from previous or next page
   const prevNext = async (url: string | null) => {
     if (!url) return;
     setLoading(true);
     try {
       const response = await api.get(url);
       if (response.status === 200) {
+        // on success set saved jobs data from the data from backend api
         setSavedJobs(response.data);
       } else {
         throw new Error("Failed to fetch data");
@@ -40,10 +42,13 @@ const SavedJobs: React.FC = () => {
     }
   };
 
+  // function for fetching saved jobs from the backend
   const fetchJobs = async (filters?: JobFilterProps) => {
     setLoading(true);
     try {
-      const response = await api.get("jobs/saved-jobs/mine/", { params: filters || {} });
+      const response = await api.get("jobs/saved-jobs/mine/", {
+        params: filters || {},
+      });
 
       if (response.status === 200) {
         setSavedJobs(response.data);
@@ -71,22 +76,26 @@ const SavedJobs: React.FC = () => {
           <div className="w-full flex-col gap justify-between">
             <div className="w-full flex gap-2 flex-col">
               <div className="flex flex-row justify-between items-start gap-2">
-              <h2 className="text-h2">Saved Jobs</h2>
-              <button onClick={() => fetchJobs()}><FaSync className="text-2xl hover:text-primary"/></button>
+                <h2 className="text-h2">Saved Jobs</h2>
+                <button onClick={() => fetchJobs()}>
+                  <FaSync className="text-2xl hover:text-primary" />
+                </button>
               </div>
               <h5 className="text-h5">
-                Keep all your favorite job opportunities in one place. Revisit, apply, and take the next step in your career with JobVana!
+                Keep all your favorite job opportunities in one place. Revisit,
+                apply, and take the next step in your career with JobVana!
               </h5>
             </div>
 
             {loading ? (
               <Loading styles="min-h-[400px]" />
+            ) : savedJobs && savedJobs.results.length > 0 ? (
+              <SavedJobsSection
+                savedJobs={savedJobs.results}
+                fetchJobs={fetchJobs}
+              />
             ) : (
-              savedJobs && savedJobs.results.length > 0 ? (
-                <SavedJobsSection savedJobs={savedJobs.results} fetchJobs={fetchJobs} />
-              ) : (
-                <p className="text-center text-gray-500">No saved jobs found.</p>
-              )
+              <p className="text-center text-gray-500">No saved jobs found.</p>
             )}
 
             {savedJobs && (

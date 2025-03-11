@@ -4,35 +4,37 @@ import { FaLocationDot, FaMoneyBillWave } from "react-icons/fa6";
 import { formatDate } from "@/utils";
 import JobDetails from "../common/JobDetails";
 
+// interface for job detail componets
 interface JobDetailSectionProps {
-  job: JobProps ;
+  job: JobProps;
 }
-
+// displays information for a single job in details
 const JobDetailSection: React.FC<JobDetailSectionProps> = ({ job }) => {
-  
-
   return (
     <div className="p-4 border-borderColor border rounded-md shadow flex flex-col gap-4 items-start justify-start">
       <div className="flex flex-row gap-2 items-center justify-center">
-        
-          <Image
-            src={
-          `https://ui-avatars.com/api/?name=${job.company_details.name}&size=150`
-            }
-            alt={job.company_details.name}
-            width={50}
-            height={50}
-          />
-       
+        <Image
+          src={`https://ui-avatars.com/api/?name=${job.company_details.name}&size=150`}
+          alt={job.company_details.name}
+          width={50}
+          height={50}
+        />
+
         <span className="flex flex-col gap-2">
           <h4 className="text-h4">{job.company_details.name}</h4>
-          {job.created_at && <h6 className="text-h6 opacity-80">Posted - {formatDate(job.created_at)}</h6>}
+          {job.created_at && (
+            <h6 className="text-h6 opacity-80">
+              Posted - {formatDate(job.created_at)}
+            </h6>
+          )}
         </span>
       </div>
       <h3 className="text-h3">{job.title}</h3>
-      {job?.deadline &&<h6 className="text-h6 opacity-80 text-secondary">
-        Deadline - {job.deadline}
-      </h6>}
+      {job?.deadline && (
+        <h6 className="text-h6 opacity-80 text-secondary">
+          Deadline - {job.deadline}
+        </h6>
+      )}
 
       <ul className="text-p readable opacity-90 flex flex-row gap-2 text-primary">
         {job.categories &&
@@ -50,11 +52,13 @@ const JobDetailSection: React.FC<JobDetailSectionProps> = ({ job }) => {
           <p className="p-1 rounded-sm">{job.job_type}</p>
         </div>
         <div className="flex flex-row justify-between gap-2">
-        <span className="p-1 rounded-sm flex flex-row gap-2 items-center">
+          <span className="p-1 rounded-sm flex flex-row gap-2 items-center">
             <FaMoneyBillWave />
-            <p>${job.min_salary} - {job.max_salary}</p>
+            <p>
+              ${job.min_salary} - {job.max_salary}
+            </p>
           </span>
-          
+
           <span className="p-1 rounded-sm flex flex-row gap-2 items-center">
             <FaLocationDot />
             <p>{job.location}</p>
@@ -69,11 +73,7 @@ const JobDetailSection: React.FC<JobDetailSectionProps> = ({ job }) => {
           <p className="text-p">{job.description}</p>
         </div>
       )}
-      {
-        job.details &&
-        <JobDetails detailsList={job.details}/>
-      }
-     
+      {job.details && <JobDetails detailsList={job.details} />}
     </div>
   );
 };

@@ -6,13 +6,12 @@ import Button from "../common/Button";
 import { capitalizeWords, formatDate } from "@/utils";
 import { FaMoneyBillWave } from "react-icons/fa";
 
+// interface for job card components
 interface JobCardProps {
   job: JobProps;
 }
-
+// displays single job data
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
-  
-
   return (
     <Link
       prefetch={true}
@@ -69,11 +68,13 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
           <p className="p-1 rounded-sm">{job.job_type}</p>
         </div>
         <div className="flex flex-row justify-between gap-2">
-        <span className="p-1 rounded-sm flex flex-row gap-2 items-center">
+          <span className="p-1 rounded-sm flex flex-row gap-2 items-center">
             <FaMoneyBillWave />
-            <p>${job.min_salary} - {job.max_salary}</p>
+            <p>
+              ${job.min_salary} - {job.max_salary}
+            </p>
           </span>
-          
+
           <span className="p-1 rounded-sm flex flex-row gap-2 items-center">
             <FaLocationDot />
             <p>{job.location}</p>

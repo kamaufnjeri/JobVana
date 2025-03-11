@@ -10,7 +10,6 @@ import { handleApiError } from "@/utils/errorHandlerUtils";
 import { toast } from "react-toastify";
 import ListInputField from "../common/ListInputField";
 
-
 const PostJobForm: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<JobPostProps>({
@@ -24,8 +23,9 @@ const PostJobForm: React.FC = () => {
     location: "",
     job_type: "",
     details: [],
-  });
+  }); // job being posted form data
 
+  // handle input and textarea fields change
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -33,18 +33,22 @@ const PostJobForm: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // handles location change
   const setLocation = (location: string) => {
     setFormData((prev) => ({ ...prev, location }));
   };
 
+  // handles changes in categories
   const setCategories = (categories: string[]) => {
     setFormData((prev) => ({ ...prev, categories: categories }));
   };
 
+  // handles changes or addition of job details
   const setDetails = (details: JobDetailProps[]) => {
     setFormData((prev) => ({ ...prev, details: details }));
   };
 
+  // hadnles submition of job being posted data to abckend api
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -53,8 +57,8 @@ const PostJobForm: React.FC = () => {
       const response = await api.post("jobs/", formData);
 
       if (response.status === 201) {
+        // on success display success message and reset form data
         toast.success("Job posted successful!");
-
         setFormData((prev) => ({
           title: "",
           description: "",
@@ -68,9 +72,9 @@ const PostJobForm: React.FC = () => {
           details: [],
         }));
       } else if (response.data.error) {
-        toast.error(response.data.error || "Registration failed");
+        toast.error(response.data.error || "Job posting failed");
       } else {
-        throw new Error("Registration failed");
+        throw new Error("Job posting failed");
       }
     } catch (error) {
       console.error("Job posting failed:", error);

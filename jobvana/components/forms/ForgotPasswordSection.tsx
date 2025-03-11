@@ -8,6 +8,7 @@ import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { routeToNextPage } from "@/utils/navigateUtils";
 
+// handles sending email for user to reset password to backend api
 const ForgotPasswordSection: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<{ email: string }>({
@@ -21,6 +22,7 @@ const ForgotPasswordSection: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // handles sending email to the backend api
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -28,14 +30,15 @@ const ForgotPasswordSection: React.FC = () => {
     try {
       const response = await api.post("auth/forgot-password/", formData);
       if (response.status === 200) {
-        // Handle success
-        routeToNextPage(router, { pageRoute: '/reset-password' });
+        // Handle success and redirect to reset password page
+        routeToNextPage(router, { pageRoute: "/reset-password" });
         toast.success(response?.data?.message);
 
         setFormData({
           email: "",
         });
       } else if (response.data.error) {
+        // display the error
         toast.error(
           response.data.error || "Reset password otp not sent failed"
         );

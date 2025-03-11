@@ -6,26 +6,27 @@ import api from "@/utils/api";
 import { GetServerSideProps } from "next";
 import React from "react";
 
-
+// interface for singel job details
 
 interface Props {
   job: JobProps | null;
   error?: string;
 }
 
-const JobDetailsPage: React.FC<Props> = ({ job, error}) => {
+const JobDetailsPage: React.FC<Props> = ({ job, error }) => {
   return (
     <ProtectedRoute allowedRoles={["employer"]}>
       <div className="grid grid-cols-4 gap-2 lg:px-10 md:px-5 px-2 py-2 w-full">
         <Sidebar />
         <div className="col-span-3 flex flex-col gap-3">
-          <SingleJobPostedDetails job={job} error={error}/>
+          <SingleJobPostedDetails job={job} error={error} />
         </div>
       </div>
     </ProtectedRoute>
   );
 };
 
+// server side getting job by id
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
 

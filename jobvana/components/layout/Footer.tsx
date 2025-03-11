@@ -9,12 +9,9 @@ import {
 } from "react-icons/fa";
 import { useAuth } from "@/context/AuthContext";
 
-
 const Footer: React.FC = () => {
-  const pathname = usePathname();
-  const { user, isAuthenticated } = useAuth();
-
- 
+  const pathname = usePathname(); // get the pathname of the page we are in to apply css if on current page
+  const { user, isAuthenticated } = useAuth(); // get user and if authenticated fromAuthContext
 
   return (
     <div className="w-full border-borderColor border-t-2 lg:px-10 md:px-5 px-2 py-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-text">
@@ -110,15 +107,15 @@ const Footer: React.FC = () => {
             <>
               {" "}
               <li className="border-text w-full border-b">
-              <Link
-               prefetch={true}
-               href={`/dashboard/post-a-job`}
-               className={`${
-                 pathname === "/post-a-job" ? "text-primary" : "text-text"
-                } text-h5 hover:text-primary transition-class`}
-               
-              >Post a Job</Link>
-                
+                <Link
+                  prefetch={true}
+                  href={`/dashboard/post-a-job`}
+                  className={`${
+                    pathname === "/post-a-job" ? "text-primary" : "text-text"
+                  } text-h5 hover:text-primary transition-class`}
+                >
+                  Post a Job
+                </Link>
               </li>
             </>
           )}

@@ -1,13 +1,13 @@
 import { ReactNode } from "react";
 
-
+// company interface
 export interface CompanyProps {
   name: string;
   description: string,
   id?: string;
 }
 
-
+// paginated response from backend interface
 export interface PaginatedResponse<T> {
   total_count: number; // Total number of items
   total_pages: number; // Total number of pages
@@ -18,25 +18,26 @@ export interface PaginatedResponse<T> {
   results: T[]; // Array of items
 }
 
-
+// job interface
 export interface JobProps {
   id: string;
   title: string;
   description: string;
-  company_details: CompanyProps; 
+  company_details: CompanyProps;
   max_salary: number;
   min_salary: number;
   is_active: boolean;
   categories: string[];
   location: string;
   job_type: string;
-  posted_by: string; 
+  posted_by: string;
   created_at: string;
   deadline?: string;
   experience_level?: string;
-  details?: any[]; 
+  details?: any[];
 }
 
+// applications interface
 export interface ApplicationProps {
   resume: string | File;
   resume_url: string;
@@ -50,20 +51,18 @@ export interface ApplicationProps {
   job_details: { id: string; title: string }
 }
 
-export interface JobResponseProps {
-    count: number;
-    next: string | null;
-    previous: string | null;
-    results: JobProps[];
-}
-
+// interface for layout component
 export interface LayoutProps {
   children: ReactNode;
 }
+
+// interface for select options
 export interface SelectValuesProps {
   value: string; // Unique identifier for each category
   label: string; // Display name for each category
 }
+
+// button componet interfaces
 export interface ButtonProps {
   name: string;
   styles?: string;
@@ -74,33 +73,33 @@ export interface ButtonProps {
 }
 
 
-// Define a TypeScript interface for the job props (as a dictionary)
+// interface for the job details
 export interface JobDetailProps {
   description: string;
   id?: string | number
   type: string;
 }
 
+// filtering inteface
 export interface JobFilterProps {
 
   [key: string]: any; // Allow additional properties
 }
-
+// interface for job posted
 export interface JobPostProps {
   title: string;
   description: string;
-  experience_level: string ;
+  experience_level: string;
   max_salary: number | null;
   min_salary: number | null;
   deadline: string;
   categories: string[];
-  location: string ;
-  job_type: string ;
+  location: string;
+  job_type: string;
   details: JobDetailProps[];
 }
 
-
-
+// interface for many jobs
 export interface ManyJobsProps {
   company_name: string;
   logo?: string;
@@ -110,6 +109,43 @@ export interface ManyJobsProps {
   level: string;
   job_name: string;
   date_posted: string;
+}
+
+// interface for the login user
+
+export interface LoginProps {
+  email: string;
+  password: string;
+}
+
+// reset password interface
+
+export interface ResetPasswordProps {
+  email: string;
+  otp: number;
+  password: string;
+  confirm_password?: string;
+}
+
+// interface for user data
+export interface UserProps {
+  first_name: string;
+  last_name: string;
+  email: string;
+  role: string;
+  company?: CompanyProps | "";
+  id: string;
+}
+
+// interface for registering user
+
+export interface SignUpUserProps {
+  first_name: string;
+  last_name: string;
+  email: string;
+  role: string;
+  password: string;
+  confirm_password?: string;
 }
 
 export interface JobApplicationProps {
@@ -134,42 +170,8 @@ export interface ApplicationReceivedProps {
 }
 
 
-// interface for user data
-export interface UserProps {
-  first_name: string;
-  last_name: string;
-  email: string;
-  role: string;
-  company?: CompanyProps | "";
-  id: string;
-}
 
-// interface for registering user
 
-export interface SignUpUserProps {
-  first_name: string;
-  last_name: string;
-  email: string;
-  role: string;
-  password: string;
-  confirm_password?: string;
-}
-
-// interface for the login user
-
-export interface LoginProps {
-  email: string;
-  password: string;
-}
-
-// reset password interface
-
-export interface ResetPasswordProps {
-  email: string;
-  otp: number;
-  password: string;
-  confirm_password?: string;
-}
 export interface JobDetailsProps {
   responsibilities: string[];
   benefits: string[];
@@ -185,7 +187,7 @@ export interface JobDetailsProps {
   date_posted: string;
 }
 
-export interface JobPostedDetailsProps {}
+export interface JobPostedDetailsProps { }
 
 export interface TestimonialProps {
   name: string;

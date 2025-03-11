@@ -19,8 +19,8 @@ const SignUpSection: React.FC = () => {
     confirm_password: "",
     role: "",
     password: "",
-  });
-  const [loading, setLoading] = useState<boolean>(false);
+  }); // form data for signing up new user
+  const [loading, setLoading] = useState<boolean>(false); // load state when submitting data to backend api
   const router = useRouter();
   const [error, setError] = useState<string>("");
 
@@ -35,41 +35,41 @@ const SignUpSection: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // submiting for login data
+  //handles submitting signup data to backend
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
-    
-      try {
-        const response = await api.post("auth/sign-up/", formData);
+    try {
+      const response = await api.post("auth/sign-up/", formData);
 
-        if (response.status === 201) {
-          routeToNextPage(router, { pageRoute: "/login" });
-          toast.success(response?.data?.message);
-          setFormData({
-            email: "",
-            password: "",
-            role: "",
-            confirm_password: "",
-            first_name: "",
-            last_name: "",
+      if (response.status === 201) {
+        // on success redirect to login and reset form data
+        routeToNextPage(router, { pageRoute: "/login" });
+        toast.success(response?.data?.message);
+        setFormData({
+          email: "",
+          password: "",
+          role: "",
+          confirm_password: "",
+          first_name: "",
+          last_name: "",
         });
-    } else if (response.data.error) {
-        toast.error(response.data.error || 'Registration failed');
-    } else {
-        throw new Error('Registration failed');
-    }
-      } catch (error) {
-        console.error("Registration failed:", error);
-        toast.error(handleApiError(error));
-      } finally {
-        setLoading(false);
-        setFormData((prev) => ({ ...prev, password: "", confirm_password: "" }));
+      } else if (response.data.error) {
+        toast.error(response.data.error || "Registration failed");
+      } else {
+        throw new Error("Registration failed");
       }
-    };
+    } catch (error) {
+      console.error("Registration failed:", error);
+      toast.error(handleApiError(error));
+      setFormData((prev) => ({ ...prev, password: "", confirm_password: "" }));
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    console.log(formData)
+  console.log(formData);
 
   return (
     <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 h-full items-center justify-center lg:w-4/5">

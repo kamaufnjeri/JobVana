@@ -10,13 +10,17 @@ import NotificationsContainer from "../dashboard/NotificationsContainer";
 import { useNotifications } from "@/context/NotificationProvider";
 
 const Header: React.FC = () => {
-  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
-  const { unreadCount } = useNotifications();
-  const pathname = usePathname();
-  const { user, isAuthenticated, logout } = useAuth();
+  const [isDropDownOpen, setIsDropDownOpen] = useState(false); // state for showing user dropdown
+  const { unreadCount } = useNotifications(); // get number of unread notifications from NotificationProvider
+  const pathname = usePathname(); // get the pathname of the page we are in to apply css if on current page
+  const { user, isAuthenticated, logout } = useAuth(); // get user and authentication state from AuthContext
+
+  // handles hiding or displaying user dropdown
   const toggleDropDown = () => {
     setIsDropDownOpen(!isDropDownOpen);
   };
+
+  // handles displaying or hiding user notifications
   const { toggleShowNotifications } = useNotifications();
 
   return (

@@ -3,12 +3,12 @@ import Button from "../common/Button";
 import Select from "react-select";
 import { AVAILABILITY_OPTIONS } from "@/constants";
 import PDFInputField from "../common/PDFInputField";
-import { useRouter } from "next/router";
 import { handleApiError } from "@/utils/errorHandlerUtils";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { JobProps } from "@/interfaces";
 
+// interface for apply job form data
 interface ApplyJobFormDataProps {
   resume: string | File;
   linkedin_url?: string;
@@ -16,6 +16,7 @@ interface ApplyJobFormDataProps {
   cover_letter: string;
 }
 
+// interface for aapply job form component
 interface ApplyJobFormProps {
   job: JobProps;
 }
@@ -26,11 +27,11 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ job }) => {
     cover_letter: "",
     availability: "",
     linkedin_url: "",
-  });
-  const [resumeUrl, setResumeUrl] = useState<string | null>(null);
+  }); // form data for applying a job
+  const [resumeUrl, setResumeUrl] = useState<string | null>(null); // resume  url
   const [loading, setLoading] = useState<boolean>(false);
-  const router = useRouter();
 
+  // handle change in input and textarea fields
   const handleChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -38,30 +39,33 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ job }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // handles change in resume
   const handleResumeChange = (resume: File | string) => {
     setFormData((prev) => ({ ...prev, resume: resume }));
   };
 
+  // handles submition of form data
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
     if (job) {
       try {
+        // use form data for application
         const newFormData = new FormData();
 
         Object.keys(formData).forEach((key) => {
           newFormData.append(key, (formData as Record<string, any>)[key]);
         });
-        
+
+        // sendt to the backend api
         const response = await api.post(
           `applications/job/${job.id}/`,
-          newFormData,
+          newFormData
         );
 
-        console.log(response)
-
         if (response.status === 201) {
+          // on success reset form data and toast indicating success
           toast.success(response.data.message);
           setFormData((prev) => ({
             ...prev,
@@ -77,10 +81,12 @@ const ApplyJobForm: React.FC<ApplyJobFormProps> = ({ job }) => {
           throw new Error("Application failed");
         }
       } catch (error) {
+        // error display the error
         console.error("Application submission failed:", error);
         const errorMessage = handleApiError(error);
         toast.error(errorMessage);
       } finally {
+        // finally set loading to false
         setLoading(false);
       }
     }

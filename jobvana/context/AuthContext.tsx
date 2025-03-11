@@ -6,15 +6,15 @@ import {
   ReactNode,
 } from "react";
 import { CompanyProps, LoginProps, UserProps } from "@/interfaces";
-import { SAMPLE_USER_APPLICANT, SAMPLE_USER_EMPLOYER } from "@/constants";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
-import { clearCookiesAndRedirect, setCookies } from "@/utils/authUtils";
+import { setCookies } from "@/utils/authUtils";
 import api from "@/utils/api";
 import { handleApiError } from "@/utils/errorHandlerUtils";
 import { useNotifications } from "./NotificationProvider";
 import { routeToNextPage } from "@/utils/navigateUtils";
+
 // interface for the context
 
 interface AuthContextType {
@@ -45,13 +45,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [company, setCompany] = useState<CompanyProps | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
-  const { fetchNotifications, setNotificationsData} = useNotifications();
-
+  const { fetchNotifications, setNotificationsData } = useNotifications();
 
   const isAuthenticated = () => {
     return user !== null;
   };
 
+  // fecth user fuction
   const fetchUser = async () => {
     setLoading(true);
 
@@ -65,7 +65,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
           if (response.status === 200) {
             const userMe = response.data;
-            fetchNotifications()
+            fetchNotifications();
             setUser(userMe); // If it's already a string, set it directly
             if (userMe.role === "employer" && userMe?.company) {
               setCompany(userMe.company);
@@ -76,10 +76,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         } catch (error) {
           console.error("Error fetching user");
           toast.error(handleApiError(error));
-
+          // if path is protected redirect to home page
           if (router.pathname.startsWith("/dashboard")) {
             routeToNextPage(router, { pageRoute: "/" });
-
           }
           Cookies.remove("accessToken");
           Cookies.remove("refreshToken");
@@ -92,13 +91,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  // fetch user if user is null or is not authenticated
   useEffect(() => {
-    if (!user || isAuthenticated()) {
+    if (!user || !isAuthenticated()) {
       fetchUser();
     }
   }, []);
 
+  // function to log out user
   const logout = async () => {
+    // get refresh token from cookies
     const refreshToken = Cookies.get("refreshToken");
     if (refreshToken) {
       try {
@@ -106,10 +108,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           refresh: refreshToken,
         });
         if (response.status === 200) {
+          // on success and user is in protected rout redirect to homepage
           if (router.pathname.startsWith("/dashboard")) {
             routeToNextPage(router, { pageRoute: "/" });
-
           }
+          // clear cookies
           Cookies.remove("accessToken");
           Cookies.remove("refreshToken");
           setNotificationsData(null);
@@ -119,15 +122,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           throw new Error("Logout failed");
         }
       } catch (error) {
+        // incase of error
         const errorMessage = handleApiError(error);
         toast.error(errorMessage);
-        routeToNextPage(router, { pageRoute: "/" });
+        // on error and user is in protected route redirect to homepage
+        if (router.pathname.startsWith("/dashboard")) {
+          routeToNextPage(router, { pageRoute: "/" });
+        }
+        // clear cookies
         Cookies.remove("accessToken");
         Cookies.remove("refreshToken");
       }
     }
   };
 
+  // fuction to login user
   const login = async (
     loginData: LoginProps,
     setLoginData: React.Dispatch<React.SetStateAction<LoginProps>>,
@@ -137,28 +146,29 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const response = await api.post("/auth/login/", loginData);
 
       if (response.status === 200) {
+        // on success clear cookies
         Cookies.remove("accessToken");
         Cookies.remove("refreshToken");
-        const { access, refresh, user: loggedinUser } = response.data;
+        const { access, refresh, user: loggedinUser } = response.data; // fetch tokens and user date
 
         const dashboardUrl = loggedinUser.role;
-        
 
+        // redirect to dashboard
         if (toDashboard) {
-          routeToNextPage(router, { pageRoute: `dashboard/${dashboardUrl}`})
+          routeToNextPage(router, { pageRoute: `dashboard/${dashboardUrl}` });
         }
-        fetchNotifications();
+        fetchNotifications(); // fetch notifications
         setLoginData({
           email: "",
-          password: ""
-        })
+          password: "",
+        }); // reset for data
 
-        setUser(loggedinUser);
+        setUser(loggedinUser); // set user data
         if (loggedinUser.role === "employer" && loggedinUser.company) {
-          setCompany(loggedinUser.company);
+          setCompany(loggedinUser.company); // set company data
         }
 
-        setCookies(refresh, access);
+        setCookies(refresh, access); // set cookies
         toast.success("Login Successful!");
       } else if (response.data.error) {
         toast.error(response.data.error || "Login failed");

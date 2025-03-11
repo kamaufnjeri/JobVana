@@ -15,6 +15,7 @@ const ApplyJobSection: React.FC<ApplyJobSectionProps> = ({
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
+  // function to save job to the backend api
   const handleSaveJob = async () => {
     setLoading(true);
 
@@ -22,15 +23,15 @@ const ApplyJobSection: React.FC<ApplyJobSectionProps> = ({
       const response = await api.post(`jobs/${job.id}/save-job/`);
 
       if (response.status === 201) {
+        // on success display success message
         toast.success(response.data.message);
+      } else if (response.data.error) {
+        toast.error(response.data.error || "Job saving failed");
+      } else {
+        throw new Error("Job saving failed");
       }
-      else if (response.data.error) {
-        toast.error(response.data.error || 'Job saving failed');
-    } else {
-        throw new Error('Job saving failed');
-    }
     } catch (error) {
-      console.error("Application submission failed:", error);
+      console.error("Job saving failed:", error);
       const errorMessage = handleApiError(error);
       toast.error(errorMessage);
     } finally {
@@ -59,9 +60,7 @@ const ApplyJobSection: React.FC<ApplyJobSectionProps> = ({
         <span className="w-[60px] h-[6px] rounded-lg bg-primary"></span>
 
         <h3 className="text-h3">About {job.company_details.name}</h3>
-        <p className="text-stylish text-p">
-          {job.company_details.description}
-        </p>
+        <p className="text-stylish text-p">{job.company_details.description}</p>
       </div>
     </div>
   );

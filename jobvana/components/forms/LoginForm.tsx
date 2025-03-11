@@ -4,19 +4,21 @@ import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { LoginProps } from "@/interfaces";
 
-
 interface LoginComponentProps {
   description?: string;
   toDashboard?: boolean;
 }
 
-const LoginForm: React.FC<LoginComponentProps> = ({ description, toDashboard=true }) => {
+const LoginForm: React.FC<LoginComponentProps> = ({
+  description,
+  toDashboard = true,
+}) => {
   const { login } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<LoginProps>({
     email: "",
     password: "",
-  });
+  }); // form data for login in i.e passsword and email
 
   // handling change of input field
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,7 +26,7 @@ const LoginForm: React.FC<LoginComponentProps> = ({ description, toDashboard=tru
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // submiting for login data
+  // handles submitting login data to the backend
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();

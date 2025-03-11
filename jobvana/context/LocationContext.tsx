@@ -33,13 +33,14 @@ export const LocationProvider: React.FC<{ children: ReactNode }> = ({
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    // fetch locations from locations.json file
     const fetchLocations = async () => {
       setLoading(true);
       try {
         const response = await axios.get("/files/locations.json");
         const data = response.data;
-        setAllLocations(data);
-        setFilteredLocations(data.slice(0, 50));
+        setAllLocations(data); // set locations data with data received
+        setFilteredLocations(data.slice(0, 50)); // set to first first locations
       } catch (error) {
         setError("Failed to load locations");
       } finally {
@@ -50,9 +51,10 @@ export const LocationProvider: React.FC<{ children: ReactNode }> = ({
     fetchLocations();
   }, []);
 
+  // filter locations based on query
   const searchLocations = (query: string) => {
     if (!query) {
-      setFilteredLocations(allLocations.slice(0, 50));
+      setFilteredLocations(allLocations.slice(0, 50)); // set to the first fifty locations
       return;
     }
     const results = allLocations.filter((loc) =>

@@ -14,7 +14,9 @@ const homeHeroSection: HeroProps = {
   platform that connects you to your next opportunity. Discover top
   career opportunities or find the perfect candidate with ease.`,
 };
-const Home: React.FC<{jobsData: PaginatedResponse<JobProps>}> = ({ jobsData}) => {
+const Home: React.FC<{ jobsData: PaginatedResponse<JobProps> }> = ({
+  jobsData,
+}) => {
   return (
     <div className="flex flex-col gap-4 lg:px-10 md:px-5 px-2 py-2 min-w-screen">
       <HeroSection
@@ -23,7 +25,7 @@ const Home: React.FC<{jobsData: PaginatedResponse<JobProps>}> = ({ jobsData}) =>
       />
 
       <StatsSection />
-      <HomeJobsSection jobsData={jobsData}/>
+      <HomeJobsSection jobsData={jobsData} />
       <WhyJobVanaSection />
       <TestimonialSection />
       <TopCompaniesSection />
@@ -31,20 +33,21 @@ const Home: React.FC<{jobsData: PaginatedResponse<JobProps>}> = ({ jobsData}) =>
   );
 };
 
+// fetch jobs from server side to display on home page
 export const getStaticProps: GetStaticProps = async () => {
   try {
-    const response = await api.get('jobs/'); // Adjust the URL based on your API
+    const response = await api.get("jobs/");
     if (response.status === 200) {
       const jobsData = response.data;
 
       return {
         props: {
-          jobsData, // Pass jobs to the HomePage component
+          jobsData,
         },
         revalidate: 3600, // Revalidate every hour to keep data fresh
       };
     } else {
-      throw new Error('Failed to fetch jobs');
+      throw new Error("Failed to fetch jobs");
     }
   } catch (error) {
     return {
@@ -53,5 +56,5 @@ export const getStaticProps: GetStaticProps = async () => {
       },
     };
   }
-}
+};
 export default Home;

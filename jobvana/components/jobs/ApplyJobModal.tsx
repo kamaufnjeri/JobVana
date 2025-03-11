@@ -3,6 +3,8 @@ import React from "react";
 import ApplyJobForm from "../forms/ApplyJobForm";
 import { FaTimes } from "react-icons/fa";
 
+
+// interface for apply job modal
 interface ApplyJobModalProps {
   job: JobProps;
   closeModal: () => void;

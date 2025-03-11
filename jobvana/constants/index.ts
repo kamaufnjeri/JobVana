@@ -11,23 +11,27 @@ import {
   UserProps,
 } from "@/interfaces";
 
+// options for user role
 export const USER_ROLES: SelectValuesProps[] = [
   { value: "applicant", label: "Applicant" },
   { value: "employer", label: "Employer" },
 ];
 
+// options for job details type
 export const JOB_DETAILS_OPTIONS: SelectValuesProps[] = [
   { value: "Responsibility", label: "Responsibility" },
   { value: "Requirement", label: "Requirement" },
-  { value: "Benefit", label: "Benefit" }
+  { value: "Benefit", label: "Benefit" },
 ];
 
+// options for job experience level
 export const JOB_EXPERIENCE_OPTIONS: SelectValuesProps[] = [
   { value: "Entry-level", label: "Entry-level" },
   { value: "Mid-level", label: "Mid-level" },
   { value: "Senior-level", label: "Senior-level" },
 ];
 
+// options for job type
 export const JOB_TYPES_OPTIONS: SelectValuesProps[] = [
   { label: "Full-time", value: "Full-time" },
   { label: "Part-time", value: "Part-time" },
@@ -35,11 +39,10 @@ export const JOB_TYPES_OPTIONS: SelectValuesProps[] = [
   { label: "Hybrid", value: "Hybrid" },
   { label: "Contract", value: "Contract" },
   { label: "Freelance", value: "Freelance" },
-  { label: "Internship", value: "Internship" }
+  { label: "Internship", value: "Internship" },
 ];
 
-
-
+// options for applicant's availability
 export const AVAILABILITY_OPTIONS: SelectValuesProps[] = [
   { value: "Available Immediately", label: "Available Immediately" },
   { value: "Available in 1 Month", label: "Available in 1 Month" },
@@ -48,27 +51,7 @@ export const AVAILABILITY_OPTIONS: SelectValuesProps[] = [
   { value: "Available in 6 Months", label: "Available in 6 Months" },
 ];
 
-
-export const EXPERIENCE_LEVELS_OPTIONS: SelectValuesProps[] = [
-  { value: "internship", label: "Internship" },
-  { value: "entry-level", label: "Entry-Level" },
-  { value: "mid-level", label: "Mid-Level" },
-  { value: "senior", label: "Senior" },
-  { value: "others", label: "Others" },
-];
-
-export const JOB_TYPES_OPTIONS_2: SelectValuesProps[] = [
-  { value: "hybrid", label: "Hybrid" },
-  { value: "remote", label: "Remote" },
-  { value: "full-time", label: "Full-Time" },
-  { value: "part-time", label: "Part-Time" },
-  { value: "contract", label: "Contract" },
-];
-
-export const EXPERIENCE_LEVELS = EXPERIENCE_LEVELS_OPTIONS;
-
-export const JOB_TYPES = JOB_TYPES_OPTIONS;
-
+// options for application status
 export const APPLICATIONS_STATUS_OPTIONS: SelectValuesProps[] = [
   { label: "Pending", value: "Pending" },
   { label: "Reviewed", value: "Reviewed" },
@@ -77,12 +60,7 @@ export const APPLICATIONS_STATUS_OPTIONS: SelectValuesProps[] = [
   { label: "Forwarded for Interview", value: "Forwarded for Interview" },
 ];
 
-export const SORT_BY_OPTIONS: SelectValuesProps[] = [
-  { label: "Latest", value: "latest" },
-  { label: "Oldest", value: "oldest" },
-];
-
-
+// sample user applicant data
 
 export const SAMPLE_USER_APPLICANT: UserProps = {
   first_name: "John",
@@ -91,6 +69,8 @@ export const SAMPLE_USER_APPLICANT: UserProps = {
   role: "applicant",
   id: "1",
 };
+
+// sample user empployer data
 
 export const SAMPLE_USER_EMPLOYER: UserProps = {
   first_name: "John",
@@ -105,6 +85,7 @@ export const SAMPLE_USER_EMPLOYER: UserProps = {
   },
 };
 
+// sample of applications received
 export const APPLICATIONS_RECEIVED: ApplicationReceivedProps[] = [
   {
     first_name: "John",
@@ -168,6 +149,8 @@ export const APPLICATIONS_RECEIVED: ApplicationReceivedProps[] = [
   },
 ];
 
+
+// sample data for job applications 
 export const SAMPLE_JOB_APPLICATIONS: JobApplicationProps[] = [
   {
     job_name: "Software Engineer",
@@ -237,6 +220,7 @@ export const SAMPLE_JOB_APPLICATIONS: JobApplicationProps[] = [
   },
 ];
 
+// sample of a job detailed
 export const SAMPLE_JOB: JobDetailsProps = {
   company_name: "Google",
   logo: "https://logo.clearbit.com/google.com",
@@ -285,6 +269,8 @@ export const SAMPLE_JOB: JobDetailsProps = {
   ],
 };
 
+
+// smaple of jobs array
 export const SAMPLE_JOBS: ManyJobsProps[] = [
   {
     company_name: "Google Google Google",
@@ -378,6 +364,7 @@ export const SAMPLE_JOBS: ManyJobsProps[] = [
   },
 ];
 
+// top companies sample data
 export const SAMPLE_TOP_COMPANIES: TopCompaniesProps[] = [
   {
     name: "Meta",
@@ -405,6 +392,7 @@ export const SAMPLE_TOP_COMPANIES: TopCompaniesProps[] = [
   },
 ];
 
+// sample testimonials data
 export const SAMPLE_TESTIMONIALS: TestimonialProps[] = [
   {
     name: "Olivia Adams",
@@ -436,6 +424,7 @@ export const SAMPLE_TESTIMONIALS: TestimonialProps[] = [
   },
 ];
 
+// sample FAQS data
 export const SAMPLE_FAQS: FAQSProps[] = [
   {
     category: "Job Seekers",
@@ -519,6 +508,7 @@ export const SAMPLE_FAQS: FAQSProps[] = [
   },
 ];
 
+// sample team leaders data
 export const SAMPLE_TEAM_MEMBERS: TeamMembersProps[] = [
   {
     name: "Lina Chen",

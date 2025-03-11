@@ -9,16 +9,15 @@ import api from "@/utils/api";
 import { handleApiError } from "@/utils/errorHandlerUtils";
 import { routeToNextPage } from "@/utils/navigateUtils";
 
-
 const ResetPasswordSection: React.FC = () => {
   const [formData, setFormData] = useState<ResetPasswordProps>({
     email: "",
     confirm_password: "",
     otp: 0,
     password: "",
-  });
+  }); // form handling reset password data
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false); // laoding state for when data is sent to backend api
   const router = useRouter();
 
   // handling change of input field
@@ -27,28 +26,33 @@ const ResetPasswordSection: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // submiting for login data
+  // handles submitting reset password data to backend
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const response = await api.post('auth/reset-password/', formData);
+      const response = await api.post("auth/reset-password/", formData);
 
-      if (response.status === 201 || response.status === 200 || response.status === 202) {
-        routeToNextPage(router, { pageRoute: '/login'})
+      if (
+        response.status === 201 ||
+        response.status === 200 ||
+        response.status === 202
+      ) {
+        // on success redirect to login and display success message
+        routeToNextPage(router, { pageRoute: "/login" });
         toast.success(response?.data?.message);
-        
+        // reset form data
         setFormData({
-          email: '',
+          email: "",
           otp: 0,
-          password: '',
-          confirm_password: ''
+          password: "",
+          confirm_password: "",
         });
       } else if (response.data.error) {
-        toast.error(response.data.error || 'Password reset failed');
+        toast.error(response.data.error || "Password reset failed");
       } else {
-        throw new Error('Password reset failed');
+        throw new Error("Password reset failed");
       }
     } catch (error) {
       const errorMessage = handleApiError(error);
@@ -66,7 +70,8 @@ const ResetPasswordSection: React.FC = () => {
         <h2 className="text-h2">Reset Password</h2>
 
         <h5 className="text-h5">
-          For your security, the OTP expires in 5 minutes from when you received the message.
+          For your security, the OTP expires in 5 minutes from when you received
+          the message.
         </h5>
 
         <span className="flex flex-col gap-2 items-start">
