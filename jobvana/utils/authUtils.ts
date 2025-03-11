@@ -3,12 +3,14 @@ import Cookies from "js-cookie";
 
 // clearing cookies
 export const clearCookiesAndRedirect = () => {
-  
-  window.location.href = "/login";
+  // Remove cookies
+  Cookies.remove("accessToken");
+  Cookies.remove("refreshToken");
 
-  Cookies.remove("access");
-  Cookies.remove("refresh");
-
+  // Check if the user is on a protected route (starts with "/dashboard")
+  if (window.location.pathname.startsWith("/dashboard")) {
+    window.location.href = "/login"; // Redirect to login page
+  }
 };
 
 // setting cookies

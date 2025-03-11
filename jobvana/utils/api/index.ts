@@ -1,22 +1,18 @@
-import axios, { AxiosHeaders, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import { clearCookiesAndRedirect, setCookies } from "../authUtils";
 
-// Get backend URL from .env file
-const baseURL: string | undefined = process.env.NEXT_PUBLIC_BACKEND_URL;
+const baseURL: string = process.env.NEXT_PUBLIC_BACKEND_URL || "https://jobvana-backend.onrender.com/api/jobs/";
 
-// Interface for decoded token
 interface DecodedToken {
   exp: number;
 }
 
-// Global variable to track if refresh token request is in progress
 let isRefreshing = false;
-let refreshTokenPromise: Promise<void> | null = null;
+let refreshTokenPromise: Promise<string | undefined> | null = null;  // Ensure return type matches expected type
 
-// Creating an Axios instance
 const api: AxiosInstance = axios.create({
   baseURL,
   headers: {
@@ -25,10 +21,9 @@ const api: AxiosInstance = axios.create({
   },
 });
 
-// Request interceptor to add refresh or access token if needed
 api.interceptors.request.use(
   async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
-    let accessToken = Cookies.get("accessToken");
+    let accessToken: string | undefined = Cookies.get("accessToken") || undefined; // Convert null to undefined
     const refreshToken = Cookies.get("refreshToken");
 
     if (accessToken && typeof accessToken === "string" && accessToken.includes(".")) {
@@ -37,49 +32,39 @@ api.interceptors.request.use(
         const isTokenExpired = decoded.exp < Date.now() / 1000;
 
         if (isTokenExpired && refreshToken) {
-          // Prevent multiple refresh requests
           if (isRefreshing) {
-            // If a refresh request is already in progress, we need to wait for it
-            await refreshTokenPromise;
-            accessToken = Cookies.get("accessToken") || accessToken; // Get new access token if available
+            accessToken = await refreshTokenPromise || undefined;  // Convert null to undefined
           } else {
             isRefreshing = true;
-            refreshTokenPromise = new Promise<void>(async (resolve, reject) => {
+            refreshTokenPromise = (async () => {
               try {
                 const response: AxiosResponse<{ access: string; refresh: string }> =
                   await axios.post(`${baseURL}auth/token/refresh/`, { refresh: refreshToken });
 
                 setCookies(response.data.refresh, response.data.access);
-                accessToken = response.data.access;
                 isRefreshing = false;
-                resolve();
+                return response.data.access;
               } catch (err) {
+                isRefreshing = false;
                 toast.error("Session expired. Please log in again.");
                 clearCookiesAndRedirect();
-                isRefreshing = false;
-                reject(err);
+                return undefined;  // Ensure a valid return type
               }
-            });
-            await refreshTokenPromise;
+            })();
+            accessToken = await refreshTokenPromise || undefined;
           }
         }
 
-        // Attach the access token to the request header
         if (accessToken) {
-          config.headers = new AxiosHeaders({
-              Authorization: `Bearer ${accessToken}`
-          });
-      
+          config.headers.Authorization = `Bearer ${accessToken}`;
           if (!(config.data instanceof FormData)) {
-              config.headers["Content-Type"] = "application/json";
+            config.headers["Content-Type"] = "application/json";
           } else {
-              // Let the browser set the proper boundary for FormData
-              config.headers["Content-Type"] = 'multipart/form-data';
+            config.headers["Content-Type"] = "multipart/form-data";
           }
-      }
-     
-      return config;
-      
+        }
+        
+        return config;
       } catch (decodeError) {
         console.error("JWT Decode Error:", decodeError);
         toast.error("Invalid session. Please log in again.");
@@ -93,7 +78,6 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor (if you want to add any additional response handling)
 api.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error) => {
@@ -103,3 +87,5 @@ api.interceptors.response.use(
 );
 
 export default api;
+
+
