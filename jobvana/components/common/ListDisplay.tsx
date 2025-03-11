@@ -2,8 +2,8 @@ import { capitalizeWords } from "@/utils";
 import React from "react";
 
 interface ListDisplayProps {
-  listItems: string[];
-  type?: string;
+  listItems: string[]; // an array of strings
+  type?: string; // type of list i.e categories
 }
 const ListDisplay: React.FC<ListDisplayProps> = ({
   listItems,

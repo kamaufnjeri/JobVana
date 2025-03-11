@@ -13,6 +13,7 @@ const ListInputField: React.FC<ListInputFieldProps> = ({ name, items, setItems  
 
    // Handle adding items
    const addTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // on clicking ENTER add tag for job filtering ie categories or search term
     if (e.key === "Enter" && tagInput.trim()) {
       e.preventDefault();
       if (!items.includes(tagInput.trim())) {

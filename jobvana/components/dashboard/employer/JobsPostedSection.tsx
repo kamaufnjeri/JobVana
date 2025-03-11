@@ -10,18 +10,18 @@ import React, { useEffect, useState } from "react";
 import { FaSearch, FaSync } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-
 const JobsPostedSection: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [jobsData, setJobsData] = useState<PaginatedResponse<JobProps> | null>(
     null
-  );
+  ); // data of jobs fetched from backend url
   const [error, setError] = useState<string>("");
   const [search, setSearch] = useState<{ [key: string]: string | number }>({
     search: "",
     page: 1,
-  });
+  }); // filters to be applied ie page or search
 
+  // function to fetch jobs
   const fetchJobs = async (search?: { [key: string]: string | number }) => {
     setLoading(true);
     try {
@@ -30,6 +30,7 @@ const JobsPostedSection: React.FC = () => {
       });
 
       if (response.status === 200) {
+        // on success set jobsData to data from backend api
         setJobsData(response.data);
       } else if (response.data.error) {
         toast.error(response.data.error || "Unknown Error ");
@@ -45,6 +46,7 @@ const JobsPostedSection: React.FC = () => {
     }
   };
 
+  // handles getting next or previous page jobs posted data
   const prevNext = async (url: string | null) => {
     setLoading(true);
 
@@ -64,6 +66,7 @@ const JobsPostedSection: React.FC = () => {
     }
   };
 
+  // on page load fetch jobs
   useEffect(() => {
     fetchJobs();
   }, []);
@@ -90,13 +93,15 @@ const JobsPostedSection: React.FC = () => {
           <button onClick={() => fetchJobs(search)}>
             <FaSearch className="hover:text-primary text-xl" />
           </button>
-          <button onClick={() => {
-            fetchJobs();
-            setSearch({
-              search: "",
-              page: 1
-            })
-            }}>
+          <button
+            onClick={() => {
+              fetchJobs();
+              setSearch({
+                search: "",
+                page: 1,
+              });
+            }}
+          >
             <FaSync className="hover:text-primary text-xl" />
           </button>
         </span>
@@ -136,9 +141,12 @@ const JobsPostedSection: React.FC = () => {
                     >
                       <td className="p-3">{job.title}</td>
                       <td className="p-3">{formatDate(job.created_at)}</td>
-                     
-                        <td className="p-3"> {job.deadline && <p>{job.deadline}</p>}</td>
-                      
+
+                      <td className="p-3">
+                        {" "}
+                        {job.deadline && <p>{job.deadline}</p>}
+                      </td>
+
                       <td className="p-3">
                         <Link
                           prefetch={true}
@@ -156,17 +164,16 @@ const JobsPostedSection: React.FC = () => {
             </table>
           </div>
           <div className="w-full flex items-center justify-center">
-          <PagesSection
-            noOfPages={jobsData.total_pages}
-            currentPage={jobsData.current_page}
-            data={jobsData}
-            prevNext={prevNext}
-            getItems={fetchJobs}
-            searchItems={search}
-          />
+            <PagesSection
+              noOfPages={jobsData.total_pages}
+              currentPage={jobsData.current_page}
+              data={jobsData}
+              prevNext={prevNext}
+              getItems={fetchJobs}
+              searchItems={search}
+            />
           </div>
         </>
-
       ) : (
         <h3 className="text-h3">No jobs found</h3>
       )}

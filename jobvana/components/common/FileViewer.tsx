@@ -2,6 +2,8 @@ import { FaDownload } from "react-icons/fa";
 import Button from "./Button";
 
 const FileViewer: React.FC<{ fileUrl: string }> = ({ fileUrl }) => {
+  // component to display pdf for the resume
+  
   return (
     <div className="flex flex-col justify-center items-center gap-2">
       <iframe

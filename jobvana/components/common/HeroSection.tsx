@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FaCircleArrowRight } from "react-icons/fa6";
 
 const HeroSection: React.FC<HeroProps> = ({ name, description }) => {
+  // hero section accepts name for the header and shotr description to be displayed 
   return (
     <section className="hero w-full rounded-lg h-auto lg:h-[450px]">
       <div className="w-full h-full bg-gray-900  bg-opacity-50 rounded-lg text-white flex flex-col items-start p-5 justify-start">

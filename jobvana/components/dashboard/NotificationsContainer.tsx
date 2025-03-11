@@ -19,22 +19,29 @@ const NotificationsContainer = () => {
     closeNotifications,
     showNotifications,
   } = useNotifications();
-  const [deletingId, setDeletingId] = useState<string | null>(null)
-  const [markAsReadId, setMarkAsReadId] =  useState<string | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null); // sets id of the notification to be deleted
+  const [markAsReadId, setMarkAsReadId] = useState<string | null>(null); // sets id of notification to be marked as read
 
-  const markAsReadFunc = async  (notId: string) => {
+  // handles marking a notification as read based on id
+  const markAsReadFunc = async (notId: string) => {
     setMarkAsReadId(notId);
-    await markAsRead(notId)
+    await markAsRead(notId);
     setMarkAsReadId(null);
-  }
+  };
+
+  // handles deleting notification based on its id
   const deleteNotificationFunc = async (notId: string) => {
-    setDeletingId(notId)
-    await deleteNotification(notId)
-    setDeletingId(null)
-  }
+    setDeletingId(notId);
+    await deleteNotification(notId);
+    setDeletingId(null);
+  };
   return (
     <div
-      className={`transition-all duration-500 ease-out fixed top-20 right-0 p-4 z-50 items-start flex flex-col gap-2 min-h-[200px] max-h-[500px] bg-gray-600 text-white overflow-y-auto h-auto ${showNotifications ? "w-full md:w-2/3 lg:w-1/2 opacity-100" : "w-[0px] opacity-0"}  rounded-lg shadow-lg`}
+      className={`transition-all duration-500 ease-out fixed top-20 right-0 p-4 z-50 items-start flex flex-col gap-2 min-h-[200px] max-h-[500px] bg-gray-600 text-white overflow-y-auto h-auto ${
+        showNotifications
+          ? "w-full md:w-2/3 lg:w-1/2 opacity-100"
+          : "w-[0px] opacity-0"
+      }  rounded-lg shadow-lg`}
     >
       <div className="flex flex-row gap-2 justify-between w-full">
         <h3 className="text-h3">Notifications</h3>
@@ -44,58 +51,64 @@ const NotificationsContainer = () => {
       </div>
       {notificationsData ? (
         <>
-        <div className="flex flex-col gap-2 items-start">
-
-          { loadingData ? <Loading styles="min-h-[200px]" /> : notificationsData?.results ?
-            notificationsData.results.map((notification) => (
-              <div key={notification.id} className="flex flex-col gap-2">
-                <div className="flex gap-2 flex-rwo">
-                <FaArrowRight/>
-                <p
-                  className={`text-p ${
-                    notification.is_read ? "font-medium" : "font-semibold"
-                  }`}
-                >
-                  {notification.message}
-                </p>
-                <p className="opacity-80">{formatDate(notification.created_at)}</p>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {!notification.is_read && (
+          <div className="flex flex-col gap-2 items-start">
+            {loadingData ? (
+              <Loading styles="min-h-[200px]" />
+            ) : notificationsData?.results ? (
+              notificationsData.results.map((notification) => (
+                <div key={notification.id} className="flex flex-col gap-2">
+                  <div className="flex gap-2 flex-rwo">
+                    <FaArrowRight />
+                    <p
+                      className={`text-p ${
+                        notification.is_read ? "font-medium" : "font-semibold"
+                      }`}
+                    >
+                      {notification.message}
+                    </p>
+                    <p className="opacity-80">
+                      {formatDate(notification.created_at)}
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {!notification.is_read && (
+                      <Button
+                        name="Mark as Read"
+                        onClick={() => markAsReadFunc(notification.id)}
+                        loading={
+                          markAsReadId === notification.id ? loading : false
+                        }
+                        styles="bg-primary rounded-md text-white h-10 p-2 self-center"
+                      />
+                    )}
                     <Button
-                      name="Mark as Read"
-                      onClick={() => markAsReadFunc(notification.id)}
-                      loading={markAsReadId === notification.id ? loading : false}
-                      styles="bg-primary rounded-md text-white h-10 p-2 self-center"
+                      name="Delete"
+                      loading={deletingId === notification.id ? loading : false}
+                      onClick={() => deleteNotificationFunc(notification.id)}
+                      styles="bg-red-500 hover:bg-read-600 rounded-md text-white h-10 p-2 self-center"
                     />
-                  )}
-                  <Button
-                    name="Delete"
-                    loading={deletingId === notification.id ? loading : false}
-                    onClick={() => deleteNotificationFunc(notification.id)}
-                    styles="bg-red-500 hover:bg-read-600 rounded-md text-white h-10 p-2 self-center"
-                  />
+                  </div>
                 </div>
-              </div>
-            ))
-            : <h3 className="tet-h3">No notifications</h3>
-          }
-          
-        </div>
-      
-        <div className="w-full flex items-center justify-center">
-          <PagesSection
-            noOfPages={notificationsData.total_pages}
-            currentPage={notificationsData.current_page}
-            data={notificationsData}
-            prevNext={prevNext}
-            searchItems={filters}
-            getItems={fetchNotifications}
-          />
-        </div> 
-      </>)
-    :  <h3 className="tet-h3">No notifications</h3>  
-    }
+              ))
+            ) : (
+              <h3 className="tet-h3">No notifications</h3>
+            )}
+          </div>
+
+          <div className="w-full flex items-center justify-center">
+            <PagesSection
+              noOfPages={notificationsData.total_pages}
+              currentPage={notificationsData.current_page}
+              data={notificationsData}
+              prevNext={prevNext}
+              searchItems={filters}
+              getItems={fetchNotifications}
+            />
+          </div>
+        </>
+      ) : (
+        <h3 className="tet-h3">No notifications</h3>
+      )}
     </div>
   );
 };

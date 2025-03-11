@@ -4,8 +4,8 @@ import { FaTimes } from "react-icons/fa";
 import { capitalizeWords } from "@/utils";
 
 interface DeleteModalProps {
-  loading: boolean;
-  closeModal: () => void;
+  loading: boolean; // show spin when loading
+  closeModal: () => void; // function for closing modal
   deleteItem: () => void; // The delete function will accept any item
   itemName: string; // Modal name passed as prop for better identification
 }

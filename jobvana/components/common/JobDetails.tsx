@@ -5,7 +5,7 @@ import { FaArrowRight } from "react-icons/fa6";
 
 
 interface ListTextContainerProps {
-  listItems: JobDetailsProps[];
+  listItems: JobDetailsProps[]; // job details Array with type and description
 }
 
 const ListTextContainer: React.FC<ListTextContainerProps> = ({ listItems }) => {

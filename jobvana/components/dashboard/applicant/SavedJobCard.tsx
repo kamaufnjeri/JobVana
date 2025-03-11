@@ -10,32 +10,36 @@ import { FaMoneyBillWave } from "react-icons/fa";
 import { FaArrowRight, FaLocationDot } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
-
+// saved jobs interface
 interface SavedJobProps {
-  id: string;
-  job_details: JobProps;
+  id: string; // id of saved jobs
+  job_details: JobProps; // details of the saved jobs ie title, location
 }
 
+// interface SavedJobCard component
 interface SavedJobCardProps {
-  savedJob: SavedJobProps;
-  fetchJobs: (params?: JobFilterProps) => void;
+  savedJob: SavedJobProps; // the saved job
+  fetchJobs: (params?: JobFilterProps) => void; // function to fetch saved jobs
 }
 
 const SavedJobCard: React.FC<SavedJobCardProps> = ({ savedJob, fetchJobs }) => {
-  const [job, setJob] = useState<JobProps>(savedJob.job_details);
+  const [job, setJob] = useState<JobProps>(savedJob.job_details); // get job's data
   const [loading, setLoading] = useState<boolean>(false);
 
+  // function to remove saved job
   const removeSavedJob = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
     setLoading(true);
 
     try {
+      // call backend api to delete job
       const response = await api.delete(`jobs/saved-jobs/${savedJob.id}/`);
 
       if (response.status === 204) {
+        // on success display success message
         toast.success("Saved job removed successfully!");
-        fetchJobs()
+        fetchJobs();
       } else if (response.data.error) {
         toast.error(response.data.error || "Unknown Error ");
       } else {
@@ -60,10 +64,7 @@ const SavedJobCard: React.FC<SavedJobCardProps> = ({ savedJob, fetchJobs }) => {
         <div className="flex flex-wrap gap-2 items-start justify-between w-full">
           <div className="flex flex-wrap gap-2 w-full">
             <Image
-              src={
-               
-                `https://ui-avatars.com/api/?name=${job.company_details.name}&size=150`
-              }
+              src={`https://ui-avatars.com/api/?name=${job.company_details.name}&size=150`}
               alt={job.company_details.name}
               width={50}
               height={50}
@@ -71,7 +72,9 @@ const SavedJobCard: React.FC<SavedJobCardProps> = ({ savedJob, fetchJobs }) => {
 
             <div className="w-full flex flex-col gap-2">
               <h4 className="text-h4">{job.company_details.name}</h4>
-              <h6 className="text-h6 opacity-80">Posted - {formatDate(job.created_at)}</h6>
+              <h6 className="text-h6 opacity-80">
+                Posted - {formatDate(job.created_at)}
+              </h6>
             </div>
           </div>
 
@@ -92,17 +95,21 @@ const SavedJobCard: React.FC<SavedJobCardProps> = ({ savedJob, fetchJobs }) => {
       </Link>
 
       <h3 className="text-h3">{job.title}</h3>
-      {job.deadline && <h6 className="text-h6 opacity-80 text-secondary">
-        Deadline - {job.deadline}
-      </h6>}
+      {job.deadline && (
+        <h6 className="text-h6 opacity-80 text-secondary">
+          Deadline - {job.deadline}
+        </h6>
+      )}
 
-      {job.categories && <ul className="text-p readable opacity-90 flex flex-wrap gap-2 text-primary">
-        {job.categories?.map((category, index) => (
-          <li key={index} className="p-1 rounded-sm">
-            {category}
-          </li>
-        ))}
-      </ul>}
+      {job.categories && (
+        <ul className="text-p readable opacity-90 flex flex-wrap gap-2 text-primary">
+          {job.categories?.map((category, index) => (
+            <li key={index} className="p-1 rounded-sm">
+              {category}
+            </li>
+          ))}
+        </ul>
+      )}
 
       <span className="flex flex-col gap-2 opacity-80 w-full">
         <div className="flex flex-row gap-2 justify-between">
@@ -112,11 +119,13 @@ const SavedJobCard: React.FC<SavedJobCardProps> = ({ savedJob, fetchJobs }) => {
           <p className="p-1 rounded-sm">{job.job_type}</p>
         </div>
         <div className="flex flex-row justify-between gap-2">
-        <span className="p-1 rounded-sm flex flex-row gap-2 items-center">
+          <span className="p-1 rounded-sm flex flex-row gap-2 items-center">
             <FaMoneyBillWave />
-            <p>${job.min_salary} - {job.max_salary}</p>
+            <p>
+              ${job.min_salary} - {job.max_salary}
+            </p>
           </span>
-          
+
           <span className="p-1 rounded-sm flex flex-row gap-2 items-center">
             <FaLocationDot />
             <p>{job.location}</p>

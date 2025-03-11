@@ -4,6 +4,7 @@ import React from "react";
 import { FaBookmark, FaUser } from "react-icons/fa6";
 import { MdLogout, MdSpaceDashboard } from "react-icons/md";
 
+// side bar for when user is logged in
 const Sidebar: React.FC = () => {
   const { user, logout } = useAuth();
 

@@ -46,16 +46,18 @@ const JobDetailsEditContainer: React.FC<{
   setDetailsList: (details: JobDetailProps[]) => void;
   job: JobProps | null;
 }> = ({ detailsList, setDetailsList, job }) => {
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null); // set index of the job detail being edited
   const [editingData, setEditingData] = useState<{
     [key: string]: JobDetailProps;
-  } | null>(null);
+  } | null>(null); // set data being edited or updated with the key being the index of the job details in array
   const [loading, setLoading] = useState<boolean>(false);
   const [addData, setAddData] = useState<JobDetailProps>({
     description: "",
     type: "",
   });
-  const [loadingDelete, setLoadingDelete] = useState<{ [key: number]: boolean }>({});
+  const [loadingDelete, setLoadingDelete] = useState<{
+    [key: number]: boolean;
+  }>({}); // state for deleting a detail
   const [addDetail, setAddDetail] = useState<boolean>(false);
 
   // Handle edit by setting editing data for the corresponding index in detailsList
@@ -95,19 +97,21 @@ const JobDetailsEditContainer: React.FC<{
     }
   };
 
+  // handles updating details of a job baased on index of the details in the array
   const handleUpdate = async (index: number) => {
     if (!job || !editingData) return;
     try {
       setLoading(true);
+      // send patch request to the backend api with data baased on index being updates
       const response = await api.patch(
         `jobs/details/${editingData[index].id}/`,
         editingData[index]
       );
 
       if (response.status === 200) {
+        // on success updated details data
         const updatedDetail = response.data.job_detail;
         const updatedList = [...detailsList];
-        console.log(response.data);
         updatedList[index] = updatedDetail;
         setDetailsList(updatedList);
         toast.success(response.data.message);
@@ -124,14 +128,15 @@ const JobDetailsEditContainer: React.FC<{
     }
   };
 
+  // delete a detail based on id and detail id
   const handleDelete = async (index: number, detailId?: number | string) => {
     if (detailId) {
       try {
-        setLoadingDelete((prev) => ({...prev, [index]: true}));
+        setLoadingDelete((prev) => ({ ...prev, [index]: true }));
         const response = await api.delete(`jobs/details/${detailId}/`);
 
         if (response.status === 204) {
-          console.log(response)
+          // on success remove the detai; from detailsList
           toast.success(response.data.message);
 
           setDetailsList(
@@ -145,19 +150,22 @@ const JobDetailsEditContainer: React.FC<{
       } catch (error) {
         toast.error(handleApiError(error));
       } finally {
-        setLoadingDelete((prev) => ({...prev, [index]: false}));
+        setLoadingDelete((prev) => ({ ...prev, [index]: false }));
       }
     }
   };
 
+  // handles adding a new detail to a job i.e benefit
   const handleAddDetail = async () => {
     if (!job) return;
     try {
       setLoading(true);
       const response = await api.post(`jobs/${job.id}/details/`, addData);
       if (response.status === 201) {
+        // on success add the detail to the detailsList
         setDetailsList([...detailsList, response.data.job_detail]);
         toast.success(response.data.message);
+        // set addData
         setAddData({
           description: "",
           type: "",
@@ -249,7 +257,9 @@ const JobDetailsEditContainer: React.FC<{
                 options={JOB_DETAILS_OPTIONS}
                 value={
                   addData.type
-                    ? JOB_DETAILS_OPTIONS.find((option) => option.value === addData.type)
+                    ? JOB_DETAILS_OPTIONS.find(
+                        (option) => option.value === addData.type
+                      )
                     : null // When addData.type is "", reset the value
                 }
                 onChange={(selectedOption) =>

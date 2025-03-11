@@ -1,6 +1,6 @@
-import Header from "../layout/Header";
+const Loading: React.FC<{ styles: string }> = ({ styles }) => {
+  // component for loading state i.e if fetching jobs from backend
 
-const Loading: React.FC<{styles: string}> = ({styles}) => {
   return (
     <>
       <div className={`w-full flex items-center justify-center ${styles}`}>

@@ -15,11 +15,13 @@ import { handleApiError } from "@/utils/errorHandlerUtils";
 import api from "@/utils/api";
 import { useRouter } from "next/router";
 
-interface ApplicationModalProps {
+// interface for a single job details component props
+interface SingleJobPostedDetailsProps {
   job: JobProps | null;
   error?: string;
 }
 
+// type for keys to be updated
 type UpdateProps =
   | "title"
   | "deadline"
@@ -32,11 +34,11 @@ type UpdateProps =
   | "min_salary"
   | "max_salary";
 
-const SingleJobPostedDetails: React.FC<ApplicationModalProps> = ({
+const SingleJobPostedDetails: React.FC<SingleJobPostedDetailsProps> = ({
   job,
   error,
 }) => {
-  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false); // allow opening of delete modala
   const router = useRouter();
   const [originalJobData, setOriginalJobData] = useState<JobProps | null>(job);
   const [formData, setFormData] = useState<JobPostProps | JobProps>({
@@ -52,6 +54,7 @@ const SingleJobPostedDetails: React.FC<ApplicationModalProps> = ({
     details: [],
   });
   const [loading, setLoading] = useState<boolean>(false);
+  // handles which key is to be edited
   const [isDisabled, setIsDisabled] = useState<{ [key: string]: boolean }>({
     description: true,
     categories: true,
@@ -70,7 +73,8 @@ const SingleJobPostedDetails: React.FC<ApplicationModalProps> = ({
       setFormData(originalJobData);
     }
   }, [originalJobData]);
-  
+
+  // enable editing for a specific field/key
   const enableEditing = (key: UpdateProps) => {
     setIsDisabled((prev) =>
       Object.fromEntries(
@@ -79,6 +83,7 @@ const SingleJobPostedDetails: React.FC<ApplicationModalProps> = ({
     );
   };
 
+  // cancel's editing of a given field or key
   const cancelEditing = (key: UpdateProps) => {
     if (originalJobData) {
       setIsDisabled((prev) => ({ ...prev, [key]: true }));
@@ -89,9 +94,10 @@ const SingleJobPostedDetails: React.FC<ApplicationModalProps> = ({
     }
   };
 
-  const closeModal = () => setOpenDeleteModal(false);
-  const openModal = () => setOpenDeleteModal(true);
+  const closeModal = () => setOpenDeleteModal(false); // function to close delete modal
+  const openModal = () => setOpenDeleteModal(true); // function to open delete modal
 
+  // handles updating of specific key/field to the backend api
   const handleUpdateJob = async (key: UpdateProps) => {
     if (originalJobData && formData) {
       if (formData[key]) {
@@ -101,6 +107,7 @@ const SingleJobPostedDetails: React.FC<ApplicationModalProps> = ({
         try {
           const response = await api.patch(`jobs/${originalJobData.id}/`, data);
           if (response.status === 200) {
+            // on success update the job's data
             const updatedJob = response.data.job;
             toast.success(response.data.message);
             setFormData(updatedJob);
@@ -122,12 +129,14 @@ const SingleJobPostedDetails: React.FC<ApplicationModalProps> = ({
     }
   };
 
+  // handles deleting of the application
   const handleDeleteJob = async () => {
     if (job) {
       setLoading(true);
       try {
         const response = await api.delete(`jobs/${job.id}/`);
         if (response.status === 204) {
+          // on success redirect to dashboard with the jobs posted listed
           router.push("/dashboard/employer");
           setFormData({
             title: "",
@@ -156,6 +165,7 @@ const SingleJobPostedDetails: React.FC<ApplicationModalProps> = ({
     }
   };
 
+  // handles change categories field
   const setCategories = (categories: string[]) => {
     setFormData((prev) => ({
       ...prev,
@@ -163,20 +173,17 @@ const SingleJobPostedDetails: React.FC<ApplicationModalProps> = ({
     }));
   };
 
+  // handles change in details field
   const setDetails = (details: JobDetailProps[]) => {
-    
     setFormData((prev) => ({
       ...prev,
       details: details, // Updating the details field
     }));
-  
-    setOriginalJobData((prev) => 
-      prev ? { ...prev, details: details } : null
-    );
+
+    setOriginalJobData((prev) => (prev ? { ...prev, details: details } : null));
   };
-  
 
-
+  // handles change location field
   const setLocation = (location: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -184,6 +191,7 @@ const SingleJobPostedDetails: React.FC<ApplicationModalProps> = ({
     }));
   };
 
+  // handles change in textarea or in put fields
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -636,7 +644,11 @@ const SingleJobPostedDetails: React.FC<ApplicationModalProps> = ({
                 )
               ) : (
                 <div className="w-full">
-                  <JobDetailsEditContainer detailsList={formData.details} setDetailsList={setDetails} job={originalJobData}/>
+                  <JobDetailsEditContainer
+                    detailsList={formData.details}
+                    setDetailsList={setDetails}
+                    job={originalJobData}
+                  />
                 </div>
               )}
               <div className="self-end flex flex-row gap-2 items-end">

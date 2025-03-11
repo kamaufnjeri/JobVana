@@ -7,9 +7,10 @@ interface SavedJobProps {
   job_details: JobProps;
 }
 
+// interface for SavedJobsSection components props
 interface SavedJobsSectionProps {
-  savedJobs: SavedJobProps[];
-  fetchJobs: (params?: JobFilterProps) => void;
+  savedJobs: SavedJobProps[]; // an array of loggein-user saved jobs
+  fetchJobs: (params?: JobFilterProps) => void; // function to fetch saved jobs from backend
 }
 
 const SavedJobsSection: React.FC<SavedJobsSectionProps> = ({

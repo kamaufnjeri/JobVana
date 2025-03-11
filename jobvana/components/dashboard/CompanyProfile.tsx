@@ -7,7 +7,7 @@ import { handleApiError } from "@/utils/errorHandlerUtils";
 import DeleteModal from "@/components/common/DeleteModal";
 import Button from "@/components/common/Button";
 
-
+// component handles displaying, updating and deleting company for user whose role si employer
 const CompanyProfile: React.FC = () => {
   const { company, setCompany } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
@@ -17,15 +17,18 @@ const CompanyProfile: React.FC = () => {
     description: "",
   });
 
+  // handles enabling editing for each field or key in company
   const [isDisabled, setIsDisabled] = useState<{ [key: string]: boolean }>({
     name: true,
     description: true,
   });
 
+  // function to enable editing of a key or field
   const enableEditing = (key: string) => {
     setIsDisabled((prev) => ({ ...prev, [key]: false }));
   };
 
+  // handles cancelling editing of a specific key
   const cancelEditing = (key: string) => {
     setIsDisabled((prev) => ({ ...prev, [key]: true }));
     if (company) {
@@ -33,6 +36,7 @@ const CompanyProfile: React.FC = () => {
     }
   };
 
+  // handles change of input or textarea fields
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -40,6 +44,7 @@ const CompanyProfile: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // set formdata to company data on pagae load
   useEffect(() => {
     if (company) {
       setFormData(company);
@@ -48,6 +53,7 @@ const CompanyProfile: React.FC = () => {
     }
   }, [company]);
 
+  // handles updating a specific field or key or company
   const handleUpdateCompany = async (key: "name" | "description") => {
     if (company && formData) {
       if (formData[key]) {
@@ -57,7 +63,7 @@ const CompanyProfile: React.FC = () => {
         try {
           const response = await api.patch(`auth/company/${company.id}/`, data);
           if (response.status === 200) {
-            console.log(response.data);
+            // on success update comapany with the new data
             const updatedCompany = response.data.company;
             toast.success(response.data.message);
             setCompany(updatedCompany);
@@ -78,8 +84,10 @@ const CompanyProfile: React.FC = () => {
     }
   };
 
-  const closeModal = () => setDeleteModalOpen(false);
-  const openModal = () => setDeleteModalOpen(true);
+  const closeModal = () => setDeleteModalOpen(false); // close delete modal function
+  const openModal = () => setDeleteModalOpen(true); // open delete modal functon
+
+  // handles deleting company
   const handleDeleteCompany = async () => {
     if (company) {
       setLoading(true);

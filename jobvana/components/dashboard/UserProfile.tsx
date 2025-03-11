@@ -11,9 +11,10 @@ import { capitalizeFirstLetter } from "@/utils";
 
 
 const UserProfile: React.FC = () => {
-  const { user, setUser } = useAuth();
+  const { user, setUser } = useAuth(); // get user from AuthContext
   const [loading, setLoading] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  // user data for editing
   const [formData, setFormData] = useState<UserProps>({
     first_name: "",
     id: "",

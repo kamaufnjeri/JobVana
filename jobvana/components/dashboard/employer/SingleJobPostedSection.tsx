@@ -1,8 +1,5 @@
 import Select from "react-select";
-import {
-  APPLICATIONS_STATUS_OPTIONS,
-  AVAILABILITY_OPTIONS,
-} from "@/constants";
+import { APPLICATIONS_STATUS_OPTIONS, AVAILABILITY_OPTIONS } from "@/constants";
 import React, { useEffect, useState } from "react";
 import Button from "@/components/common/Button";
 import {
@@ -21,7 +18,6 @@ import { handleApiError } from "@/utils/errorHandlerUtils";
 import Loading from "@/components/common/Loading";
 import PagesSection from "@/components/common/PagesSection";
 
-
 interface SingleJobPostedSectionProps {
   job: JobProps | null;
   error?: string;
@@ -31,30 +27,33 @@ const SingleJobPostedSection: React.FC<SingleJobPostedSectionProps> = ({
   job,
   error,
 }) => {
-  const [openApplicationModal, setOpenApplicationModal] = useState(false);
-  const [applicationInModal, setApplicationInModal] = useState<ApplicationProps | null>(null);
+  const [openApplicationModal, setOpenApplicationModal] = useState(false); // handles opening modal and displaying details of application chosen
+  const [applicationInModal, setApplicationInModal] =
+    useState<ApplicationProps | null>(null); // set application details to be displayed on modal
   const [applicationsData, setApplicationsData] =
-    useState<PaginatedResponse<ApplicationProps> | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
+    useState<PaginatedResponse<ApplicationProps> | null>(null); // data of applications for the job received from backend api
+  const [loading, setLoading] = useState<boolean>(false);
 
+  // filters to be applied when filtering applications
   const [filters, setFilters] = useState<JobFilterProps>({
     status: "",
     availability: "",
     page: 1,
   });
 
+  // handles opening application modal and setting application to be viewed dataaa
   const openApplicationModalFunc = (application: ApplicationProps) => {
     setOpenApplicationModal(true);
     setApplicationInModal(application);
   };
 
+  // closes modal and sets application in modal to null
   const closeApplicationModal = () => {
     setOpenApplicationModal(false);
     setApplicationInModal(null);
   };
 
-  
-
+  // function to fetch applications for the specified jobsF
   const fetchApplications = async (filters?: {
     [key: string]: string | number;
   }) => {
@@ -66,6 +65,7 @@ const SingleJobPostedSection: React.FC<SingleJobPostedSectionProps> = ({
         });
 
         if (response.status === 200) {
+          // on success sey applications data with the data from abckend api
           setApplicationsData(response.data);
         } else if (response.data.error) {
           toast.error(response.data.error || "Unknown Error ");
@@ -82,9 +82,9 @@ const SingleJobPostedSection: React.FC<SingleJobPostedSectionProps> = ({
     }
   };
 
+  // handles getting previous page or next page data
   const prevNext = async (url: string | null) => {
     setLoading(true);
-
     if (url) {
       try {
         const response = await api.get(url);
@@ -101,11 +101,10 @@ const SingleJobPostedSection: React.FC<SingleJobPostedSectionProps> = ({
     }
   };
 
+  // fetch applications on page load
   useEffect(() => {
     fetchApplications();
   }, []);
-
-  
 
   return (
     <div className="p-4 border border-borderColor rounded-md shadow flex flex-col gap-4 w-full">
@@ -113,7 +112,7 @@ const SingleJobPostedSection: React.FC<SingleJobPostedSectionProps> = ({
         <h3 className="text-h3 text-red-500">{error}</h3>
       ) : job ? (
         <>
-          {(openApplicationModal && applicationInModal) && (
+          {openApplicationModal && applicationInModal && (
             <SingleApplicationReceivedModal
               closeModal={closeApplicationModal}
               fetchApplications={fetchApplications}
@@ -140,7 +139,7 @@ const SingleJobPostedSection: React.FC<SingleJobPostedSectionProps> = ({
                   Availability
                 </label>
                 <Select
-                className="rounded-md min-w-[200px] text-gray-800 outline-none border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
+                  className="rounded-md min-w-[200px] text-gray-800 outline-none border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
                   options={AVAILABILITY_OPTIONS}
                   placeholder={"Availability"}
                   value={
@@ -185,81 +184,86 @@ const SingleJobPostedSection: React.FC<SingleJobPostedSectionProps> = ({
                   menuPlacement="bottom"
                 />
               </span>
-              <button onClick={() => {
-            fetchApplications();
-            setFilters({
-              availability: "",
-              status: "",
-              page: 1
-            })
-            }}>
-            <FaSync className="hover:text-primary text-xl" />
-          </button>
+              <button
+                onClick={() => {
+                  fetchApplications();
+                  setFilters({
+                    availability: "",
+                    status: "",
+                    page: 1,
+                  });
+                }}
+              >
+                <FaSync className="hover:text-primary text-xl" />
+              </button>
             </span>
           </div>
           {loading ? (
-        <Loading styles="w-[400px" />
-      ) : applicationsData ? (
-      <div className="w-full">
-          <div className="w-full overflow-x-auto shadow-md rounded-lg">
-            <table className="min-w-[700px] w-full border border-borderColor rounded-lg">
-              <thead>
-                <tr className="bg-primary text-left text-white">
-                  <th className="p-3 border-b border-borderColor min-w-[140px]">
-                    Name
-                  </th>
+            <Loading styles="w-[400px" />
+          ) : applicationsData ? (
+            <div className="w-full">
+              <div className="w-full overflow-x-auto shadow-md rounded-lg">
+                <table className="min-w-[700px] w-full border border-borderColor rounded-lg">
+                  <thead>
+                    <tr className="bg-primary text-left text-white">
+                      <th className="p-3 border-b border-borderColor min-w-[140px]">
+                        Name
+                      </th>
 
-                  <th className="p-3 border-b border-borderColor min-w-[140px]">
-                    Date Applied
-                  </th>
-                  <th className="p-3 border-b border-borderColor min-w-[140px]">
-                    Status
-                  </th>
-                  <th className="p-3 border-b border-borderColor min-w-[140px]">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {applicationsData?.results && applicationsData.results.map((application) => (
-                  <tr
-                    key={`${application.id}`}
-                    className="border-b border-borderColor hover:opacity-100 opacity-80"
-                  >
-                    <td className="p-3">{application?.applicant_details.name}</td>
-                    <td className="p-3">{formatDate(application.created_at)}</td>
+                      <th className="p-3 border-b border-borderColor min-w-[140px]">
+                        Date Applied
+                      </th>
+                      <th className="p-3 border-b border-borderColor min-w-[140px]">
+                        Status
+                      </th>
+                      <th className="p-3 border-b border-borderColor min-w-[140px]">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {applicationsData?.results &&
+                      applicationsData.results.map((application) => (
+                        <tr
+                          key={`${application.id}`}
+                          className="border-b border-borderColor hover:opacity-100 opacity-80"
+                        >
+                          <td className="p-3">
+                            {application?.applicant_details.name}
+                          </td>
+                          <td className="p-3">
+                            {formatDate(application.created_at)}
+                          </td>
 
-                    <td className="p-3">
-                      {application.status}
-                    </td>
-                    <td className="p-3">
-                      <Button
-                        styles="bg-gray-800 rounded-md text-white h-10 px-4"
-                        name="View"
-                        onClick={() => openApplicationModalFunc(application)}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="w-full flex items-center justify-center">
-          <PagesSection
-            noOfPages={applicationsData.total_pages}
-            currentPage={applicationsData.current_page}
-            data={applicationsData}
-            prevNext={prevNext}
-            getItems={fetchApplications}
-            searchItems={filters}
-          />
-          </div>
-        </div>
-
-      ) : (
-        <h3 className="text-h3">No applications found</h3>
-      )}
-          
+                          <td className="p-3">{application.status}</td>
+                          <td className="p-3">
+                            <Button
+                              styles="bg-gray-800 rounded-md text-white h-10 px-4"
+                              name="View"
+                              onClick={() =>
+                                openApplicationModalFunc(application)
+                              }
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="w-full flex items-center justify-center">
+                <PagesSection
+                  noOfPages={applicationsData.total_pages}
+                  currentPage={applicationsData.current_page}
+                  data={applicationsData}
+                  prevNext={prevNext}
+                  getItems={fetchApplications}
+                  searchItems={filters}
+                />
+              </div>
+            </div>
+          ) : (
+            <h3 className="text-h3">No applications found</h3>
+          )}
         </>
       ) : (
         <h3 className="text-h3">Job not found</h3>

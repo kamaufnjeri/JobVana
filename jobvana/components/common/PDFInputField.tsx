@@ -4,23 +4,23 @@ import { FaUpload } from "react-icons/fa6";
 import FileViewer from "./FileViewer";
 
 const PDFInputField: React.FC<{
-  handleResumeChange: (resume: string | File) => void;
-  resume: string | File;
-  resumeUrl: string | null;
-  setResumeUrl: React.Dispatch<React.SetStateAction<string | null>>
+  handleResumeChange: (resume: string | File) => void; // handles resume change setting resume field in application form data
+  resume: string | File; // the resume if set
+  resumeUrl: string | null; // url to resume if updating application
+  setResumeUrl: React.Dispatch<React.SetStateAction<string | null>>;
 }> = ({ handleResumeChange, resume, resumeUrl, setResumeUrl }) => {
-  const [loading, setLoading] = useState<boolean>(false);
   const [displayResumeUrl, setDisplayResumeUrl] = useState(resumeUrl);
 
   const handleUploadResume = async (file: File) => {
-   
-      handleResumeChange(file);
-      console.log(file)
-      const fileUrl = URL.createObjectURL(file);
-      setResumeUrl(fileUrl);   
+    // function to handle when pdf file for resume is selected
+    handleResumeChange(file);
+    // create a temporary url for resume selected to display it
+    const fileUrl = URL.createObjectURL(file);
+    setResumeUrl(fileUrl);
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    // accepsts only pdf documents
     accept: {
       "application/pdf": [".pdf"],
     },
@@ -51,15 +51,11 @@ const PDFInputField: React.FC<{
         </div>
       </div>
 
-    {
-        resumeUrl && 
-          <div className="mt-4 flex justify-between items-center bg-gray-100 p-2 rounded-lg">
-            <FileViewer fileUrl={resumeUrl} />
-          </div>
-        
-      }
-
-     
+      {displayResumeUrl && (
+        <div className="mt-4 flex justify-between items-center bg-gray-100 p-2 rounded-lg">
+          <FileViewer fileUrl={displayResumeUrl} />
+        </div>
+      )}
     </div>
   );
 };
