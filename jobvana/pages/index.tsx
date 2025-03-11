@@ -2,9 +2,11 @@ import HeroSection from "@/components/common/HeroSection";
 import StatsSection from "../components/common/StatsSection";
 import WhyJobVanaSection from "@/components/about/WhyJobVanaSection";
 import TestimonialSection from "@/components/about/TestimonialSections";
-import { HeroProps } from "@/interfaces";
+import { HeroProps, JobProps, PaginatedResponse } from "@/interfaces";
 import HomeJobsSection from "@/components/home/HomeJobsSection";
 import TopCompaniesSection from "@/components/home/TopCompaniesSection";
+import api from "@/utils/api";
+import { GetStaticProps } from "next";
 
 const homeHeroSection: HeroProps = {
   name: "Your ultimate destination for job success!",
@@ -12,7 +14,7 @@ const homeHeroSection: HeroProps = {
   platform that connects you to your next opportunity. Discover top
   career opportunities or find the perfect candidate with ease.`,
 };
-const Home: React.FC = () => {
+const Home: React.FC<{jobsData: PaginatedResponse<JobProps>}> = ({ jobsData}) => {
   return (
     <div className="flex flex-col gap-4 lg:px-10 md:px-5 px-2 py-2 min-w-screen">
       <HeroSection
@@ -21,12 +23,35 @@ const Home: React.FC = () => {
       />
 
       <StatsSection />
-      <HomeJobsSection />
+      <HomeJobsSection jobsData={jobsData}/>
       <WhyJobVanaSection />
       <TestimonialSection />
-      <TopCompaniesSection/>
+      <TopCompaniesSection />
     </div>
   );
 };
 
+export const getStaticProps: GetStaticProps = async () => {
+  try {
+    const response = await api.get('jobs/'); // Adjust the URL based on your API
+    if (response.status === 200) {
+      const jobsData = response.data;
+
+      return {
+        props: {
+          jobsData, // Pass jobs to the HomePage component
+        },
+        revalidate: 3600, // Revalidate every hour to keep data fresh
+      };
+    } else {
+      throw new Error('Failed to fetch jobs');
+    }
+  } catch (error) {
+    return {
+      props: {
+        jobsData: [], // Empty array if something goes wrong
+      },
+    };
+  }
+}
 export default Home;

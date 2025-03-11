@@ -1,15 +1,72 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../common/Button";
 import Link from "next/link";
 import Image from "next/image";
+import { ResetPasswordProps } from "@/interfaces";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import api from "@/utils/api";
+import { handleApiError } from "@/utils/errorHandlerUtils";
+import { routeToNextPage } from "@/utils/navigateUtils";
+
 
 const ResetPasswordSection: React.FC = () => {
+  const [formData, setFormData] = useState<ResetPasswordProps>({
+    email: "",
+    confirm_password: "",
+    otp: 0,
+    password: "",
+  });
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
+
+  // handling change of input field
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // submiting for login data
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await api.post('auth/reset-password/', formData);
+
+      if (response.status === 201 || response.status === 200 || response.status === 202) {
+        routeToNextPage(router, { pageRoute: '/login'})
+        toast.success(response?.data?.message);
+        
+        setFormData({
+          email: '',
+          otp: 0,
+          password: '',
+          confirm_password: ''
+        });
+      } else if (response.data.error) {
+        toast.error(response.data.error || 'Password reset failed');
+      } else {
+        throw new Error('Password reset failed');
+      }
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 h-full items-center justify-center lg:w-4/5">
-      <form className="flex flex-col gap-2 rounded-lg shadow-lg p-5">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-2 rounded-lg shadow-lg p-5"
+      >
         <h2 className="text-h2">Reset Password</h2>
+
         <h5 className="text-h5">
-          Set a new password to keep your account secure.
+          For your security, the OTP expires in 5 minutes from when you received the message.
         </h5>
 
         <span className="flex flex-col gap-2 items-start">
@@ -21,20 +78,40 @@ const ResetPasswordSection: React.FC = () => {
             name="email"
             id="email"
             required
+            value={formData.email}
+            onChange={handleChange}
             placeholder="Enter email"
             className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
           />
         </span>
         <span className="flex flex-col gap-2 items-start">
+          <label htmlFor="otp" className="text-h6 font-medium">
+            OTP
+          </label>
+          <input
+            type="number"
+            name="otp"
+            id="otp"
+            required
+            min={0}
+            value={formData.otp}
+            onChange={handleChange}
+            placeholder="Enter otp"
+            className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
+          />
+        </span>
+        <span className="flex flex-col gap-2 items-start">
           <label htmlFor="password" className="text-h6 font-medium">
-            Password
+            New Password
           </label>
           <input
             type="password"
             name="password"
             id="password"
             required
-            placeholder="Enter password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Enter new password"
             className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
           />
         </span>
@@ -47,26 +124,29 @@ const ResetPasswordSection: React.FC = () => {
             name="confirm_password"
             id="confirm_password"
             required
+            value={formData.confirm_password}
+            onChange={handleChange}
             placeholder="Confirm password"
             className="rounded-md outline-none w-full border border-borderColor p-2 focus:ring-2 focus:ring-blue-500 text-gray-900"
           />
         </span>
         <Button
           type="submit"
+          loading={loading}
           name="Reset Password"
           styles="bg-primary rounded-md text-white h-10 p-2 w-full self-center"
         />
-       
+
         <span className="text-h6 flex flex-row self-end gap-1">
           <h6>Remembered your password?</h6>
-          <Link href="/login" className="text-primary">
+          <Link prefetch={true} href="/login" className="text-primary">
             {" "}
             Log in here
           </Link>
         </span>
       </form>
       <div className=" bg-primary h-full rounded-lg text-white flex flex-col gap-2 items-center justify-center p-5">
-      <div className="w-full h-auto rounded-md relative">
+        <div className="w-full h-auto rounded-md relative">
           <Image
             alt={"Sign Up Image"}
             src={"/images/contact-us.jpg"}
@@ -80,7 +160,8 @@ const ResetPasswordSection: React.FC = () => {
         <div className="flex flex-col gap-2 items-end justify-end">
           <h1 className="text-h1">Welcome to JobVana.</h1>
           <p className="text-p readable text-right">
-            “We’re here to help you get back to your next opportunity. Simply reset your password and continue where you left off.”
+            “We’re here to help you get back to your next opportunity. Simply
+            reset your password and continue where you left off.”
           </p>
           <p className="text-p stylish italic">— Florence Kamau</p>
           <h6 className="text-h6 font-semibold">Founder & CEO</h6>

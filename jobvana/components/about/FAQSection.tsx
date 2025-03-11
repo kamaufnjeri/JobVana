@@ -8,7 +8,7 @@ const FAQSection: React.FC = () => {
     employers: null,
     general: null,
   });
-  
+
   const faqRefs = useRef<{
     [key: string]: { [index: number]: HTMLDivElement | null };
   }>({});
@@ -33,14 +33,14 @@ const FAQSection: React.FC = () => {
       chevronElement.classList.toggle("rotate-180");
     }
 
-    if (answerElement ) {
+    if (answerElement) {
       if (openIndex[category] === index) {
         answerElement.classList.remove("max-h-40", "opacity-90");
 
         answerElement.classList.add("max-h-0", "opacity-0");
       } else {
-      answerElement.classList.remove("max-h-0", "opacity-0");
-      answerElement.classList.add("max-h-40", "opacity-90");
+        answerElement.classList.remove("max-h-0", "opacity-0");
+        answerElement.classList.add("max-h-40", "opacity-90");
       }
     }
     setOpenIndex((prev) => ({
@@ -82,7 +82,7 @@ const FAQSection: React.FC = () => {
                         }}
                         className="transition-transform duration-300"
                       >
-                        <FaChevronDown className="opacity-90 cursor-pointer"/>
+                        <FaChevronDown className="opacity-90 cursor-pointer" />
                       </div>
                     </span>
 

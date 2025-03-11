@@ -28,7 +28,7 @@ const TestimonialSection: React.FC = () => {
         {/* Animate Presence for smooth transition */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={testimonialIndex} 
+            key={testimonialIndex}
             initial={{ opacity: 0, x: 50 }} // Initial hidden state
             animate={{ opacity: 1, x: 0 }} // Animate to visible
             exit={{ opacity: 0, x: -50 }} // Smooth exit transition

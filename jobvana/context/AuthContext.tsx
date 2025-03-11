@@ -1,48 +1,189 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { UserProps } from "@/interfaces";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { CompanyProps, LoginProps, UserProps } from "@/interfaces";
 import { SAMPLE_USER_APPLICANT, SAMPLE_USER_EMPLOYER } from "@/constants";
+import { useRouter } from "next/router";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import { clearCookiesAndRedirect, setCookies } from "@/utils/authUtils";
+import api from "@/utils/api";
+import { handleApiError } from "@/utils/errorHandlerUtils";
+import { useNotifications } from "./NotificationProvider";
+import { routeToNextPage } from "@/utils/navigateUtils";
+// interface for the context
 
 interface AuthContextType {
-  user: UserProps;
-  setUser: React.Dispatch<React.SetStateAction<UserProps>>;
-  error: string | null;
+  user: UserProps | null;
+  setUser: React.Dispatch<React.SetStateAction<UserProps | null>>;
+  company: CompanyProps | null;
+  setCompany: React.Dispatch<React.SetStateAction<CompanyProps | null>>;
   loading: boolean;
+  login: (
+    loginData: LoginProps,
+    setLoginData: React.Dispatch<React.SetStateAction<LoginProps>>,
+    toDashboard: boolean
+  ) => Promise<void>;
+  logout: () => void;
+  isAuthenticated: () => boolean;
 }
 
-const defaultUser: UserProps = {
-  first_name: '',
-  last_name: '',
-  role: 'guest',
-  email: ''
-};
+// default user if a user is not logged in or logouts
 
+// creating auth context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<UserProps>(defaultUser);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+// auth context provider
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [user, setUser] = useState<UserProps | null>(null);
+  const [company, setCompany] = useState<CompanyProps | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const router = useRouter();
+  const { fetchNotifications, setNotificationsData} = useNotifications();
+
+
+  const isAuthenticated = () => {
+    return user !== null;
+  };
+
+  const fetchUser = async () => {
+    setLoading(true);
+
+    const accessToken = Cookies.get("accessToken");
+
+    if (accessToken) {
+      if (accessToken) {
+        // if access token get user data
+        try {
+          const response = await api.get("auth/me/");
+
+          if (response.status === 200) {
+            const userMe = response.data;
+            fetchNotifications()
+            setUser(userMe); // If it's already a string, set it directly
+            if (userMe.role === "employer" && userMe?.company) {
+              setCompany(userMe.company);
+            }
+          } else {
+            throw new Error();
+          }
+        } catch (error) {
+          console.error("Error fetching user");
+          toast.error(handleApiError(error));
+
+          if (router.pathname.startsWith("/dashboard")) {
+            routeToNextPage(router, { pageRoute: "/" });
+
+          }
+          Cookies.remove("accessToken");
+          Cookies.remove("refreshToken");
+        } finally {
+          setLoading(false);
+        }
+      }
+    } else {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchUser = async () => {
-      setLoading(true);
-      try {
-        setUser(SAMPLE_USER_EMPLOYER);
-      } catch (error) {
-        setError("Failed to load auths");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUser();
+    if (!user || isAuthenticated()) {
+      fetchUser();
+    }
   }, []);
 
-  return (
-    <AuthContext.Provider value={{ user, setUser, error, loading }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const logout = async () => {
+    const refreshToken = Cookies.get("refreshToken");
+    if (refreshToken) {
+      try {
+        const response = await api.post("auth/logout/", {
+          refresh: refreshToken,
+        });
+        if (response.status === 200) {
+          if (router.pathname.startsWith("/dashboard")) {
+            routeToNextPage(router, { pageRoute: "/" });
+
+          }
+          Cookies.remove("accessToken");
+          Cookies.remove("refreshToken");
+          setNotificationsData(null);
+          setUser(null);
+          toast.success("Logout successful!");
+        } else {
+          throw new Error("Logout failed");
+        }
+      } catch (error) {
+        const errorMessage = handleApiError(error);
+        toast.error(errorMessage);
+        routeToNextPage(router, { pageRoute: "/" });
+        Cookies.remove("accessToken");
+        Cookies.remove("refreshToken");
+      }
+    }
+  };
+
+  const login = async (
+    loginData: LoginProps,
+    setLoginData: React.Dispatch<React.SetStateAction<LoginProps>>,
+    toDashboard: boolean
+  ) => {
+    try {
+      const response = await api.post("/auth/login/", loginData);
+
+      if (response.status === 200) {
+        Cookies.remove("accessToken");
+        Cookies.remove("refreshToken");
+        const { access, refresh, user: loggedinUser } = response.data;
+
+        const dashboardUrl = loggedinUser.role;
+        
+
+        if (toDashboard) {
+          routeToNextPage(router, { pageRoute: `dashboard/${dashboardUrl}`})
+        }
+        fetchNotifications();
+        setLoginData({
+          email: "",
+          password: ""
+        })
+
+        setUser(loggedinUser);
+        if (loggedinUser.role === "employer" && loggedinUser.company) {
+          setCompany(loggedinUser.company);
+        }
+
+        setCookies(refresh, access);
+        toast.success("Login Successful!");
+      } else if (response.data.error) {
+        toast.error(response.data.error || "Login failed");
+      } else {
+        throw new Error("Login failed");
+      }
+    } catch (error: unknown) {
+      const errorMessage = handleApiError(error);
+      toast.error(errorMessage);
+      setLoginData((prev) => ({ ...prev, password: "" }));
+    }
+  };
+
+  const value = {
+    user,
+    setUser,
+    company,
+    setCompany,
+    loading,
+    login,
+    logout,
+    isAuthenticated,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
