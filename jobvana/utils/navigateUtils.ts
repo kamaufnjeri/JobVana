@@ -1,5 +1,6 @@
 import { NextRouter } from "next/router";
 
+// inetrface for routeToNextPage function
 interface PageRouteProps {
   pageRoute: string;
 }
