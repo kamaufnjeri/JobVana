@@ -80,7 +80,7 @@ const JobApplicationsSection: React.FC = () => {
 
   useEffect(() => {
     fetchApplications();
-  }, []);
+  }, [fetchApplications]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
