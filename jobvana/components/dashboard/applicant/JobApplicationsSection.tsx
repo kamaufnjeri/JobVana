@@ -144,44 +144,45 @@ const JobApplicationsSection: React.FC = () => {
               className="rounded-md w-full text-gray-800 outline-none border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
             />
           </span>
-          <span className="flex flex-col gap-2 self-end items-start">
-            <label htmlFor="type" className="text-h6 font-medium">
-              Status
-            </label>
-            <Select
-              className="rounded-md text-gray-800 outline-none border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
-              options={APPLICATIONS_STATUS_OPTIONS}
-              placeholder={"Status"}
-              value={
-                APPLICATIONS_STATUS_OPTIONS.find(
-                  (level) => level.value === filters.status
-                ) || null
-              }
-              onChange={(selectedOption) => {
-                const newFilters = {
-                  ...filters,
-                  status: selectedOption?.value || "",
-                };
-                fetchApplications(newFilters);
-                setFilters(newFilters);
-              }}
-              isSearchable
-              menuPlacement="bottom"
-            />
+          <div className="flex flex-row gap w-full items-center justify-center">
+            <span className="flex flex-col gap-2 self-end items-start">
+              <label htmlFor="type" className="text-h6 font-medium">
+                Status
+              </label>
+              <Select
+                className="rounded-md text-gray-800 outline-none border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
+                options={APPLICATIONS_STATUS_OPTIONS}
+                placeholder={"Status"}
+                value={
+                  APPLICATIONS_STATUS_OPTIONS.find(
+                    (level) => level.value === filters.status
+                  ) || null
+                }
+                onChange={(selectedOption) => {
+                  const newFilters = {
+                    ...filters,
+                    status: selectedOption?.value || "",
+                  };
+                  fetchApplications(newFilters);
+                  setFilters(newFilters);
+                }}
+                isSearchable
+                menuPlacement="bottom"
+              />
+            </span>
             <button
-            onClick={() => {
-              fetchApplications();
-              setFilters({
-                job_title: "",
-                status: "",
-                page: 1,
-              });
-            }}
-          >
-            <FaSync className="hover:text-primary text-xl" />
-          </button>
-          </span>
-          
+              onClick={() => {
+                fetchApplications();
+                setFilters({
+                  job_title: "",
+                  status: "",
+                  page: 1,
+                });
+              }}
+            >
+              <FaSync className="hover:text-primary text-xl" />
+            </button>
+          </div>
         </span>
       </div>
 
