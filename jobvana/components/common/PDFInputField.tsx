@@ -1,29 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { FaUpload } from "react-icons/fa6";
 import FileViewer from "./FileViewer";
 
 const PDFInputField: React.FC<{
-  handleResumeChange: (resume: string | File) => void; // handles resume change setting resume field in application form data
-  resume: string | File; // the resume if set
-  resumeUrl: string | null; // url to resume if updating application
+  handleResumeChange: (resume: string | File) => void;
+  resume: string | File;
+  resumeUrl: string | null;
   setResumeUrl: React.Dispatch<React.SetStateAction<string | null>>;
 }> = ({ handleResumeChange, resume, resumeUrl, setResumeUrl }) => {
-  const [displayResumeUrl, setDisplayResumeUrl] = useState(resumeUrl);
+  const [displayResumeUrl, setDisplayResumeUrl] = useState<string | null>(
+    resumeUrl
+  );
+  const [fileName, setFileName] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Ensure display updates when resumeUrl changes
+    if (resumeUrl) {
+      setDisplayResumeUrl(resumeUrl);
+    }
+  }, [resumeUrl]);
 
   const handleUploadResume = async (file: File) => {
-    // function to handle when pdf file for resume is selected
     handleResumeChange(file);
-    // create a temporary url for resume selected to display it
+
+    // Create a temporary URL for preview and update file name
     const fileUrl = URL.createObjectURL(file);
+    setDisplayResumeUrl(fileUrl);
     setResumeUrl(fileUrl);
+    setFileName(file.name);
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    // accepsts only pdf documents
-    accept: {
-      "application/pdf": [".pdf"],
-    },
+    accept: { "application/pdf": [".pdf"] },
     multiple: false,
     onDrop: (acceptedFiles) => {
       if (acceptedFiles[0]) {
@@ -51,8 +60,12 @@ const PDFInputField: React.FC<{
         </div>
       </div>
 
+      {/* Display File Preview & Name */}
       {displayResumeUrl && (
-        <div className="mt-4 flex justify-between items-center bg-gray-100 p-2 rounded-lg">
+        <div className="mt-4 flex flex-col bg-gray-100 p-3 rounded-lg">
+          <p className="text-gray-700 font-medium">
+            {fileName || "Uploaded File"}
+          </p>
           <FileViewer fileUrl={displayResumeUrl} />
         </div>
       )}

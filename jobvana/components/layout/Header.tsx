@@ -43,8 +43,8 @@ const Header: React.FC = () => {
       <nav
         className={` flex-col gap-2 lg:px-10 md:px-5 px-2 py-2 lg:flex-row lg:items-center items-start lg:justify-between lg:w-2/3 w-full md:smooth-dropdown sm:smooth-dropdown lg:flex transition-all duration-300 ease-out ${
           isDropDownOpen
-            ? "max-h-96 opacity-100 lg:opacity-100"
-            : "max-h-0 opacity-0 lg:opacity-100"
+            ? "max-h-96 opacity-100 lg:opacity-100 pointer-events-auto z-10"
+            : "max-h-0 opacity-0 lg:opacity-100 lg:pointer-events-auto pointer-events-none lg:z-10 -z-0"
         }`}
       >
         <ul className="flex flex-col gap-2 lg:flex-row lg:items-center items-start lg:gap-4 lg:w-3/4">

@@ -3,13 +3,14 @@ import Button from "./Button";
 
 const FileViewer: React.FC<{ fileUrl: string }> = ({ fileUrl }) => {
   // component to display pdf for the resume
-  
+
   return (
     <div className="flex flex-col justify-center items-center gap-2">
       <iframe
         src={fileUrl}
-        width="640"
+        width="100%"
         height="480"
+        style={{ maxWidth: "640px" }}
         frameBorder="0"
         allowFullScreen
       />{" "}

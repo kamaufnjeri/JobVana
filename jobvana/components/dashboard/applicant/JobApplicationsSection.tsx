@@ -128,7 +128,7 @@ const JobApplicationsSection: React.FC = () => {
         </div>
 
         <span className="flex lg:flex-row md:flex-row flex-col gap-2 self-end items-center justify-between w-full">
-          <span className="flex flex-col gap-2 self-end items-start md:w-1/2 w-full lg:w-1/2">
+          <span className="flex flex-col gap-2 self-end items-start">
             <label htmlFor="type" className="text-h6 font-medium">
               Job Title
             </label>
@@ -149,7 +149,7 @@ const JobApplicationsSection: React.FC = () => {
               Status
             </label>
             <Select
-              className="rounded-md min-w-[200px] text-gray-800 outline-none border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
+              className="rounded-md text-gray-800 outline-none border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
               options={APPLICATIONS_STATUS_OPTIONS}
               placeholder={"Status"}
               value={

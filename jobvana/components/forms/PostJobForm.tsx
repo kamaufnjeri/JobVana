@@ -289,7 +289,7 @@ const PostJobForm: React.FC = () => {
           detailsList={formData?.details}
         />
       </span>
-      <div className="lg:col-span-2 place-self-center w-1/2">
+      <div className="lg:col-span-2 place-self-center lg:w-1/2 md:w-1/2 w-2/3">
         <Button
           type="submit"
           loading={loading}

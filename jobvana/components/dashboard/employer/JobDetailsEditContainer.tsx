@@ -36,7 +36,7 @@ const InputField: React.FC<InputFieldProps> = ({
       }
       menuPlacement="top"
       placeholder="Type"
-      className="w-[220px] text-gray-800"
+      className="w-full text-gray-800"
     />
   </div>
 );
