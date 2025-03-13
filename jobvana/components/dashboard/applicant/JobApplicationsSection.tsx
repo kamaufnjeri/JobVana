@@ -144,7 +144,7 @@ const JobApplicationsSection: React.FC = () => {
               className="rounded-md w-full text-gray-800 outline-none border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
             />
           </span>
-          <div className="flex flex-row gap w-full items-center justify-center">
+          <div className="flex flex-row gap w-full items-end gap-2">
             <span className="flex flex-col gap-2 self-end items-start">
               <label htmlFor="type" className="text-h6 font-medium">
                 Status
