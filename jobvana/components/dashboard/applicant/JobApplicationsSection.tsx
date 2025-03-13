@@ -141,7 +141,7 @@ const JobApplicationsSection: React.FC = () => {
               onChange={handleChange}
               onKeyDown={handleKeyDown}
               placeholder="Type a job title and press Enter to search..."
-              className="rounded-md min-w-full text-gray-800 outline-none border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
+              className="rounded-md w-full text-gray-800 outline-none border border-borderColor p-2 focus:ring-2 focus:ring-blue-500"
             />
           </span>
           <span className="flex flex-col gap-2 self-end items-start">
@@ -168,8 +168,7 @@ const JobApplicationsSection: React.FC = () => {
               isSearchable
               menuPlacement="bottom"
             />
-          </span>
-          <button
+            <button
             onClick={() => {
               fetchApplications();
               setFilters({
@@ -181,6 +180,8 @@ const JobApplicationsSection: React.FC = () => {
           >
             <FaSync className="hover:text-primary text-xl" />
           </button>
+          </span>
+          
         </span>
       </div>
 
