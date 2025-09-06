@@ -95,6 +95,8 @@ The application will be deployed using **Vercel** or **Netlify** to ensure publi
 ## Project Links
 - **GitHub Repository**: [JobVana](https://github.com/kamaufnjeri/JobVana.git)
 - **Live Deployment**: [Website](https://jobvana.vercel.app/)
+- **Backend GitHub Repository**: [Backend](https://github.com/kamaufnjeri/jobvana-backend.git)
+
 
 # License
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for more details.
