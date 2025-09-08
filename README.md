@@ -2,6 +2,8 @@
 
 ## Project Overview
 **JobVana** is an interactive job board platform designed to help users explore, filter, and apply for job postings seamlessly. This frontend project is part of **Project Nexus - ProDev Frontend**, focusing on building a real-world application with modern frontend technologies.
+**Backend GitHub Repository**: [Backend](https://github.com/kamaufnjeri/jobvana-backend.git)
+
 
 ## Features
 ### 1. API Data Integration
